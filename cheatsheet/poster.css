@@ -1,7 +1,7 @@
-/* Eguchi Cheat Sheet — A3 LANDSCAPE editorial poster styles
-   420mm × 297mm — wide format. Cards: vertical color band on left + horizontal body. */
+/* Eguchi Cheat Sheet — A3 PORTRAIT pedagogical poster
+   297mm × 420mm — family-grouped, kanji explicated as verbete. */
 
-@page { size: A3 landscape; margin: 0; }
+@page { size: A3 portrait; margin: 0; }
 
 body {
   font-family: 'Fraunces', Georgia, serif;
@@ -13,13 +13,14 @@ body {
 }
 
 .sheet {
-  width: 420mm;
-  min-height: 297mm;
+  width: 297mm;
+  min-height: 420mm;
   background: #faf6ef;
   margin: 24px auto;
   position: relative;
   box-shadow: 0 8px 40px rgba(0,0,0,0.2);
   overflow: hidden;
+  padding: 14mm 14mm 18mm;
 }
 
 @media print {
@@ -28,139 +29,182 @@ body {
   .no-print { display: none !important; }
 }
 
-/* HEADER STRIP — sits across the top, single row */
+/* HEADER */
 .poster-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 10mm 14mm 5mm;
-  border-bottom: 1px solid rgba(20,16,12,0.12);
+  margin-bottom: 8mm;
+  padding-bottom: 5mm;
+  border-bottom: 1px solid rgba(20,16,12,0.15);
 }
-.poster-header .left { display: flex; align-items: baseline; gap: 8mm; }
+.poster-header .left { display: flex; align-items: baseline; gap: 7mm; }
 .poster-header .brand {
   font-family: 'Fraunces', serif;
   font-weight: 400;
-  font-size: 42pt;
+  font-size: 44pt;
   letter-spacing: -0.04em;
   line-height: 1;
 }
 .poster-header .brand em { font-style: italic; color: #c8332a; }
 .poster-header .kanji-sub {
   font-family: 'Fraunces', serif;
-  font-size: 16pt;
+  font-size: 14pt;
   color: #6e6253;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
 }
 .poster-header .right {
   text-align: right;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
+  font-size: 8pt;
   color: #6e6253;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .poster-header .right .inst {
-  font-size: 18pt;
+  font-size: 16pt;
   color: #14100c;
   font-weight: 500;
 }
 
-/* FAMILY ROWS — 3 stacked, each holds 3 voicings horizontal */
-#familiesWrap {
-  padding: 6mm 14mm 0;
+/* PEDAGOGICAL EPIGRAPH — sits below header */
+.epigraph {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 11pt;
+  color: #6e6253;
+  line-height: 1.45;
+  margin-bottom: 6mm;
+  padding-left: 5mm;
+  border-left: 2px solid #c8332a;
 }
+.epigraph strong { color: #14100c; font-style: normal; font-weight: 500; }
+
+/* FAMILY ROWS — 3 stacked sections */
+#familiesWrap { display: flex; flex-direction: column; gap: 5mm; }
+
 .family-row {
-  margin-bottom: 4mm;
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
 }
-.family-label {
+
+.family-header {
   display: flex;
   align-items: baseline;
   gap: 5mm;
-  margin-bottom: 2mm;
-  padding-bottom: 1mm;
-  border-bottom: 0.5px solid rgba(20,16,12,0.18);
+  padding-bottom: 1.5mm;
+  border-bottom: 0.5px solid rgba(20,16,12,0.2);
 }
-.family-label .roman {
+.family-header .roman {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
   font-size: 13pt;
   color: #c8332a;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
-.family-label .name {
+.family-header .name {
   font-family: 'Fraunces', serif;
-  font-size: 16pt;
+  font-size: 18pt;
   font-weight: 500;
   letter-spacing: -0.01em;
 }
-.family-label .meta {
+.family-header .cue {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
+  font-size: 8pt;
   color: #6e6253;
-  margin-left: auto;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  margin-left: auto;
 }
 
-/* VOICING TRIO — 3 cards side-by-side in a family row */
+.family-distinguish {
+  font-family: 'Fraunces', serif;
+  font-size: 9.5pt;
+  font-style: italic;
+  color: #4a3f30;
+  line-height: 1.45;
+  margin-bottom: 2mm;
+  padding: 0 1mm;
+}
+.family-distinguish strong { color: #14100c; font-style: normal; font-weight: 500; }
+
+/* VOICING TRIO */
 .voicing-trio {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 4mm;
+  gap: 3mm;
 }
 .voicing {
   display: flex;
-  flex-direction: row;     /* HORIZONTAL — band left, body right */
+  flex-direction: column;
   background: white;
-  border-radius: 3mm;
+  border-radius: 2.5mm;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(20,16,12,0.06);
-  min-height: 70mm;
+  box-shadow: 0 1.5mm 4mm rgba(20,16,12,0.06);
+  border: 0.5px solid rgba(20,16,12,0.06);
 }
 
-/* COLOR BAND — vertical, full card height, ~28% of card width */
+/* COLOR BAND — top, with kanji as hero */
 .voicing .color-band {
-  flex: 0 0 38mm;
+  height: 34mm;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2mm;
+  gap: 3mm;
   position: relative;
-  padding: 4mm 2mm;
+  padding: 0 4mm;
 }
 .voicing .color-band .kanji {
   font-family: 'Fraunces', serif;
   font-weight: 400;
-  font-size: 76pt;
+  font-size: 56pt;
   line-height: 1;
 }
-.voicing .color-band .kanji-reading {
+.voicing .color-band .kanji-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1mm;
   font-family: 'JetBrains Mono', monospace;
+  font-size: 8pt;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  opacity: 0.92;
+}
+.voicing .color-band .kanji-side .reading {
   font-size: 9pt;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  opacity: 0.7;
+  font-weight: 500;
+}
+.voicing .color-band .kanji-side .etymology {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 8pt;
+  letter-spacing: 0;
+  opacity: 0.85;
+  max-width: 30mm;
 }
 .voicing .color-band .inv-tag {
   position: absolute;
-  top: 3mm;
-  left: 3mm;
+  top: 2mm;
+  right: 3mm;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9pt;
+  font-size: 8.5pt;
   letter-spacing: 0.12em;
+  font-weight: 700;
   opacity: 0.85;
 }
 
-/* BODY — chord info + diagram */
+/* BODY */
 .voicing .body {
   flex: 1;
-  padding: 4mm 5mm 4mm;
+  padding: 3mm 4mm 4mm;
   display: flex;
   flex-direction: column;
   gap: 2mm;
-  min-width: 0;
 }
 .voicing .name-line {
   display: flex;
@@ -169,73 +213,74 @@ body {
 }
 .voicing .pt-name {
   font-family: 'Fraunces', serif;
-  font-size: 18pt;
+  font-size: 14pt;
   font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.05;
 }
 .voicing .cifra {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11pt;
+  font-size: 9pt;
   color: #6e6253;
   letter-spacing: 0.06em;
+}
+.voicing .bass-cue {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5pt;
+  color: #c8332a;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 .voicing .notes {
   font-family: 'Fraunces', serif;
-  font-size: 13pt;
+  font-size: 11pt;
   letter-spacing: 0.04em;
-  color: #14100c;
   text-align: center;
-  padding: 2mm 0;
-  border-top: 0.5px solid rgba(20,16,12,0.08);
-  border-bottom: 0.5px solid rgba(20,16,12,0.08);
+  padding: 1mm 0;
+  border-top: 0.5px solid rgba(20,16,12,0.1);
+  border-bottom: 0.5px solid rgba(20,16,12,0.1);
 }
-.voicing .notes .arrow { color: #b09b80; margin: 0 5px; font-size: 10pt; }
-
+.voicing .notes .arrow { color: #b09b80; margin: 0 4px; font-size: 9pt; }
 .voicing .diagram {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 0;
-  padding: 1mm 0;
+  margin: 1mm 0;
 }
-.voicing .diagram svg {
-  width: 100%;
-  height: 100%;
-  max-height: 42mm;
+.voicing .diagram svg { width: 100%; max-height: 22mm; }
+.voicing .verbete {
+  font-family: 'Fraunces', serif;
+  font-size: 8.5pt;
+  line-height: 1.4;
+  color: #3a2f24;
+  text-align: justify;
+  flex: 1;
 }
-.voicing .voicing-detail {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  color: #6e6253;
-  text-align: center;
-  letter-spacing: 0.06em;
-}
+.voicing .verbete strong { color: #14100c; font-weight: 500; }
 
-/* FOOTER STRIP */
+/* FOOTER */
 .poster-footer {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 5mm 14mm 6mm;
-  border-top: 1px solid rgba(20,16,12,0.12);
+  border-top: 1px solid rgba(20,16,12,0.15);
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
+  font-size: 7.5pt;
   color: #6e6253;
   letter-spacing: 0.1em;
 }
 .poster-footer em { font-family: 'Fraunces', serif; font-style: italic; }
-.poster-footer .citation { max-width: 60%; line-height: 1.5; }
+.poster-footer .citation { max-width: 65%; line-height: 1.5; }
 .poster-footer .right { text-align: right; line-height: 1.5; }
 
 /* NO-PRINT CONTROLS */
 .no-print {
-  max-width: 1300px;
+  max-width: 1100px;
   margin: 24px auto;
   padding: 16px;
   background: #14100c;

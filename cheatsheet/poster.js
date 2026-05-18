@@ -2,16 +2,16 @@
 // Requires lib.js already loaded.
 
 const POSTER_INSTRUMENTS = {
-  piano: { label: 'Piano', tagline: 'Teclado · acorde simultâneo', renderFn: 'pianoSVG', svgOpts: { keyWidth: 16, keyHeight: 64 } },
-  violao: { label: 'Violão', tagline: 'Afinação padrão · voicing de 3 cordas', renderFn: 'guitarSVG', svgOpts: {} },
-  trompete: { label: 'Trompete em Dó', tagline: 'Concert pitch · arpejo monofônico', renderFn: 'trumpetSVG', svgOpts: {} },
-  gaita: { label: 'Gaita Diatônica em Dó', tagline: 'Richter · 10 furos · arpejo · ↑ sopra / ↓ puxa', renderFn: 'harmonicaSVG', svgOpts: {} },
+  piano:    { label: 'Piano',                tagline: 'Teclado · acorde simultâneo',         renderFn: 'pianoSVG',     svgOpts: { keyWidth: 14, keyHeight: 58 } },
+  violao:   { label: 'Violão',               tagline: 'Afinação padrão · voicing de 3 cordas', renderFn: 'guitarSVG',    svgOpts: {} },
+  trompete: { label: 'Trompete em Dó',       tagline: 'Concert pitch · arpejo monofônico',    renderFn: 'trumpetSVG',   svgOpts: {} },
+  gaita:    { label: 'Gaita Diatônica em Dó', tagline: 'Richter · 10 furos · ↑sopra ↓puxa',    renderFn: 'harmonicaSVG', svgOpts: {} },
 };
 
 const FAMILIES = [
-  { roman: 'I',  name: 'Dó maior',  desc: 'tônica · o lar',          slice: [0, 3] },
-  { roman: 'IV', name: 'Fá maior',  desc: 'subdominante · o repouso', slice: [3, 6] },
-  { roman: 'V',  name: 'Sol maior', desc: 'dominante · a tensão',     slice: [6, 9] },
+  { key: 'C major', roman: 'I',  voicings: [0, 1, 2] },
+  { key: 'F major', roman: 'IV', voicings: [3, 4, 5] },
+  { key: 'G major', roman: 'V',  voicings: [6, 7, 8] },
 ];
 
 function buildPoster(instrumentKey, opts) {
@@ -21,6 +21,7 @@ function buildPoster(instrumentKey, opts) {
   if (!cfg) return;
   const renderFn = window.EguchiCheat[cfg.renderFn];
   const svgOpts = { ...cfg.svgOpts, bw };
+  const familyIntros = window.EguchiCheat_FAMILIES || {};
 
   // Header
   document.title = `Eguchi · A3 ${cfg.label}`;
@@ -28,20 +29,22 @@ function buildPoster(instrumentKey, opts) {
   const subEl = document.getElementById('instrumentSub');
   if (subEl) subEl.textContent = cfg.tagline;
 
-  // Build families
+  // Families
   const container = document.getElementById('familiesWrap');
   if (!container) return;
   container.innerHTML = '';
   FAMILIES.forEach(fam => {
-    const voicings = window.EguchiCheat.VOICINGS.slice(fam.slice[0], fam.slice[1]);
+    const intro = familyIntros[fam.key] || {};
+    const voicings = fam.voicings.map(i => window.EguchiCheat.VOICINGS[i]);
     const row = document.createElement('div');
     row.className = 'family-row';
     row.innerHTML = `
-      <div class="family-label">
+      <div class="family-header">
         <span class="roman">${fam.roman}</span>
-        <span class="name">${fam.name}</span>
-        <span class="meta">${fam.desc}</span>
+        <span class="name">${intro.label || fam.key}</span>
+        <span class="cue">${intro.cue || ''}</span>
       </div>
+      ${intro.distinguish ? `<div class="family-distinguish">${intro.distinguish}</div>` : ''}
       <div class="voicing-trio"></div>
     `;
     const trio = row.querySelector('.voicing-trio');
@@ -51,22 +54,26 @@ function buildPoster(instrumentKey, opts) {
       const svg = renderFn(v, svgOpts);
       card.innerHTML = `
         <div class="color-band" style="background:${v.hex};color:${v.text};">
-          <span class="inv-tag" style="color:${v.text};opacity:0.7;">${v.invShort}</span>
+          <span class="inv-tag" style="color:${v.text};">${v.invShort}</span>
           <span class="kanji" style="color:${v.text};">${v.kanji}</span>
-          <span class="kanji-reading" style="color:${v.text};">${v.kanjiReading}</span>
+          <span class="kanji-side" style="color:${v.text};">
+            <span class="reading">${v.kanjiReading}</span>
+            <span class="etymology">${v.etymology || ''}</span>
+          </span>
         </div>
         <div class="body">
           <div class="name-line">
             <span class="pt-name">${v.name}</span>
             <span class="cifra">${v.chordSym}</span>
           </div>
+          <div class="bass-cue">▸ ${v.bass || ''} · ${v.feel || ''}</div>
           <div class="notes">
             <strong>${v.notesPt[0]}</strong><span class="arrow">→</span>
             <strong>${v.notesPt[1]}</strong><span class="arrow">→</span>
             <strong>${v.notesPt[2]}</strong>
           </div>
           <div class="diagram">${svg}</div>
-          <div class="voicing-detail">${v.notes.join(' · ')}</div>
+          <div class="verbete">${v.verbete || ''}</div>
         </div>
       `;
       trio.appendChild(card);

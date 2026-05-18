@@ -6,36 +6,99 @@ const VOICINGS = [
   // Dó maior (C major) — 3 inversões
   { name: 'Vermelho', kanji: '赤', kanjiReading: 'aka', hex: '#c8332a', text: '#fff',
     chord: 'Dó maior', chordSym: 'C', inv: 'fundamental', invShort: 'I',
-    notes: ['C4', 'E4', 'G4'], notesPt: ['Dó', 'Mi', 'Sol'] },
+    notes: ['C4', 'E4', 'G4'], notesPt: ['Dó', 'Mi', 'Sol'],
+    etymology: 'fogo amplo · sol nascendo',
+    bass: 'Dó (tônica) grave',
+    feel: 'lar firme · ponto de repouso',
+    verbete: '赤 (aka) é a cor mais elementar do léxico japonês — uma das poucas cores adjetivais verdadeiras. Tônica no grave = o ouvido reconhece "casa" instantaneamente. O mais resoluto dos três voicings de Dó.' },
+
   { name: 'Laranja', kanji: '橙', kanjiReading: 'daidai', hex: '#e88a33', text: '#1a1614',
     chord: 'Dó maior', chordSym: 'C/E', inv: '1ª inversão', invShort: 'I⁶',
-    notes: ['E4', 'G4', 'C5'], notesPt: ['Mi', 'Sol', 'Dó'] },
+    notes: ['E4', 'G4', 'C5'], notesPt: ['Mi', 'Sol', 'Dó'],
+    etymology: 'laranja-amarga · daidai',
+    bass: 'Mi (terça) grave',
+    feel: 'movimento ascendente · abertura',
+    verbete: '橙 (daidai) é a fruta japonesa que persiste no pé entre estações — homófona de "geração após geração". Terça no grave dá sensação de elevação a partir do meio. Caráter aberto, não-conclusivo.' },
+
   { name: 'Marrom', kanji: '茶', kanjiReading: 'cha', hex: '#7a4d2a', text: '#fff',
     chord: 'Dó maior', chordSym: 'C/G', inv: '2ª inversão', invShort: 'I⁶₄',
-    notes: ['G4', 'C5', 'E5'], notesPt: ['Sol', 'Dó', 'Mi'] },
+    notes: ['G4', 'C5', 'E5'], notesPt: ['Sol', 'Dó', 'Mi'],
+    etymology: 'chá fermentado · wabi',
+    bass: 'Sol (quinta) grave',
+    feel: 'suspensão · à espera',
+    verbete: '茶 (cha) é a cor da terra-mãe e do chá envelhecido — estética wabi do imperfeito. Quinta no grave sem tônica embaixo cria um "buraco perceptual": o cérebro busca a fundação e sente tensão. O voicing mais transiente de Dó.' },
 
   // Fá maior (F major) — 3 inversões
   { name: 'Roxo', kanji: '紫', kanjiReading: 'murasaki', hex: '#7a3d8a', text: '#fff',
     chord: 'Fá maior', chordSym: 'F', inv: 'fundamental', invShort: 'IV',
-    notes: ['F4', 'A4', 'C5'], notesPt: ['Fá', 'Lá', 'Dó'] },
+    notes: ['F4', 'A4', 'C5'], notesPt: ['Fá', 'Lá', 'Dó'],
+    etymology: 'flor gromwell · cor imperial',
+    bass: 'Fá (tônica de F) grave',
+    feel: 'outro lar · aspiração',
+    verbete: '紫 (murasaki) era cor reservada à corte imperial japonesa — só nobreza alta a usava. Subdominante (IV) é o segundo centro tonal — outro lar fora do Vermelho. Sensação de aspiração distante.' },
+
   { name: 'Preto', kanji: '黒', kanjiReading: 'kuro', hex: '#1a1614', text: '#ede4d0',
     chord: 'Fá maior', chordSym: 'F/A', inv: '1ª inversão', invShort: 'IV⁶',
-    notes: ['A4', 'C5', 'F5'], notesPt: ['Lá', 'Dó', 'Fá'] },
+    notes: ['A4', 'C5', 'F5'], notesPt: ['Lá', 'Dó', 'Fá'],
+    etymology: 'escuridão · profundidade',
+    bass: 'Lá (terça) grave',
+    feel: 'mistério · peso emocional',
+    verbete: '黒 (kuro) é a profundidade da noite — ausência luminosa em vez de cor. Terça do Fá no grave gera densidade contemplativa. O voicing mais "denso emocionalmente" do método.' },
+
   { name: 'Amarelo', kanji: '黄', kanjiReading: 'kii', hex: '#e8c83a', text: '#1a1614',
     chord: 'Fá maior', chordSym: 'F/C', inv: '2ª inversão', invShort: 'IV⁶₄',
-    notes: ['C5', 'F5', 'A5'], notesPt: ['Dó', 'Fá', 'Lá'] },
+    notes: ['C5', 'F5', 'A5'], notesPt: ['Dó', 'Fá', 'Lá'],
+    etymology: 'sol no zênite · ouro',
+    bass: 'Dó (quinta) grave',
+    feel: 'luz alta · suspensão luminosa',
+    verbete: '黄 (kii) é o sol pleno do meio-dia — máximo de claridade sem o calor saturado do vermelho. Fá flutua sobre Dó grave: elevação luminosa, conclusão adiada.' },
 
   // Sol maior (G major) — 3 inversões
   { name: 'Rosa', kanji: '桃', kanjiReading: 'momo', hex: '#e89aaa', text: '#1a1614',
     chord: 'Sol maior', chordSym: 'G', inv: 'fundamental', invShort: 'V',
-    notes: ['G4', 'B4', 'D5'], notesPt: ['Sol', 'Si', 'Ré'] },
+    notes: ['G4', 'B4', 'D5'], notesPt: ['Sol', 'Si', 'Ré'],
+    etymology: 'flor de pessegueiro · primavera',
+    bass: 'Sol (tônica de G) grave',
+    feel: 'anúncio · promessa',
+    verbete: '桃 (momo) é a flor do pessegueiro — primavera, promessa, doçura terna. Dominante (V) com tônica no grave: anúncio direto de retorno ao Vermelho. A "cor da expectativa".' },
+
   { name: 'Azul', kanji: '青', kanjiReading: 'ao', hex: '#3a6a9a', text: '#fff',
     chord: 'Sol maior', chordSym: 'G/B', inv: '1ª inversão', invShort: 'V⁶',
-    notes: ['B4', 'D5', 'G5'], notesPt: ['Si', 'Ré', 'Sol'] },
+    notes: ['B4', 'D5', 'G5'], notesPt: ['Si', 'Ré', 'Sol'],
+    etymology: 'azul-verde · céu, mar, broto',
+    bass: 'Si (terça) grave',
+    feel: 'tensão lateral · sutileza',
+    verbete: '青 (ao) cobre azul E verde — vastidão do céu, juventude da folha. Terça do Sol no grave amacia a tensão dominante; expectativa fica mais lateral, mais sutil que no Rosa.' },
+
   { name: 'Verde', kanji: '緑', kanjiReading: 'midori', hex: '#5a8a3a', text: '#fff',
     chord: 'Sol maior', chordSym: 'G/D', inv: '2ª inversão', invShort: 'V⁶₄',
-    notes: ['D5', 'G5', 'B5'], notesPt: ['Ré', 'Sol', 'Si'] },
+    notes: ['D5', 'G5', 'B5'], notesPt: ['Ré', 'Sol', 'Si'],
+    etymology: 'broto novo · midori',
+    bass: 'Ré (quinta) grave',
+    feel: 'preparação · iminência',
+    verbete: '緑 (midori) é o verde recente, o broto que acabou de abrir — palavra mais nova que 青. Quinta do Sol no grave: preparação direta pro retorno à tônica. Soa "antes da resolução".' },
 ];
+
+// Family-level pedagogical intros — explain how to distinguish voicings within a chord
+const FAMILY_INTROS = {
+  'C major': {
+    label: 'Dó maior · I',
+    cue: 'a tônica do sistema · ponto de chegada',
+    distinguish: 'Três modos de tocar o mesmo acorde. A nota mais GRAVE é a chave perceptual — antes de pular pra outra família, treine ouvir QUAL é o pé: Dó (赤, raiz firme), Mi (橙, terça aberta) ou Sol (茶, quinta suspensa). O cérebro infantil aprende a "ouvir esse pé" antes da harmonia inteira.'
+  },
+  'F major': {
+    label: 'Fá maior · IV',
+    cue: 'subdominante · segundo centro tonal',
+    distinguish: 'O acorde do "afastamento da casa" — soa diferente do Dó porque o pé tonal mudou. Os três voicings pintam tons da mesma distância: Fá grave (紫, nobreza), Lá grave (黒, profundidade), Dó grave (黄, luz alta).'
+  },
+  'G major': {
+    label: 'Sol maior · V',
+    cue: 'dominante · tensão que quer voltar',
+    distinguish: 'O acorde que pede pra resolver no Vermelho. As três inversões são gradações da mesma promessa: Sol grave (桃, anúncio claro), Si grave (青, suspensão lateral), Ré grave (緑, iminência).'
+  }
+};
+
+if (typeof window !== 'undefined') window.EguchiCheat_FAMILIES = FAMILY_INTROS;
 
 // ============================================================
 // PIANO KEYBOARD SVG — 2 octaves C4–B5
