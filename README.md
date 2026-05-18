@@ -80,6 +80,13 @@ df = pd.read_csv('eguchi-lab-YYYY-MM-DD.csv', parse_dates=['ts'])
 
 JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcool, mood, notas).
 
+## Jornada do usuário
+
+1. **Primeira visita** → onboarding de 5 telas (Welcome → Goal → Calibrate → Colors → Baseline). Termina forçando baseline (ou pular).
+2. **Visitas seguintes** → menu com card de **recomendação "agora"** calculado do estado: "comece pela baseline", "treine sua sessão de hoje", "próxima cor está pronta", "faz N dias — sessão curta?", etc.
+3. **Currículo** → tela com mapa das 8 cores e status (bloqueada / em treino / aprendendo / dominada). Tap em qualquer cor abre lesson card.
+4. **Desbloqueio** → quando uma cor nova destrava, abre lesson card cheia: cor + kanji + função tonal + como soa + por que essa cor + mnemônico + exemplo + play button.
+
 ## Modos de treino
 
 - **Treino livre** — todas as 8 cores desbloqueadas. Prática direta, sem gating Eguchi. Trials salvos com `mode: 'free'`.

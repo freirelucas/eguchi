@@ -364,6 +364,92 @@
     margin: 4px 6px 4px 0;
   }
 
+  /* ONBOARDING */
+  .onb-dots { display: flex; align-items: center; gap: 8px; }
+  .onb-dot { flex: 1; height: 2px; background: var(--bg-3); border-radius: 1px; transition: background 0.2s; }
+  .onb-dot.active { background: var(--accent); }
+  .onb-steps { display: flex; flex-direction: column; gap: 18px; }
+  .onb-step { display: flex; gap: 14px; align-items: flex-start; }
+  .onb-step-n { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.1em; padding-top: 3px; flex-shrink: 0; }
+  .onb-step-t { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.25; }
+  .onb-step-d { font-family: 'Fraunces', serif; font-size: 13px; color: var(--text-dim); margin-top: 4px; line-height: 1.5; }
+  .onb-colors-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .onb-color-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.02); border: 1px solid var(--line);
+  }
+  .onb-color-chip {
+    width: 28px; height: 28px; border-radius: 5px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-size: 14px;
+  }
+  .onb-color-name { font-family: 'Fraunces', serif; font-size: 12.5px; line-height: 1; }
+  .onb-color-sym { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-mute); margin-top: 2px; }
+
+  /* RECOMMENDATION CARD on menu */
+  .reco-card {
+    background: linear-gradient(135deg, rgba(212,101,74,0.13), rgba(232,160,74,0.07));
+    border: 1px solid rgba(212,101,74,0.3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .reco-card:active { transform: scale(0.99); }
+  .reco-card:hover { border-color: rgba(212,101,74,0.55); }
+  .reco-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .reco-title { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.3; }
+  .reco-sub { font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
+
+  /* CURRÍCULO */
+  .curriculum-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px; border-radius: 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    margin-bottom: 8px;
+    transition: border-color 0.15s;
+  }
+  .curriculum-row:hover { border-color: var(--line-strong, rgba(232,224,212,0.18)); }
+  .curriculum-swatch {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-size: 20px;
+  }
+  .curriculum-info { flex: 1; min-width: 0; }
+  .curriculum-name { font-family: 'Fraunces', serif; font-size: 16px; }
+  .curriculum-chord { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-mute); letter-spacing: 0.1em; margin-top: 2px; }
+  .curriculum-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    text-align: right; line-height: 1.5;
+  }
+  .curriculum-status { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+  .status-locked { background: rgba(110,98,83,0.18); color: var(--text-mute); border: 1px solid rgba(110,98,83,0.3); }
+  .status-current { background: rgba(232,160,74,0.15); color: var(--accent-warm); border: 1px solid var(--accent-warm); }
+  .status-learning { background: rgba(112,144,176,0.15); color: var(--accent-cool); border: 1px solid rgba(112,144,176,0.4); }
+  .status-mastered { background: rgba(143,184,116,0.15); color: var(--green); border: 1px solid var(--green); }
+  .curriculum-row.locked { opacity: 0.55; }
+
+  /* LESSON CARD */
+  #lessonCard .doc h3 { margin-top: 14px; font-size: 14px; }
+  #lessonCard .doc p { font-size: 13.5px; }
+  .lesson-pulse { animation: lessonPulse 1.4s infinite; }
+  @keyframes lessonPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,160,74,0.0); }
+    50% { box-shadow: 0 0 0 14px rgba(232,160,74,0.18); }
+  }
+
   /* EXPLORE */
   .explore-info {
     padding: 18px 18px 12px;
@@ -665,6 +751,157 @@
 </head>
 <body>
 
+<!-- ============ ONBOARDING ============ -->
+<div class="screen" id="onbWelcome">
+  <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--text-mute);text-transform:uppercase;margin-bottom:18px;">江口式実験室 · n=1</div>
+      <h1 style="font-family:'Fraunces',serif;font-weight:400;font-size:clamp(46px,13vw,68px);letter-spacing:-0.04em;line-height:0.95;">treino<br><em style="color:var(--accent);font-style:italic;">de ouvido.</em></h1>
+      <p style="font-family:'Fraunces',serif;font-size:16px;line-height:1.55;color:var(--text-dim);margin-top:22px;">
+        O método Eguchi associa cada acorde a uma cor. Aqui, ele é um experimento de um sujeito só — você.
+      </p>
+      <p style="font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:var(--text-mute);margin-top:14px;line-height:1.5;">
+        Mediremos antes. Treinaremos com rigor. Exportaremos os dados.
+      </p>
+    </div>
+    <div>
+      <div class="onb-dots"><div class="onb-dot active"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div></div>
+      <button class="btn btn-primary btn-block" onclick="goTo('onbGoal')" style="margin-top:16px;">Continuar</button>
+      <button class="btn btn-ghost btn-block" onclick="skipOnboarding()" style="margin-top:6px;font-size:11px;">Pular tudo</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="onbGoal">
+  <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--text-mute);text-transform:uppercase;">O que vai acontecer</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-0.02em;line-height:1.1;margin-top:10px;margin-bottom:22px;">
+        Quatro coisas, <em style="color:var(--accent);font-style:italic;">repetidas.</em>
+      </h2>
+      <div class="onb-steps">
+        <div class="onb-step"><span class="onb-step-n">01</span><div><div class="onb-step-t">Baseline cego</div><div class="onb-step-d">50 trials sem feedback — pra saber seu ponto de partida.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">02</span><div><div class="onb-step-t">Treino diário</div><div class="onb-step-d">15 a 100 trials. Modo Eguchi destrava cores gradualmente; modo livre libera as 8.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Probes periódicos</div><div class="onb-step-d">A cada 5 sessões, teste com variações inéditas — mede generalização.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">04</span><div><div class="onb-step-t">Diário</div><div class="onb-step-d">Sono, café, mood. Variáveis confundidoras viram dados.</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div></div>
+      <button class="btn btn-primary btn-block" onclick="goTo('onbCalibrate')" style="margin-top:16px;">Continuar</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="onbCalibrate">
+  <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--text-mute);text-transform:uppercase;">Calibração · 01</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;margin-top:10px;margin-bottom:4px;">
+        Som <em style="color:var(--accent);font-style:italic;">limpo.</em>
+      </h2>
+      <p style="font-family:'Fraunces',serif;font-size:14px;color:var(--text-dim);line-height:1.5;margin-bottom:18px;">
+        Use fones. Toque uma vez e ajuste o volume até a nota mais aguda ficar nítida sem doer.
+      </p>
+      <div style="display:flex;justify-content:center;margin:18px 0;">
+        <button class="play-btn" onclick="playCalibrationTone()" style="width:120px;height:120px;font-size:36px;">▶</button>
+      </div>
+      <div style="font-family:'Fraunces',serif;font-size:12px;color:var(--text-mute);text-align:center;margin-bottom:18px;">Lá 4 · 440 Hz · senoidal</div>
+      <div style="padding:14px;background:rgba(112,144,176,0.08);border:1px solid rgba(112,144,176,0.18);border-radius:6px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent-cool);letter-spacing:0.16em;text-transform:uppercase;">i</span>
+          <span style="font-family:'Fraunces',serif;font-style:italic;font-size:13px;color:var(--text-dim);line-height:1.45;">
+            Sem fones, a discriminação cai ~30%. Use o mesmo par sempre — o equipamento entra como covariável.
+          </span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div><div class="onb-dot"></div></div>
+      <button class="btn btn-primary btn-block" onclick="goTo('onbColors')" style="margin-top:16px;">Está bom</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="onbColors">
+  <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--text-mute);text-transform:uppercase;">Calibração · 02</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;margin-top:10px;margin-bottom:4px;">
+        Oito acordes, <em style="color:var(--accent);font-style:italic;">oito cores.</em>
+      </h2>
+      <p style="font-family:'Fraunces',serif;font-size:13.5px;color:var(--text-dim);line-height:1.5;margin-bottom:18px;">
+        Vermelho é Dó maior — o "lar". Branco é Sol maior — o brilho que quer voltar. Marrom é Sol7 — a tensão que abre portas. Você não precisa decorar agora.
+      </p>
+      <div id="onbColorsGrid" class="onb-colors-grid"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);margin-top:12px;letter-spacing:0.04em;">
+        Mapeamento cor ↔ acorde: Eguchi (1991).
+      </div>
+    </div>
+    <div>
+      <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div></div>
+      <button class="btn btn-primary btn-block" onclick="goTo('onbBaseline')" style="margin-top:16px;">Quero medir</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="onbBaseline">
+  <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--accent-cool);text-transform:uppercase;margin-bottom:14px;">baseline · cego</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;">Antes de treinar,<br><em style="color:var(--accent-cool);font-style:italic;">uma medição.</em></h2>
+      <div style="margin-top:22px;display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);padding-top:2px;">⏱</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">50 trials.</strong> Cerca de 6 minutos. Você tocará todas as 8 cores misturadas.</div></div>
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);padding-top:2px;">○</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Sem feedback.</strong> Não saberá se acertou. É o que torna a medida limpa.</div></div>
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);padding-top:2px;">⟲</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Sem ressentimento.</strong> Provavelmente vai acertar perto do acaso (12.5%). É o objetivo.</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div></div>
+      <button class="btn btn-primary btn-block" onclick="finishOnboardingAndStartBaseline()" style="background:var(--accent-cool);color:var(--bg);margin-top:16px;">Começar baseline</button>
+      <button class="btn btn-ghost btn-block" onclick="finishOnboardingAndGoMenu()" style="margin-top:6px;font-size:11px;">Pular por agora</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LESSON CARD (chord unlock) ============ -->
+<div class="screen" id="lessonCard">
+  <div class="topbar">
+    <button class="topbar-back" onclick="closeLessonCard()">← Voltar</button>
+    <span class="topbar-title">nova cor</span>
+    <span class="topbar-meta"></span>
+  </div>
+  <div class="screen-pad" style="display:flex;flex-direction:column;flex:1;">
+    <div id="lessonHero" style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 0;">
+      <div id="lessonSwatch" style="width:140px;height:140px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:64px;"></div>
+      <div style="text-align:center;">
+        <div id="lessonName" style="font-family:'Fraunces',serif;font-weight:400;font-size:32px;letter-spacing:-0.02em;"></div>
+        <div id="lessonChord" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-mute);letter-spacing:0.16em;text-transform:uppercase;margin-top:4px;"></div>
+      </div>
+      <button id="lessonPlayBtn" class="play-btn" onclick="playLessonChord()" style="width:64px;height:64px;font-size:22px;">▶</button>
+    </div>
+    <div class="doc" id="lessonBody" style="padding:0;flex:1;"></div>
+    <div>
+      <button class="btn btn-primary btn-block" id="lessonContinueBtn" onclick="closeLessonCard()">Continuar treino</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CURRÍCULO ============ -->
+<div class="screen" id="curriculum">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goTo('menu')">← Menu</button>
+    <span class="topbar-title">currículo</span>
+    <span class="topbar-meta"></span>
+  </div>
+  <div class="screen-pad">
+    <p style="font-family:'Fraunces',serif;font-size:13.5px;color:var(--text-dim);line-height:1.5;margin-bottom:18px;">
+      Mapa das 8 cores. Em modo Eguchi, você destrava gradualmente. Em modo livre, todas estão disponíveis — o status reflete sua precisão.
+    </p>
+    <div id="curriculumList"></div>
+  </div>
+</div>
+
 <!-- ============ MENU ============ -->
 <div class="screen active" id="menu">
   <div class="screen-pad">
@@ -676,6 +913,11 @@
       </div>
 
       <div class="menu-summary">
+        <div id="menuReco" class="reco-card" style="display:none;" onclick="actOnRecommendation()">
+          <div class="reco-label" id="recoLabel">Recomendado agora</div>
+          <div class="reco-title" id="recoTitle">—</div>
+          <div class="reco-sub" id="recoSub"></div>
+        </div>
         <div class="panel">
           <div class="panel-row">
             <span class="label">Nível Eguchi</span>
@@ -708,18 +950,21 @@
         <button class="btn btn-block" onclick="startTrainSession()">Treino Eguchi<small>progressão clássica · desbloqueio gradual</small></button>
         <button class="btn btn-ghost btn-block" onclick="startProgressionSession()">Modo progressão<small>2–4 acordes em sequência</small></button>
         <div class="menu-grid">
-          <button class="btn" onclick="goTo('explore')">Explorar<small>conhecer cada cor</small></button>
+          <button class="btn" onclick="goTo('curriculum')">Currículo<small>mapa das 8 cores</small></button>
+          <button class="btn" onclick="goTo('explore')">Explorar<small>cada cor em detalhe</small></button>
+        </div>
+        <div class="menu-grid">
           <button class="btn" onclick="startBaseline()">Baseline<small>medir partida</small></button>
-        </div>
-        <div class="menu-grid">
           <button class="btn" onclick="goTo('stats')">Estatísticas<small>matriz, RT, curva</small></button>
-          <button class="btn" onclick="goTo('log')">Diário<small>sono, café, mood</small></button>
         </div>
         <div class="menu-grid">
-          <button class="btn btn-ghost" onclick="goTo('settings')">Ajustes</button>
-          <button class="btn btn-ghost" onclick="goTo('science')">Método</button>
+          <button class="btn" onclick="goTo('log')">Diário<small>sono, café, mood</small></button>
+          <button class="btn" onclick="goTo('settings')">Ajustes<small>instrumento, ref, etc.</small></button>
         </div>
-        <button class="btn btn-ghost btn-block" onclick="goTo('parents')">Para os pais<small>introdução pedagógica · referências</small></button>
+        <div class="menu-grid">
+          <button class="btn btn-ghost" onclick="goTo('science')">Método</button>
+          <button class="btn btn-ghost" onclick="goTo('parents')">Para os pais</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1370,6 +1615,11 @@ function loadState() {
       if (typeof parsed.totalSessions !== 'number') parsed.totalSessions = 0;
       if (typeof parsed.freeSessions !== 'number') parsed.freeSessions = 0;
       if (typeof parsed.progressionSessions !== 'number') parsed.progressionSessions = 0;
+      if (typeof parsed.onboardingDone !== 'boolean') {
+        // Existing users with any history are considered onboarded
+        parsed.onboardingDone = (parsed.history && parsed.history.length > 0) || (parsed.baseline !== null);
+      }
+      if (!parsed.unlockSeen) parsed.unlockSeen = [];
       if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
       return parsed;
@@ -1384,6 +1634,8 @@ function loadState() {
     progressions: [],
     dailyLogs: [],
     milestones: [],
+    unlockSeen: [],
+    onboardingDone: false,
     startDate: new Date().toISOString(),
     lastUnlockDate: new Date().toISOString(),
     totalSessions: 0,
@@ -1845,11 +2097,14 @@ function tryUnlockNextLevel() {
 function goTo(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screen).classList.add('active');
+  window.scrollTo(0, 0);
   if (screen === 'menu') renderMenu();
   if (screen === 'stats') renderStats();
   if (screen === 'explore') renderExplore();
   if (screen === 'log') renderLog();
   if (screen === 'settings') renderSettings();
+  if (screen === 'curriculum') renderCurriculum();
+  if (screen === 'onbColors') populateOnboardingColors();
   // 'train' / 'progression' navigation is direct — callers (startTrainSession, startFreeSession,
   // actuallyStartBaseline, startProbeSession, startProgressionSession) own session setup.
 }
@@ -1868,6 +2123,7 @@ function renderMenu() {
   const streakEl = document.getElementById('menuStreak');
   if (streakEl) streakEl.textContent = streak === 0 ? '—' : (streak === 1 ? '1 dia' : streak + ' dias');
   document.getElementById('menuBaseline').textContent = state.baseline ? new Date(state.baseline.date).toLocaleDateString('pt-BR') : 'não feito';
+  updateRecommendation();
 }
 
 // ============================================
@@ -2160,15 +2416,15 @@ function handleAnswer(idx) {
     showSessionBanner();
   }
 
-  // Unlock check (only train mode)
+  // Unlock check (only train mode) — opens full lesson card with the new color
   if (sessionMode === 'train') {
     const unlocked = tryUnlockNextLevel();
     if (unlocked) {
+      const newIdx = state.levelUnlocked - 1;
       setTimeout(() => {
-        showModal('✦ Nova cor desbloqueada',
-          `<strong style="color:${unlocked.hex};font-size:18px;">${unlocked.name}</strong><br>(${unlocked.chord})<br><br>${unlocked.feel}`,
-          [{ label: 'Continuar', primary: true, action: () => { hideModal(); renderColorGrid(); } }]);
-      }, 700);
+        showLessonCard(newIdx, 'train', true);
+      }, 900);
+      return; // skip auto-next-round; lesson card's close handler will resume
     }
   }
 
@@ -2592,6 +2848,263 @@ function checkMilestones() {
     }
   });
   return newly;
+}
+
+// ============================================
+// ONBOARDING + LESSON CARD + CURRICULUM + RECOMMENDATION
+// ============================================
+function skipOnboarding() {
+  state.onboardingDone = true;
+  saveState();
+  goTo('menu');
+}
+
+function finishOnboardingAndStartBaseline() {
+  state.onboardingDone = true;
+  saveState();
+  startBaseline();
+}
+
+function finishOnboardingAndGoMenu() {
+  state.onboardingDone = true;
+  saveState();
+  goTo('menu');
+}
+
+function populateOnboardingColors() {
+  const grid = document.getElementById('onbColorsGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  CHORDS.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'onb-color-row';
+    const chip = document.createElement('div');
+    chip.className = 'onb-color-chip';
+    chip.style.background = c.hex;
+    chip.style.color = c.text;
+    chip.textContent = c.kanji;
+    const info = document.createElement('div');
+    info.style.flex = '1';
+    info.style.minWidth = '0';
+    const name = document.createElement('div');
+    name.className = 'onb-color-name';
+    name.textContent = c.name;
+    const sym = document.createElement('div');
+    sym.className = 'onb-color-sym';
+    sym.textContent = c.chordSym;
+    info.appendChild(name);
+    info.appendChild(sym);
+    row.appendChild(chip);
+    row.appendChild(info);
+    grid.appendChild(row);
+  });
+}
+
+function playCalibrationTone() {
+  ensureAudioContext();
+  // Play A4 (440Hz) sine for ~1.2s
+  if (toneReady && toneInstruments && toneInstruments.sine) {
+    try {
+      toneInstruments.sine.triggerAttackRelease('A4', 1.2, Tone.now());
+      return;
+    } catch (e) { /* fall through */ }
+  }
+  const ctx = audioCtx;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = 440;
+  gain.gain.value = 0;
+  gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.04);
+  gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 1.0);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.3);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 1.35);
+}
+
+let lessonChordIdx = null;
+let lessonReturnScreen = 'menu';
+let lessonFromUnlock = false;
+function showLessonCard(chordIdx, returnTo, fromUnlock) {
+  lessonChordIdx = chordIdx;
+  lessonReturnScreen = returnTo || 'menu';
+  lessonFromUnlock = !!fromUnlock;
+  const c = CHORDS[chordIdx];
+  document.getElementById('lessonSwatch').style.background = c.hex;
+  document.getElementById('lessonSwatch').style.color = c.text;
+  document.getElementById('lessonSwatch').textContent = c.kanji;
+  document.getElementById('lessonName').textContent = c.name;
+  document.getElementById('lessonName').style.color = c.hex;
+  document.getElementById('lessonChord').textContent = `${c.chord} · ${c.chordSym} · ${c.kanji} (${c.kanjiReading})`;
+  const body = document.getElementById('lessonBody');
+  body.innerHTML = `
+    <h3>Função tonal</h3>
+    <p>${c.function}</p>
+    <h3>Como soa</h3>
+    <p>${c.feel}</p>
+    <h3>Por que essa cor</h3>
+    <p>${c.whyColor || ''}</p>
+    <h3>Mnemônico</h3>
+    <p><em>${c.mnemonic || ''}</em></p>
+    ${c.example ? `<h3>Exemplo</h3><p>${c.example}</p>` : ''}
+  `;
+  // Track that the user has seen this unlock card
+  if (!state.unlockSeen.includes(c.id)) {
+    state.unlockSeen.push(c.id);
+    saveState();
+  }
+  goTo('lessonCard');
+  // Auto-play the chord after a moment
+  setTimeout(() => playLessonChord(), 600);
+  // Pulse the play button gently
+  const pb = document.getElementById('lessonPlayBtn');
+  if (pb) {
+    pb.classList.add('lesson-pulse');
+    setTimeout(() => pb.classList.remove('lesson-pulse'), 4000);
+  }
+}
+
+function playLessonChord() {
+  if (lessonChordIdx === null) return;
+  ensureAudioContext();
+  playChord(CHORDS[lessonChordIdx].freqs, state.settings.instrument);
+}
+
+function closeLessonCard() {
+  const ret = lessonReturnScreen || 'menu';
+  const wasFromUnlock = lessonFromUnlock;
+  lessonChordIdx = null;
+  lessonFromUnlock = false;
+  if (wasFromUnlock && ret === 'train') {
+    goTo('train');
+    renderColorGrid();
+    setTimeout(() => {
+      if (sessionCount >= state.settings.sessionLength) endSession();
+      else newRound();
+    }, 300);
+  } else {
+    goTo(ret);
+  }
+}
+
+function renderCurriculum() {
+  const list = document.getElementById('curriculumList');
+  if (!list) return;
+  list.innerHTML = '';
+  const playHistory = state.history.filter(h => h.mode === 'train' || h.mode === 'free');
+  CHORDS.forEach((c, idx) => {
+    const records = playHistory.filter(r => r.chordIdx === idx);
+    const trials = records.length;
+    const correct = records.filter(r => r.correct).length;
+    const acc = trials > 0 ? Math.round(correct / trials * 100) : null;
+    const recent = records.slice(-20);
+    const recentAcc = recent.length > 0 ? recent.filter(r => r.correct).length / recent.length : null;
+    let statusLabel, statusClass;
+    if (idx >= state.levelUnlocked) {
+      statusLabel = 'bloqueada (Eguchi)';
+      statusClass = 'status-locked';
+    } else if (idx === state.levelUnlocked - 1) {
+      if (recentAcc !== null && recentAcc >= 0.85) {
+        statusLabel = 'em treino · pronta';
+        statusClass = 'status-current';
+      } else {
+        statusLabel = 'em treino';
+        statusClass = 'status-current';
+      }
+    } else {
+      if (recentAcc !== null && recentAcc >= 0.85) {
+        statusLabel = 'dominada';
+        statusClass = 'status-mastered';
+      } else if (recentAcc !== null && recentAcc >= 0.5) {
+        statusLabel = 'aprendendo';
+        statusClass = 'status-learning';
+      } else {
+        statusLabel = 'destravada';
+        statusClass = 'status-mastered';
+      }
+    }
+    const row = document.createElement('div');
+    row.className = 'curriculum-row' + (idx >= state.levelUnlocked ? ' locked' : '');
+    row.innerHTML = `
+      <div class="curriculum-swatch" style="background:${c.hex};color:${c.text};">${c.kanji}</div>
+      <div class="curriculum-info">
+        <div class="curriculum-name">${c.name}</div>
+        <div class="curriculum-chord">${c.chord} · ${c.chordSym}</div>
+      </div>
+      <div class="curriculum-meta">
+        <span class="curriculum-status ${statusClass}">${statusLabel}</span>
+        <div style="margin-top:4px;color:var(--text-mute);">${trials > 0 ? `${acc}% · ${trials}` : '—'}</div>
+      </div>
+    `;
+    row.style.cursor = (idx < state.levelUnlocked || trials > 0) ? 'pointer' : 'default';
+    if (idx < state.levelUnlocked || trials > 0) {
+      row.addEventListener('click', () => showLessonCard(idx, 'curriculum'));
+    }
+    list.appendChild(row);
+  });
+}
+
+// ===== RECOMMENDATION ENGINE =====
+let currentRecommendation = null;
+function computeRecommendation() {
+  // Priority-ordered checks
+  // 1. No onboarding done → onboarding (shouldn't reach menu but guard)
+  if (!state.onboardingDone) {
+    return { label: 'Comece aqui', title: 'Faça o onboarding', sub: '5 telas · 2 min', action: () => goTo('onbWelcome') };
+  }
+  // 2. No baseline → suggest baseline
+  if (!state.baseline) {
+    return { label: 'Próximo passo', title: 'Comece pela baseline', sub: '50 trials cegos · ~6 min. Sem isso, não dá pra interpretar progresso.', action: startBaseline };
+  }
+  // 3. Unlock criteria met but not yet unlocked (rare since it auto-unlocks, but show as encouragement)
+  if (state.levelUnlocked < CHORDS.length) {
+    const c = checkUnlockCriteria();
+    if (c && c.ready) {
+      return { label: 'Quase lá', title: 'Próxima cor está pronta', sub: 'Treine mais uma sessão pra destravar.', action: startTrainSession };
+    }
+  }
+  // 4. Streak check — trained today?
+  const today = new Date().toDateString();
+  const trainedToday = state.history.some(r => new Date(r.ts).toDateString() === today && (r.mode === 'train' || r.mode === 'free'));
+  if (!trainedToday) {
+    const streak = calculateStreak();
+    if (streak >= 1) {
+      return { label: 'Manter streak', title: `Treine sua sessão de hoje`, sub: `${streak} ${streak === 1 ? 'dia' : 'dias'} seguidos. Não quebre agora.`, action: startTrainSession };
+    }
+    // Long gap?
+    if (state.history.length > 0) {
+      const last = new Date(state.history[state.history.length - 1].ts);
+      const days = Math.floor((Date.now() - last.getTime()) / (1000 * 60 * 60 * 24));
+      if (days >= 2) {
+        return { label: 'Volte ao treino', title: `Faz ${days} dias`, sub: 'Uma sessão curta de 15 trials reativa o circuito.', action: () => { state.settings.sessionLength = 15; saveState(); startTrainSession(); } };
+      }
+    }
+    return { label: 'Comece o dia', title: 'Treino diário', sub: 'Sessão de hoje · ' + state.settings.sessionLength + ' trials', action: startTrainSession };
+  }
+  // 5. Done for today → suggest progression or probe
+  if (state.levelUnlocked >= 3) {
+    return { label: 'Avançado', title: 'Modo progressão', sub: 'Já treinou hoje. Que tal sequências?', action: startProgressionSession };
+  }
+  // Default
+  return { label: 'Continuar', title: 'Mais um treino livre?', sub: 'Reforço sem gating.', action: startFreeSession };
+}
+
+function actOnRecommendation() {
+  if (currentRecommendation && typeof currentRecommendation.action === 'function') {
+    currentRecommendation.action();
+  }
+}
+
+function updateRecommendation() {
+  const reco = computeRecommendation();
+  currentRecommendation = reco;
+  const card = document.getElementById('menuReco');
+  if (!card || !reco) return;
+  card.style.display = 'block';
+  document.getElementById('recoLabel').textContent = reco.label;
+  document.getElementById('recoTitle').textContent = reco.title;
+  document.getElementById('recoSub').textContent = reco.sub;
 }
 
 // ============================================
@@ -3147,6 +3660,11 @@ document.body.addEventListener('click', () => ensureAudioContext(), { once: true
 bindSettings();
 renderMenu();
 updateAudioBadge();
+
+// Route first-time visitors through onboarding
+if (!state.onboardingDone) {
+  goTo('onbWelcome');
+}
 
 // Pre-construct Tone.js instruments so Salamander samples start downloading
 // before the user clicks play. Audio context still needs a user gesture to start.
