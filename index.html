@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/tone@14.7.77/build/Tone.js" defer></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   :root {
@@ -273,8 +274,95 @@
   .color-btn .kanji-small { font-size: 17px; line-height: 1; }
   .color-btn.flash-correct { animation: flashGreen 0.5s; }
   .color-btn.flash-wrong { animation: flashRed 0.5s; }
+  .color-btn.pulse-reveal { animation: pulseReveal 1.2s ease-out; }
   @keyframes flashGreen { 0%,100% { box-shadow: 0 0 0 0 rgba(143,184,116,0); } 50% { box-shadow: 0 0 0 5px rgba(143,184,116,0.9); } }
   @keyframes flashRed { 0%,100% { box-shadow: 0 0 0 0 rgba(212,101,74,0); } 50% { box-shadow: 0 0 0 5px rgba(212,101,74,0.9); } }
+  @keyframes pulseReveal {
+    0% { box-shadow: 0 0 0 0 rgba(232,160,74,0); transform: scale(1); }
+    30% { box-shadow: 0 0 0 8px rgba(232,160,74,0.85); transform: scale(1.04); }
+    100% { box-shadow: 0 0 0 0 rgba(232,160,74,0); transform: scale(1); }
+  }
+
+  /* REPLAY + PROGRESSION SLOTS + REFERENCE TONIC TAG */
+  .replay-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .replay-btn:hover, .replay-btn:active { background: var(--bg-2); color: var(--text); }
+  .prog-slots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 14px 0 4px;
+  }
+  .prog-slot {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 2px dashed var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--text-mute);
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  }
+  .prog-slot.current { border-color: var(--accent-warm); border-style: solid; transform: scale(1.05); }
+  .prog-slot.filled { border-style: solid; }
+  .prog-slot.correct { border-color: var(--green); }
+  .prog-slot.wrong { border-color: var(--accent); }
+  .ref-tonic-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-cool);
+    background: rgba(112,144,176,0.08);
+    border-radius: 3px;
+    padding: 2px 6px;
+    letter-spacing: 0.08em;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .session-banner {
+    position: fixed;
+    top: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .session-banner.show { opacity: 1; }
+  .milestone-badge {
+    display: inline-block;
+    background: rgba(232,160,74,0.12);
+    border: 1px solid var(--accent-warm);
+    color: var(--accent-warm);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin: 4px 6px 4px 0;
+  }
 
   /* EXPLORE */
   .explore-info {
@@ -590,7 +678,7 @@
       <div class="menu-summary">
         <div class="panel">
           <div class="panel-row">
-            <span class="label">Nível atual</span>
+            <span class="label">Nível Eguchi</span>
             <span class="panel-value" id="menuLevel">1 / 8</span>
           </div>
           <div class="panel-row">
@@ -602,16 +690,23 @@
             <span class="panel-value" id="menuAccuracy">—</span>
           </div>
           <div class="panel-row">
+            <span class="label">Streak</span>
+            <span class="panel-value" id="menuStreak">—</span>
+          </div>
+          <div class="panel-row">
             <span class="label">Baseline</span>
             <span class="panel-value" id="menuBaseline">não feito</span>
           </div>
         </div>
+        <div id="audioBadge" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);text-align:center;margin-top:8px;letter-spacing:0.04em;"></div>
       </div>
     </div>
 
     <div>
       <div class="btn-row">
-        <button class="btn btn-primary btn-block" onclick="goTo('train')">Treinar sessão</button>
+        <button class="btn btn-primary btn-block" onclick="startFreeSession()">Treino livre<small>todas as 8 cores · prática direta</small></button>
+        <button class="btn btn-block" onclick="startTrainSession()">Treino Eguchi<small>progressão clássica · desbloqueio gradual</small></button>
+        <button class="btn btn-ghost btn-block" onclick="startProgressionSession()">Modo progressão<small>2–4 acordes em sequência</small></button>
         <div class="menu-grid">
           <button class="btn" onclick="goTo('explore')">Explorar<small>conhecer cada cor</small></button>
           <button class="btn" onclick="startBaseline()">Baseline<small>medir partida</small></button>
@@ -642,9 +737,67 @@
   <div class="play-area">
     <button class="play-btn" id="playBtn" onclick="playCurrentChord()">▶</button>
     <div class="feedback" id="feedback"></div>
+    <button class="replay-btn" id="replayBtn" onclick="replayCurrentChord()" style="display:none;">↻ ouvir de novo</button>
   </div>
 
   <div class="color-grid" id="colorGrid"></div>
+</div>
+
+<!-- ============ PROGRESSION ============ -->
+<div class="screen" id="progression">
+  <div class="topbar">
+    <button class="topbar-back" onclick="endSessionAndReturn()">← Menu</button>
+    <span class="topbar-title">progressão</span>
+    <span class="topbar-meta"><span id="progCount">0</span> / <span id="progTotal">10</span></span>
+  </div>
+  <div class="train-progress-bar"><div class="train-progress-fill" id="progBar"></div></div>
+
+  <div class="play-area">
+    <button class="play-btn" id="progPlayBtn" onclick="playProgressionSeq()">▶</button>
+    <div id="progSlots" class="prog-slots"></div>
+    <div class="feedback" id="progFeedback"></div>
+    <button class="replay-btn" id="progReplayBtn" onclick="playProgressionSeq()" style="display:none;">↻ ouvir de novo</button>
+  </div>
+
+  <div class="color-grid" id="progColorGrid"></div>
+</div>
+
+<!-- ============ SESSION INTRO ============ -->
+<div class="screen" id="sessionIntro">
+  <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
+    <div>
+      <div class="brand">
+        <h1 class="brand-title" id="introMode">Treino</h1>
+        <div class="brand-sub" id="introSub">Pronto?</div>
+      </div>
+      <div class="panel" style="margin-top:32px;">
+        <div class="panel-row"><span class="label">Trials</span><span class="panel-value" id="introTrials">30</span></div>
+        <div class="panel-row"><span class="label">Instrumento</span><span class="panel-value" id="introInstr">piano</span></div>
+        <div class="panel-row"><span class="label">Variações</span><span class="panel-value" id="introVar">desligado</span></div>
+        <div class="panel-row"><span class="label">Tônica ref</span><span class="panel-value" id="introTonic">—</span></div>
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-primary btn-block" id="introStartBtn">Começar</button>
+      <button class="btn btn-ghost btn-block" onclick="goTo('menu')" style="margin-top:8px;">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SESSION SUMMARY ============ -->
+<div class="screen" id="sessionSummary">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goTo('menu')">← Menu</button>
+    <span class="topbar-title">sessão concluída</span>
+    <span class="topbar-meta"></span>
+  </div>
+  <div class="doc" id="summaryBody"></div>
+  <div class="screen-pad" style="padding-top:0;">
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" id="summaryAgainBtn" style="flex:1;">Treinar de novo</button>
+      <button class="btn btn-ghost" onclick="goTo('menu')" style="flex:1;">Menu</button>
+    </div>
+  </div>
 </div>
 
 <!-- ============ EXPLORE ============ -->
@@ -848,6 +1001,38 @@
       <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
         Probe usa timbre + variações inéditas, sem feedback. Mede se você generaliza.
       </p>
+    </div>
+
+    <div class="setting-row">
+      <span class="label">Tônica de referência</span>
+      <div class="seg" id="tonicSeg">
+        <button class="seg-btn" data-tonic="off">desligado</button>
+        <button class="seg-btn" data-tonic="C">Dó</button>
+        <button class="seg-btn" data-tonic="A">Lá</button>
+      </div>
+      <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
+        Toca a tônica antes do acorde. Treina ouvido <em>relativo</em>, não absoluto — útil pra adultos ancorarem. Cada trial fica marcado, então a análise depois separa as duas condições.
+      </p>
+    </div>
+
+    <div class="setting-row">
+      <span class="label">Tocar acorde correto após erro</span>
+      <div class="seg" id="correctSeg">
+        <button class="seg-btn" data-correct="on">ligado</button>
+        <button class="seg-btn" data-correct="off">desligado</button>
+      </div>
+      <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
+        Quando você erra, o app pulsa a cor certa e toca o acorde. Reforço imediato.
+      </p>
+    </div>
+
+    <div class="setting-row">
+      <span class="label">Tamanho da sequência (modo progressão)</span>
+      <div class="seg" id="progLenSeg">
+        <button class="seg-btn" data-plen="2">2</button>
+        <button class="seg-btn" data-plen="3">3</button>
+        <button class="seg-btn" data-plen="4">4</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1136,6 +1321,9 @@ const DEFAULT_SETTINGS = {
   variation: 'off',
   sessionLength: 30,
   probeAuto: 'off',
+  refTonic: 'off',           // 'off' | 'C' | 'A'
+  playCorrectOnError: 'on',  // 'on' | 'off'
+  progressionLength: 3,      // 2 | 3 | 4
 };
 
 // ============================================
@@ -1150,7 +1338,13 @@ let chordPlayedAt = null;
 let sessionCount = 0;
 let lastChordIdx = null;
 let acceptingInput = false;
-let sessionMode = 'train'; // 'train', 'baseline', 'probe'
+let sessionMode = 'train'; // 'train', 'baseline', 'probe', 'free', 'progression'
+let trialReplays = 0;
+let toneInstruments = null;
+let toneReady = false;
+let progressionSeq = [];      // [chordIdx, ...]
+let progressionChoices = [];  // [chordIdx | null, ...]
+let progressionSlot = 0;
 let baselineResults = [];
 let probeResults = [];
 let statsView = 'train';
@@ -1168,10 +1362,14 @@ function loadState() {
       if (!parsed.history) parsed.history = [];
       if (!parsed.baseline) parsed.baseline = null;
       if (!parsed.probes) parsed.probes = [];
+      if (!parsed.progressions) parsed.progressions = [];
       if (!parsed.dailyLogs) parsed.dailyLogs = [];
+      if (!parsed.milestones) parsed.milestones = [];
       if (!parsed.startDate) parsed.startDate = new Date().toISOString();
       if (!parsed.lastUnlockDate) parsed.lastUnlockDate = parsed.startDate;
       if (typeof parsed.totalSessions !== 'number') parsed.totalSessions = 0;
+      if (typeof parsed.freeSessions !== 'number') parsed.freeSessions = 0;
+      if (typeof parsed.progressionSessions !== 'number') parsed.progressionSessions = 0;
       if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
       return parsed;
@@ -1183,10 +1381,14 @@ function loadState() {
     history: [],
     baseline: null,
     probes: [],
+    progressions: [],
     dailyLogs: [],
+    milestones: [],
     startDate: new Date().toISOString(),
     lastUnlockDate: new Date().toISOString(),
     totalSessions: 0,
+    freeSessions: 0,
+    progressionSessions: 0,
     settings: { ...DEFAULT_SETTINGS },
   };
 }
@@ -1205,7 +1407,96 @@ function ensureAudioContext() {
     audioCtx = new AC({ latencyHint: 'interactive' });
   }
   if (audioCtx.state === 'suspended') audioCtx.resume();
+  // Best-effort start Tone.js audio chain on first user gesture
+  if (typeof Tone !== 'undefined' && !toneReady) {
+    Tone.start().then(() => initToneInstruments()).catch(() => { /* fallback to legacy */ });
+  }
   return audioCtx;
+}
+
+function initToneInstruments() {
+  if (toneReady || typeof Tone === 'undefined') return;
+  try {
+    const reverb = new Tone.Reverb({ decay: 1.6, wet: 0.18 }).toDestination();
+    const piano = new Tone.Sampler({
+      urls: { A1: 'A1.mp3', A2: 'A2.mp3', A3: 'A3.mp3', A4: 'A4.mp3', A5: 'A5.mp3' },
+      baseUrl: 'https://tonejs.github.io/audio/salamander/',
+      release: 1.2,
+      attack: 0.005,
+    }).connect(reverb);
+    const organ = new Tone.PolySynth(Tone.Synth, {
+      oscillator: { type: 'fatsawtooth', count: 3, spread: 30 },
+      envelope: { attack: 0.04, decay: 0.1, sustain: 0.7, release: 0.6 },
+    });
+    organ.volume.value = -10;
+    organ.chain(new Tone.Filter(5000, 'lowpass'), reverb);
+    const strings = new Tone.PolySynth(Tone.Synth, {
+      oscillator: { type: 'fatsawtooth', count: 4, spread: 40 },
+      envelope: { attack: 0.4, decay: 0.3, sustain: 0.8, release: 1.2 },
+    });
+    strings.volume.value = -12;
+    const chorus = new Tone.Chorus(4, 2.5, 0.5).start();
+    strings.chain(chorus, new Tone.Filter(3500, 'lowpass'), reverb);
+    const guitar = new Tone.PluckSynth({ attackNoise: 1, dampening: 4000, resonance: 0.95 });
+    guitar.volume.value = -6;
+    guitar.connect(reverb);
+    const sine = new Tone.PolySynth(Tone.Synth, {
+      oscillator: { type: 'sine' },
+      envelope: { attack: 0.04, decay: 0.2, sustain: 0.6, release: 0.6 },
+    });
+    sine.volume.value = -10;
+    sine.connect(reverb);
+    toneInstruments = { piano, organ, strings, guitar, sine };
+    // Wait for piano samples to load before flipping ready flag
+    Tone.loaded().then(() => {
+      toneReady = true;
+      updateAudioBadge();
+    }).catch(() => { toneReady = false; updateAudioBadge(); });
+  } catch (e) {
+    console.warn('Tone.js init failed; using legacy synth.', e);
+    toneReady = false;
+    updateAudioBadge();
+  }
+}
+
+function updateAudioBadge() {
+  const badge = document.getElementById('audioBadge');
+  if (!badge) return;
+  if (typeof Tone === 'undefined') {
+    badge.style.display = 'block';
+    badge.textContent = 'áudio offline · síntese local';
+  } else if (toneReady) {
+    badge.style.display = 'none';
+  } else {
+    badge.style.display = 'block';
+    badge.textContent = 'carregando samples…';
+  }
+}
+
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function freqToNote(freq) {
+  const midi = Math.round(69 + 12 * Math.log2(freq / 440));
+  const name = NOTE_NAMES[((midi % 12) + 12) % 12];
+  const oct = Math.floor(midi / 12) - 1;
+  return name + oct;
+}
+
+function playChordTone(freqs, instrumentName) {
+  if (!toneReady || !toneInstruments) return false;
+  const instr = toneInstruments[instrumentName] || toneInstruments.piano;
+  const notes = freqs.map(freqToNote);
+  const dur = instrumentName === 'guitar' ? 1.8 : 2.0;
+  try {
+    if (instrumentName === 'guitar') {
+      notes.forEach((n, i) => instr.triggerAttack(n, Tone.now() + i * 0.02));
+    } else {
+      instr.triggerAttackRelease(notes, dur, Tone.now());
+    }
+    return true;
+  } catch (e) {
+    console.warn('Tone playChord failed; falling back.', e);
+    return false;
+  }
 }
 
 const INSTRUMENTS = {
@@ -1393,16 +1684,48 @@ const INSTRUMENTS = {
 };
 
 function playChord(freqs, instrument) {
+  ensureAudioContext();
+  // Try Tone.js (samples) first; fall back to legacy additive synth if unavailable
+  if (playChordTone(freqs, instrument)) return;
   const ctx = ensureAudioContext();
   const synth = INSTRUMENTS[instrument] || INSTRUMENTS.piano;
   synth(ctx, freqs);
+}
+
+function playTonicReference(tonic) {
+  if (!tonic || tonic === 'off') return 0;
+  const freq = tonic === 'C' ? 261.63 : (tonic === 'A' ? 440.00 : 0);
+  if (!freq) return 0;
+  ensureAudioContext();
+  // Use sine tone — minimal reference, not the instrument
+  if (toneReady && toneInstruments && toneInstruments.sine) {
+    try {
+      toneInstruments.sine.triggerAttackRelease(freqToNote(freq), 0.7, Tone.now());
+      return 1100;
+    } catch (e) { /* fall through */ }
+  }
+  // Legacy fallback
+  const ctx = audioCtx;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  gain.gain.value = 0;
+  gain.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 0.04);
+  gain.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 0.6);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.85);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.9);
+  return 1100;
 }
 
 // ============================================
 // MARKOV-FILTERED SAMPLING
 // ============================================
 function pickNextChord() {
-  const unlocked = state.levelUnlocked;
+  // Free mode uses all 8 chords; train mode uses unlocked set
+  const unlocked = sessionMode === 'free' ? CHORDS.length : state.levelUnlocked;
   const available = CHORDS.slice(0, unlocked).map((_, i) => i);
   const accuracies = computeAccuraciesByColor();
 
@@ -1527,19 +1850,23 @@ function goTo(screen) {
   if (screen === 'explore') renderExplore();
   if (screen === 'log') renderLog();
   if (screen === 'settings') renderSettings();
-  if (screen === 'train') startTrainSession();
+  // 'train' / 'progression' navigation is direct — callers (startTrainSession, startFreeSession,
+  // actuallyStartBaseline, startProbeSession, startProgressionSession) own session setup.
 }
 
 function renderMenu() {
   document.getElementById('menuLevel').textContent = `${state.levelUnlocked} / 8`;
-  document.getElementById('menuSessions').textContent = state.totalSessions;
-  const trainHistory = state.history.filter(h => h.mode === 'train');
-  if (trainHistory.length > 0) {
-    const correct = trainHistory.filter(h => h.correct).length;
-    document.getElementById('menuAccuracy').textContent = Math.round(correct / trainHistory.length * 100) + '%';
+  document.getElementById('menuSessions').textContent = `${state.totalSessions} · ${state.freeSessions || 0} livres`;
+  const playHistory = state.history.filter(h => h.mode === 'train' || h.mode === 'free');
+  if (playHistory.length > 0) {
+    const correct = playHistory.filter(h => h.correct).length;
+    document.getElementById('menuAccuracy').textContent = Math.round(correct / playHistory.length * 100) + '%';
   } else {
     document.getElementById('menuAccuracy').textContent = '—';
   }
+  const streak = calculateStreak();
+  const streakEl = document.getElementById('menuStreak');
+  if (streakEl) streakEl.textContent = streak === 0 ? '—' : (streak === 1 ? '1 dia' : streak + ' dias');
   document.getElementById('menuBaseline').textContent = state.baseline ? new Date(state.baseline.date).toLocaleDateString('pt-BR') : 'não feito';
 }
 
@@ -1559,20 +1886,23 @@ function startTrainSession() {
     return;
   }
 
-  sessionMode = 'train';
-  sessionCount = 0;
-  lastChordIdx = null;
-  currentChordIdx = null;
-  acceptingInput = false;
-  document.getElementById('trainTitle').innerHTML = 'treino';
-  document.getElementById('trainTotal').textContent = state.settings.sessionLength;
-  document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
-  document.getElementById('feedback').innerHTML = '';
-  renderColorGrid();
-  updateTrainHeader();
-  setTimeout(() => {
-    if (document.getElementById('train').classList.contains('active')) newRound();
-  }, 400);
+  showSessionIntro('train', () => {
+    sessionMode = 'train';
+    sessionCount = 0;
+    lastChordIdx = null;
+    currentChordIdx = null;
+    acceptingInput = false;
+    goTo('train');
+    document.getElementById('trainTitle').innerHTML = 'treino';
+    document.getElementById('trainTotal').textContent = state.settings.sessionLength;
+    document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
+    document.getElementById('feedback').innerHTML = '';
+    renderColorGrid();
+    updateTrainHeader();
+    setTimeout(() => {
+      if (document.getElementById('train').classList.contains('active')) newRound();
+    }, 400);
+  });
 }
 
 function sessionWasProbeRecently() {
@@ -1623,6 +1953,7 @@ function startProbeSession() {
   lastChordIdx = null;
   currentChordIdx = null;
   acceptingInput = false;
+  goTo('train');
   document.getElementById('trainTitle').innerHTML = 'probe <span class="badge badge-probe">teste</span>';
   document.getElementById('trainTotal').textContent = PROBE_LENGTH;
   document.getElementById('feedback').classList.remove('correct', 'wrong');
@@ -1647,13 +1978,15 @@ function updateTrainHeader() {
 function renderColorGrid() {
   const grid = document.getElementById('colorGrid');
   grid.innerHTML = '';
+  // Free mode unlocks all 8; train mode honors levelUnlocked
+  const unlocked = sessionMode === 'free' ? CHORDS.length : state.levelUnlocked;
   CHORDS.forEach((c, idx) => {
     const btn = document.createElement('button');
     btn.className = 'color-btn';
     btn.dataset.idx = idx;
     btn.style.background = c.hex;
     btn.style.color = c.text;
-    if (idx >= state.levelUnlocked) btn.disabled = true;
+    if (idx >= unlocked) btn.disabled = true;
     btn.innerHTML = `<span class="kanji-small">${c.kanji}</span><span class="name">${c.name}</span>`;
     btn.addEventListener('click', () => handleAnswer(idx));
     grid.appendChild(btn);
@@ -1678,16 +2011,20 @@ function renderColorGridForBaseline() {
 
 function newRound() {
   acceptingInput = false;
+  trialReplays = 0;
+  const replayBtn = document.getElementById('replayBtn');
+  if (replayBtn) replayBtn.style.display = 'none';
+
+  // Clear any lingering pulse-reveal on grid
+  document.querySelectorAll('#colorGrid .color-btn').forEach(b => b.classList.remove('pulse-reveal'));
 
   if (sessionMode === 'baseline') {
-    // Baseline uses all 8 chords, randomly, no markov filter
     const all = [0, 1, 2, 3, 4, 5, 6, 7];
     const filtered = all.filter(i => i !== lastChordIdx);
     currentChordIdx = filtered[Math.floor(Math.random() * filtered.length)];
     currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
     currentInstrument = 'piano';
   } else if (sessionMode === 'probe') {
-    // Probe: random chord from unlocked set, aggressive variations, varied instrument
     const unlocked = state.levelUnlocked;
     const available = CHORDS.slice(0, unlocked).map((_, i) => i).filter(i => i !== lastChordIdx);
     currentChordIdx = available[Math.floor(Math.random() * available.length)];
@@ -1695,13 +2032,13 @@ function newRound() {
     const instruments = ['piano', 'organ', 'strings', 'guitar', 'sine'];
     currentInstrument = instruments[Math.floor(Math.random() * instruments.length)];
   } else {
-    // Normal train
+    // Train or free
     currentChordIdx = pickNextChord();
     currentVariation = pickVariation(currentChordIdx, state.settings.variation);
     currentInstrument = state.settings.instrument;
   }
 
-  if (sessionMode === 'train') {
+  if (sessionMode === 'train' || sessionMode === 'free') {
     document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
   }
   playCurrentChord();
@@ -1716,9 +2053,24 @@ function playCurrentChord() {
   const btn = document.getElementById('playBtn');
   btn.classList.add('playing');
   setTimeout(() => btn.classList.remove('playing'), 600);
+  // Reference tonic (only in train/free modes, only if user enabled)
+  const tonicEnabled = (sessionMode === 'train' || sessionMode === 'free') && state.settings.refTonic !== 'off';
+  const tonicDelay = tonicEnabled ? playTonicReference(state.settings.refTonic) : 0;
+  setTimeout(() => {
+    playChord(currentVariation.freqs, currentInstrument);
+    chordPlayedAt = performance.now();
+    acceptingInput = true;
+    const replayBtn = document.getElementById('replayBtn');
+    if (replayBtn && (sessionMode === 'train' || sessionMode === 'free')) {
+      replayBtn.style.display = 'inline-block';
+    }
+  }, tonicDelay);
+}
+
+function replayCurrentChord() {
+  if (currentChordIdx === null || currentVariation === null) return;
+  trialReplays += 1;
   playChord(currentVariation.freqs, currentInstrument);
-  chordPlayedAt = performance.now();
-  acceptingInput = true;
 }
 
 function handleAnswer(idx) {
@@ -1726,6 +2078,8 @@ function handleAnswer(idx) {
   acceptingInput = false;
   const rt = performance.now() - chordPlayedAt;
   const correct = idx === currentChordIdx;
+  const replayBtn = document.getElementById('replayBtn');
+  if (replayBtn) replayBtn.style.display = 'none';
 
   const record = {
     ts: new Date().toISOString(),
@@ -1737,6 +2091,8 @@ function handleAnswer(idx) {
     instrument: currentInstrument,
     variation: currentVariation.type,
     mode: sessionMode,
+    refTonic: state.settings.refTonic !== 'off' ? state.settings.refTonic : null,
+    replays: trialReplays,
   };
 
   if (sessionMode === 'baseline') {
@@ -1744,15 +2100,14 @@ function handleAnswer(idx) {
   } else if (sessionMode === 'probe') {
     probeResults.push(record);
   } else {
+    // train or free
     state.history.push(record);
     if (state.history.length > 2000) state.history = state.history.slice(-2000);
     saveState();
   }
 
-  // Visual feedback on chosen button (always, even in baseline)
   const buttons = document.querySelectorAll('#colorGrid .color-btn');
   if (buttons[idx]) {
-    // In baseline, just neutral flash; otherwise correct/wrong
     if (sessionMode === 'baseline') {
       buttons[idx].style.outline = '2px solid rgba(255,255,255,0.3)';
       setTimeout(() => buttons[idx].style.outline = '', 400);
@@ -1762,24 +2117,36 @@ function handleAnswer(idx) {
     }
   }
 
-  // Verbal feedback
   const fb = document.getElementById('feedback');
   if (sessionMode === 'baseline') {
-    // No feedback shown
+    // no feedback
   } else if (sessionMode === 'probe') {
     fb.classList.remove('correct', 'wrong');
     fb.innerHTML = '<small>Resposta registrada · sem feedback (probe)</small>';
   } else {
     fb.classList.remove('correct', 'wrong');
+    const refTag = state.settings.refTonic !== 'off'
+      ? `<span class="ref-tonic-tag">ref: ${state.settings.refTonic === 'C' ? 'Dó' : 'Lá'}</span>`
+      : '';
     if (correct) {
       const rtNote = rt < MAX_RT_MS ? 'absoluto' : 'calculado — sinta, não pense';
       fb.classList.add('correct', 'show');
       const varTag = currentVariation.type !== 'root' ? ` · ${currentVariation.type}` : '';
-      fb.innerHTML = `Correto<small>${Math.round(rt)}ms · ${rtNote}${varTag}</small>`;
+      const replayTag = trialReplays > 0 ? ` · ${trialReplays} replay${trialReplays > 1 ? 's' : ''}` : '';
+      fb.innerHTML = `${refTag}Correto<small>${Math.round(rt)}ms · ${rtNote}${varTag}${replayTag}</small>`;
     } else {
       fb.classList.add('wrong', 'show');
       const right = CHORDS[currentChordIdx];
-      fb.innerHTML = `Era ${right.name}<small>${right.chordSym} · ${right.kanji}</small>`;
+      fb.innerHTML = `${refTag}Era ${right.name}<small>${right.chordSym} · ${right.kanji}</small>`;
+      // Play correct chord + pulse the correct color
+      if (state.settings.playCorrectOnError === 'on' && buttons[currentChordIdx]) {
+        const correctIdx = currentChordIdx;
+        setTimeout(() => {
+          buttons[correctIdx].classList.add('pulse-reveal');
+          playChord(currentVariation.freqs, currentInstrument);
+        }, 650);
+        setTimeout(() => buttons[correctIdx].classList.remove('pulse-reveal'), 1900);
+      }
     }
   }
 
@@ -1788,7 +2155,12 @@ function handleAnswer(idx) {
   currentChordIdx = null;
   updateTrainHeader();
 
-  // Check unlock (only in train mode)
+  // Mid-session banner every 10 trials (train/free only)
+  if ((sessionMode === 'train' || sessionMode === 'free') && sessionCount > 0 && sessionCount % 10 === 0) {
+    showSessionBanner();
+  }
+
+  // Unlock check (only train mode)
   if (sessionMode === 'train') {
     const unlocked = tryUnlockNextLevel();
     if (unlocked) {
@@ -1800,17 +2172,17 @@ function handleAnswer(idx) {
     }
   }
 
-  // Next round or end
   const sessionLen = sessionMode === 'baseline' ? BASELINE_LENGTH :
                      sessionMode === 'probe' ? PROBE_LENGTH :
                      state.settings.sessionLength;
 
   if (sessionCount >= sessionLen) {
-    setTimeout(endSession, sessionMode === 'baseline' ? 600 : 1200);
+    const endDelay = sessionMode === 'baseline' ? 600 : (correct ? 1200 : 2200);
+    setTimeout(endSession, endDelay);
   } else {
     const delay = sessionMode === 'baseline' ? 700 :
                   sessionMode === 'probe' ? 1000 :
-                  correct ? 900 : 1800;
+                  correct ? 900 : (state.settings.playCorrectOnError === 'on' ? 2400 : 1800);
     setTimeout(newRound, delay);
   }
 }
@@ -1841,22 +2213,385 @@ function endSession() {
       [{ label: 'OK', primary: true, action: () => { hideModal(); goTo('menu'); } }]);
     return;
   }
-  state.totalSessions += 1;
+  // train or free
+  if (sessionMode === 'train') {
+    state.totalSessions += 1;
+  } else if (sessionMode === 'free') {
+    state.freeSessions += 1;
+  }
+  const newMilestones = checkMilestones();
   saveState();
-  goTo('menu');
+  showSessionSummary(sessionMode, sessionCount, newMilestones);
 }
 
 function endSessionAndReturn() {
-  if (sessionMode === 'baseline' || sessionMode === 'probe') {
-    // Discard partial baseline/probe
+  if (sessionMode === 'baseline' || sessionMode === 'probe' || sessionMode === 'progression') {
+    // Discard partial baseline/probe/progression
     goTo('menu');
     return;
   }
   if (sessionCount > 0) {
-    state.totalSessions += 1;
+    if (sessionMode === 'train') state.totalSessions += 1;
+    else if (sessionMode === 'free') state.freeSessions += 1;
     saveState();
   }
   goTo('menu');
+}
+
+// ============================================
+// FREE / PROGRESSION / UX JOURNEY
+// ============================================
+function startFreeSession() {
+  showSessionIntro('free', () => {
+    sessionMode = 'free';
+    sessionCount = 0;
+    lastChordIdx = null;
+    currentChordIdx = null;
+    acceptingInput = false;
+    goTo('train');
+    document.getElementById('trainTitle').textContent = 'treino livre';
+    document.getElementById('trainTotal').textContent = state.settings.sessionLength;
+    document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
+    document.getElementById('feedback').innerHTML = '';
+    renderColorGrid();
+    updateTrainHeader();
+    setTimeout(() => {
+      if (document.getElementById('train').classList.contains('active')) newRound();
+    }, 400);
+  });
+}
+
+function startProgressionSession() {
+  showSessionIntro('progression', () => {
+    sessionMode = 'progression';
+    sessionCount = 0;
+    lastChordIdx = null;
+    acceptingInput = false;
+    goTo('progression');
+    const totalRounds = Math.max(5, Math.round(state.settings.sessionLength / state.settings.progressionLength));
+    document.getElementById('progTotal').textContent = totalRounds;
+    document.getElementById('progCount').textContent = 0;
+    document.getElementById('progBar').style.width = '0%';
+    document.getElementById('progFeedback').classList.remove('show', 'correct', 'wrong');
+    document.getElementById('progFeedback').innerHTML = '';
+    renderProgressionColorGrid();
+    progressionTotalRounds = totalRounds;
+    progressionRoundIdx = 0;
+    progressionResults = [];
+    setTimeout(() => {
+      if (document.getElementById('progression').classList.contains('active')) startProgressionRound();
+    }, 400);
+  });
+}
+
+let progressionTotalRounds = 0;
+let progressionRoundIdx = 0;
+let progressionResults = [];
+
+function startProgressionRound() {
+  acceptingInput = false;
+  progressionSlot = 0;
+  progressionChoices = [];
+  const len = state.settings.progressionLength;
+  // Pick `len` distinct chord indices from unlocked or all (free in progression)
+  // Progression uses all 8 chords always (it's intended as advanced practice)
+  const pool = CHORDS.map((_, i) => i);
+  progressionSeq = [];
+  let prev = -1;
+  for (let i = 0; i < len; i++) {
+    const candidates = pool.filter(c => c !== prev);
+    const pick = candidates[Math.floor(Math.random() * candidates.length)];
+    progressionSeq.push(pick);
+    progressionChoices.push(null);
+    prev = pick;
+  }
+  renderProgressionSlots();
+  document.getElementById('progFeedback').classList.remove('show', 'correct', 'wrong');
+  document.getElementById('progFeedback').innerHTML = '<small>Pressione play, depois identifique cada acorde em ordem.</small>';
+  document.getElementById('progFeedback').classList.add('show');
+  document.getElementById('progReplayBtn').style.display = 'none';
+  playProgressionSeq();
+}
+
+function playProgressionSeq() {
+  ensureAudioContext();
+  const btn = document.getElementById('progPlayBtn');
+  btn.classList.add('playing');
+  setTimeout(() => btn.classList.remove('playing'), 600);
+  const gap = 650;
+  const dur = 1.6;
+  progressionSeq.forEach((chordIdx, i) => {
+    setTimeout(() => {
+      playChord(CHORDS[chordIdx].freqs, state.settings.instrument);
+    }, i * (gap + dur * 1000 * 0.6));
+  });
+  const totalMs = progressionSeq.length * (gap + dur * 1000 * 0.6);
+  setTimeout(() => {
+    acceptingInput = true;
+    document.getElementById('progReplayBtn').style.display = 'inline-block';
+  }, totalMs);
+}
+
+function renderProgressionColorGrid() {
+  const grid = document.getElementById('progColorGrid');
+  grid.innerHTML = '';
+  CHORDS.forEach((c, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'color-btn';
+    btn.dataset.idx = idx;
+    btn.style.background = c.hex;
+    btn.style.color = c.text;
+    btn.innerHTML = `<span class="kanji-small">${c.kanji}</span><span class="name">${c.name}</span>`;
+    btn.addEventListener('click', () => handleProgressionAnswer(idx));
+    grid.appendChild(btn);
+  });
+}
+
+function renderProgressionSlots() {
+  const wrap = document.getElementById('progSlots');
+  wrap.innerHTML = '';
+  for (let i = 0; i < progressionSeq.length; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'prog-slot';
+    if (i === progressionSlot && progressionChoices[i] === null) slot.classList.add('current');
+    if (progressionChoices[i] !== null) {
+      slot.classList.add('filled');
+      const c = CHORDS[progressionChoices[i]];
+      slot.style.background = c.hex;
+      slot.style.color = c.text;
+      slot.style.borderColor = c.hex;
+      slot.textContent = c.kanji;
+    }
+    wrap.appendChild(slot);
+  }
+}
+
+function handleProgressionAnswer(idx) {
+  if (!acceptingInput) return;
+  if (progressionSlot >= progressionSeq.length) return;
+  progressionChoices[progressionSlot] = idx;
+  progressionSlot += 1;
+  renderProgressionSlots();
+  if (progressionSlot < progressionSeq.length) return;
+  // Round complete — score it
+  acceptingInput = false;
+  const correctMask = progressionSeq.map((c, i) => c === progressionChoices[i] ? 1 : 0);
+  const allCorrect = correctMask.every(v => v === 1);
+  const correctCount = correctMask.reduce((a, b) => a + b, 0);
+  // Visual: mark each slot correct/wrong
+  const slots = document.querySelectorAll('#progSlots .prog-slot');
+  slots.forEach((s, i) => s.classList.add(correctMask[i] ? 'correct' : 'wrong'));
+  const fb = document.getElementById('progFeedback');
+  fb.classList.remove('correct', 'wrong');
+  fb.classList.add(allCorrect ? 'correct' : 'wrong', 'show');
+  fb.innerHTML = allCorrect
+    ? `Sequência perfeita ✦<small>${correctCount}/${progressionSeq.length}</small>`
+    : `${correctCount}/${progressionSeq.length} corretos<small>esperado: ${progressionSeq.map(c => CHORDS[c].name).join(' → ')}</small>`;
+  progressionResults.push({
+    ts: new Date().toISOString(),
+    seq: progressionSeq.map(c => CHORDS[c].id),
+    chosenSeq: progressionChoices.map(c => CHORDS[c].id),
+    correctMask,
+    perfect: allCorrect,
+    length: progressionSeq.length,
+    instrument: state.settings.instrument,
+  });
+  progressionRoundIdx += 1;
+  document.getElementById('progCount').textContent = progressionRoundIdx;
+  document.getElementById('progBar').style.width = (progressionRoundIdx / progressionTotalRounds * 100) + '%';
+  if (progressionRoundIdx >= progressionTotalRounds) {
+    setTimeout(endProgressionSession, 1500);
+  } else {
+    setTimeout(startProgressionRound, allCorrect ? 1200 : 2000);
+  }
+}
+
+function endProgressionSession() {
+  state.progressions.push({
+    date: new Date().toISOString(),
+    rounds: progressionResults,
+  });
+  state.progressionSessions += 1;
+  const newMilestones = checkMilestones();
+  saveState();
+  const perfect = progressionResults.filter(r => r.perfect).length;
+  const totalChords = progressionResults.reduce((a, r) => a + r.length, 0);
+  const correctChords = progressionResults.reduce((a, r) => a + r.correctMask.reduce((x, y) => x + y, 0), 0);
+  const accStr = totalChords > 0 ? Math.round(correctChords / totalChords * 100) + '%' : '—';
+  showSessionSummary('progression', progressionRoundIdx, newMilestones, {
+    accLine: `${accStr} (${correctChords}/${totalChords} acordes)`,
+    extraLine: `Sequências perfeitas: <strong>${perfect}/${progressionResults.length}</strong>`,
+  });
+}
+
+// ============================================
+// SESSION INTRO + SUMMARY + BANNER
+// ============================================
+function showSessionIntro(mode, onStart) {
+  const modeLabels = { train: 'Treino Eguchi', free: 'Treino livre', progression: 'Modo progressão' };
+  const subLabels = {
+    train: 'Progressão clássica · desbloqueio gradual',
+    free: 'Todas as 8 cores · prática direta',
+    progression: `${state.settings.progressionLength} acordes em sequência`,
+  };
+  document.getElementById('introMode').textContent = modeLabels[mode] || 'Treino';
+  document.getElementById('introSub').textContent = subLabels[mode] || 'Pronto?';
+  const trials = mode === 'progression'
+    ? `${Math.max(5, Math.round(state.settings.sessionLength / state.settings.progressionLength))} rodadas`
+    : state.settings.sessionLength;
+  document.getElementById('introTrials').textContent = trials;
+  document.getElementById('introInstr').textContent = state.settings.instrument;
+  document.getElementById('introVar').textContent = state.settings.variation === 'off' ? 'desligado'
+    : (state.settings.variation === 'octave' ? 'oitavas' : 'inversões+oitavas');
+  document.getElementById('introTonic').textContent = state.settings.refTonic === 'off' ? '—'
+    : (state.settings.refTonic === 'C' ? 'Dó' : 'Lá');
+  const btn = document.getElementById('introStartBtn');
+  const clone = btn.cloneNode(true);
+  btn.parentNode.replaceChild(clone, btn);
+  clone.addEventListener('click', () => {
+    ensureAudioContext();
+    onStart();
+  });
+  goTo('sessionIntro');
+}
+
+function showSessionBanner() {
+  let banner = document.getElementById('sessionBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'sessionBanner';
+    banner.className = 'session-banner';
+    document.body.appendChild(banner);
+  }
+  // Compute partial stats for this session (last N trials in history, mode-filtered)
+  const sessionRecords = state.history.slice(-sessionCount).filter(r => r.mode === sessionMode);
+  const correct = sessionRecords.filter(r => r.correct).length;
+  const accPct = sessionRecords.length > 0 ? Math.round(correct / sessionRecords.length * 100) : 0;
+  const avgRt = sessionRecords.length > 0
+    ? Math.round(sessionRecords.reduce((a, r) => a + r.rtMs, 0) / sessionRecords.length)
+    : 0;
+  banner.textContent = `${sessionCount} trials · ${accPct}% · ${avgRt}ms`;
+  banner.classList.add('show');
+  setTimeout(() => banner.classList.remove('show'), 2200);
+}
+
+function showSessionSummary(mode, count, newMilestones, extras) {
+  extras = extras || {};
+  const body = document.getElementById('summaryBody');
+  let html = '';
+  const modeLabels = { train: 'Treino Eguchi', free: 'Treino livre', progression: 'Modo progressão' };
+  html += `<h2>${modeLabels[mode] || 'Sessão'} concluída</h2>`;
+  if (mode === 'progression') {
+    html += `<p>${extras.accLine || ''}</p>`;
+    if (extras.extraLine) html += `<p>${extras.extraLine}</p>`;
+  } else {
+    // train/free
+    const sessionRecords = state.history.slice(-count).filter(r => r.mode === mode);
+    const correct = sessionRecords.filter(r => r.correct).length;
+    const acc = sessionRecords.length > 0 ? Math.round(correct / sessionRecords.length * 100) : 0;
+    const rts = sessionRecords.map(r => r.rtMs);
+    const avgRt = rts.length > 0 ? Math.round(rts.reduce((a, b) => a + b, 0) / rts.length) : 0;
+    const medianRt = rts.length > 0 ? rts.slice().sort((a, b) => a - b)[Math.floor(rts.length / 2)] : 0;
+    // Per-color acc
+    const byColor = {};
+    sessionRecords.forEach(r => {
+      if (!byColor[r.chordIdx]) byColor[r.chordIdx] = { c: 0, t: 0 };
+      byColor[r.chordIdx].t += 1;
+      if (r.correct) byColor[r.chordIdx].c += 1;
+    });
+    let best = { idx: null, acc: -1 }, worst = { idx: null, acc: 2 };
+    Object.entries(byColor).forEach(([idx, v]) => {
+      const a = v.c / v.t;
+      if (v.t >= 2 && a > best.acc) best = { idx: parseInt(idx), acc: a };
+      if (v.t >= 2 && a < worst.acc) worst = { idx: parseInt(idx), acc: a };
+    });
+    html += `<p><strong>${correct}/${sessionRecords.length}</strong> acertos · <strong>${acc}%</strong> · RT médio <strong>${avgRt}ms</strong> · mediana ${medianRt}ms</p>`;
+    if (best.idx !== null && worst.idx !== null && best.idx !== worst.idx) {
+      html += `<p>Melhor: <strong style="color:${CHORDS[best.idx].hex};">${CHORDS[best.idx].name}</strong> (${Math.round(best.acc*100)}%) · Pior: <strong style="color:${CHORDS[worst.idx].hex};">${CHORDS[worst.idx].name}</strong> (${Math.round(worst.acc*100)}%)</p>`;
+    }
+    if (mode === 'train') {
+      const c = checkUnlockCriteria();
+      if (c && typeof c.ready !== 'undefined') {
+        html += `<h3>Critérios de unlock</h3><ul>`;
+        html += `<li>${c.minTests ? '✓' : '○'} ${c.minTestsCount}/${MIN_TESTS_FOR_UNLOCK} trials no nível</li>`;
+        html += `<li>${c.bayesianPass ? '✓' : '○'} posterior <strong>${Math.round((c.posteriorProb || 0) * 100)}%</strong> (alvo ≥95%)</li>`;
+        html += `<li>${c.avgRtPass ? '✓' : '○'} RT médio <strong>${c.avgRt ? Math.round(c.avgRt) + 'ms' : '—'}</strong> (alvo &lt;2000ms)</li>`;
+        html += `<li>${c.daysPass ? '✓' : '○'} <strong>${Math.floor(c.daysAtLevel)}</strong>/${MIN_DAYS_AT_LEVEL} dias no nível</li>`;
+        html += `</ul>`;
+      }
+    }
+  }
+  if (newMilestones && newMilestones.length > 0) {
+    html += `<h3>✦ Conquistas desbloqueadas</h3><p>`;
+    newMilestones.forEach(m => { html += `<span class="milestone-badge">${m}</span>`; });
+    html += `</p>`;
+  }
+  body.innerHTML = html;
+  // Re-bind again button
+  const againBtn = document.getElementById('summaryAgainBtn');
+  const clone = againBtn.cloneNode(true);
+  againBtn.parentNode.replaceChild(clone, againBtn);
+  clone.addEventListener('click', () => {
+    if (mode === 'train') startTrainSession();
+    else if (mode === 'free') startFreeSession();
+    else if (mode === 'progression') startProgressionSession();
+  });
+  goTo('sessionSummary');
+}
+
+// ============================================
+// STREAK + MILESTONES
+// ============================================
+function calculateStreak() {
+  if (state.history.length === 0) return 0;
+  const days = new Set();
+  state.history.forEach(r => {
+    if (r.mode === 'train' || r.mode === 'free') {
+      days.add(new Date(r.ts).toDateString());
+    }
+  });
+  const sortedDays = Array.from(days).map(d => new Date(d)).sort((a, b) => b - a);
+  if (sortedDays.length === 0) return 0;
+  let streak = 0;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  let cursor = new Date(today);
+  // Check if today has activity; if not, start from yesterday
+  const todayStr = today.toDateString();
+  const hasToday = days.has(todayStr);
+  if (!hasToday) {
+    cursor.setDate(cursor.getDate() - 1);
+    if (!days.has(cursor.toDateString())) return 0;
+  }
+  while (days.has(cursor.toDateString())) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
+const MILESTONE_DEFS = [
+  { id: 'first-session', label: 'Primeira sessão', test: (s) => (s.totalSessions + s.freeSessions) >= 1 },
+  { id: 'trials-100', label: '100 trials', test: (s) => s.history.length >= 100 },
+  { id: 'trials-500', label: '500 trials', test: (s) => s.history.length >= 500 },
+  { id: 'trials-1000', label: '1000 trials', test: (s) => s.history.length >= 1000 },
+  { id: 'sessions-10', label: '10 sessões', test: (s) => (s.totalSessions + s.freeSessions) >= 10 },
+  { id: 'streak-3', label: 'Streak de 3 dias', test: (s) => calculateStreak() >= 3 },
+  { id: 'streak-7', label: 'Streak de 7 dias', test: (s) => calculateStreak() >= 7 },
+  { id: 'baseline-done', label: 'Baseline registrado', test: (s) => s.baseline && s.baseline.results && s.baseline.results.length > 0 },
+  { id: 'unlock-2', label: 'Segunda cor desbloqueada', test: (s) => s.levelUnlocked >= 2 },
+  { id: 'unlock-all', label: 'Todas as 8 cores desbloqueadas', test: (s) => s.levelUnlocked >= 8 },
+  { id: 'progression-1', label: 'Primeira progressão', test: (s) => s.progressionSessions >= 1 },
+];
+
+function checkMilestones() {
+  const newly = [];
+  MILESTONE_DEFS.forEach(def => {
+    if (!state.milestones.includes(def.id) && def.test(state)) {
+      state.milestones.push(def.id);
+      newly.push(def.label);
+    }
+  });
+  return newly;
 }
 
 // ============================================
@@ -2233,6 +2968,15 @@ function renderSettings() {
   document.querySelectorAll('#probeSeg .seg-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.probe === state.settings.probeAuto);
   });
+  document.querySelectorAll('#tonicSeg .seg-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tonic === state.settings.refTonic);
+  });
+  document.querySelectorAll('#correctSeg .seg-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.correct === state.settings.playCorrectOnError);
+  });
+  document.querySelectorAll('#progLenSeg .seg-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.plen) === state.settings.progressionLength);
+  });
 }
 
 function bindSettings() {
@@ -2259,6 +3003,25 @@ function bindSettings() {
   document.querySelectorAll('#probeSeg .seg-btn').forEach(b => {
     b.addEventListener('click', () => {
       state.settings.probeAuto = b.dataset.probe;
+      saveState(); renderSettings();
+    });
+  });
+  document.querySelectorAll('#tonicSeg .seg-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      state.settings.refTonic = b.dataset.tonic;
+      saveState(); renderSettings();
+      if (b.dataset.tonic !== 'off') playTonicReference(b.dataset.tonic);
+    });
+  });
+  document.querySelectorAll('#correctSeg .seg-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      state.settings.playCorrectOnError = b.dataset.correct;
+      saveState(); renderSettings();
+    });
+  });
+  document.querySelectorAll('#progLenSeg .seg-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      state.settings.progressionLength = parseInt(b.dataset.plen);
       saveState(); renderSettings();
     });
   });
@@ -2383,6 +3146,19 @@ document.body.addEventListener('click', () => ensureAudioContext(), { once: true
 
 bindSettings();
 renderMenu();
+updateAudioBadge();
+
+// Pre-construct Tone.js instruments so Salamander samples start downloading
+// before the user clicks play. Audio context still needs a user gesture to start.
+function preloadToneInstruments() {
+  if (typeof Tone === 'undefined' || toneInstruments) return;
+  try { initToneInstruments(); } catch (e) { /* ignore */ }
+}
+if (typeof Tone !== 'undefined') {
+  preloadToneInstruments();
+} else {
+  window.addEventListener('load', preloadToneInstruments);
+}
 
 // Register service worker for offline support
 if ('serviceWorker' in navigator) {

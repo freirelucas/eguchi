@@ -1,7 +1,7 @@
 // Eguchi Lab — Service Worker
-// Cache-first strategy for app shell; network-first for fonts with cache fallback
+// Cache-first strategy for app shell; cache-on-fetch for fonts, Tone.js, and Salamander samples
 
-const CACHE_VERSION = 'eguchi-lab-v3';
+const CACHE_VERSION = 'eguchi-lab-v4';
 const APP_SHELL = [
   './',
   './index.html',
@@ -10,8 +10,9 @@ const APP_SHELL = [
   './icon-512.png',
 ];
 
-// Google Fonts (cached on first fetch)
+// Cross-origin hosts cached on first fetch
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+const CDN_HOSTS = ['unpkg.com', 'tonejs.github.io'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -28,24 +29,34 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+function cacheOnFetch(event) {
+  event.respondWith(
+    caches.open(CACHE_VERSION).then((cache) =>
+      cache.match(event.request).then((cached) => {
+        const fetchPromise = fetch(event.request).then((response) => {
+          if (response && response.status === 200) {
+            cache.put(event.request, response.clone());
+          }
+          return response;
+        }).catch(() => cached);
+        return cached || fetchPromise;
+      })
+    )
+  );
+}
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Fonts: cache them as we go, fallback to cache offline
+  // Fonts: cache on fetch, offline fallback
   if (FONT_HOSTS.includes(url.hostname)) {
-    event.respondWith(
-      caches.open(CACHE_VERSION).then((cache) =>
-        cache.match(event.request).then((cached) => {
-          const fetchPromise = fetch(event.request).then((response) => {
-            if (response && response.status === 200) {
-              cache.put(event.request, response.clone());
-            }
-            return response;
-          }).catch(() => cached);
-          return cached || fetchPromise;
-        })
-      )
-    );
+    cacheOnFetch(event);
+    return;
+  }
+
+  // Tone.js + Salamander piano samples: cache on fetch, offline fallback
+  if (CDN_HOSTS.includes(url.hostname)) {
+    cacheOnFetch(event);
     return;
   }
 

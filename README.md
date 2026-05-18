@@ -80,13 +80,32 @@ df = pd.read_csv('eguchi-lab-YYYY-MM-DD.csv', parse_dates=['ts'])
 
 JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcool, mood, notas).
 
+## Modos de treino
+
+- **Treino livre** — todas as 8 cores desbloqueadas. Prática direta, sem gating Eguchi. Trials salvos com `mode: 'free'`.
+- **Treino Eguchi** — progressão clássica: cor nova só desbloqueia quando P(p>85%|dados) > 95% em 50+ trials e ≥7 dias no nível. Modo canônico do método.
+- **Modo progressão** — 2-4 acordes em sequência. Identifique cada um em ordem. Testa memória de curto prazo + reconhecimento.
+- **Baseline** — 50 trials cegos, sem feedback. Ponto de partida.
+- **Probe** — 10 trials com variações inéditas, sem feedback. Mede generalização.
+
+## Recursos do treino
+
+- **Replay** — botão pra ouvir o acorde de novo durante o trial; cada replay é tracked.
+- **Acorde correto após erro** — toggle nos ajustes. Quando errar, pulsa a cor certa + toca o acorde.
+- **Tônica de referência** — opcional. Toca Dó ou Lá antes de cada acorde. Treina ouvido relativo (útil pra adultos).
+- **Intro & resumo de sessão** — antes começa um briefing, depois mostra acurácia, RT médio, melhor/pior cor, conquistas.
+- **Streak diário & milestones** — track de hábito + badges em marcos (1ª sessão, 100 trials, 7 dias seguidos, etc.).
+
 ## Stack técnica
 
 - Vanilla HTML/CSS/JS (zero dependências de build)
-- Web Audio API para síntese aditiva dos 5 timbres
+- **Tone.js** + samples Salamander Grand Piano via CDN (qualidade de áudio profissional)
+- Fallback automático pra síntese aditiva vanilla se Tone.js não carregar
 - localStorage para persistência
-- Service Worker para offline
+- Service Worker pra offline (cacheia Tone.js + samples na 1ª visita)
 - Fontes: Fraunces (serif) + JetBrains Mono via Google Fonts CDN
+
+**Primeira carga:** ~500KB extras (Tone.js + samples). Depois fica 100% offline.
 
 ## Sequência das cores (método Eguchi)
 
