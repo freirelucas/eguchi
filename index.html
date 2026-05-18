@@ -364,6 +364,18 @@
     margin: 4px 6px 4px 0;
   }
 
+  /* COLOR FLASH on correct (full-screen brief tint) */
+  .color-flash {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 80;
+    transition: opacity 0.18s ease-out;
+    mix-blend-mode: screen;
+  }
+  .color-flash.show { opacity: 0.42; }
+
   /* ONBOARDING */
   .onb-dots { display: flex; align-items: center; gap: 8px; }
   .onb-dot { flex: 1; height: 2px; background: var(--bg-3); border-radius: 1px; transition: background 0.2s; }
@@ -1450,6 +1462,9 @@
   </div>
 </div>
 
+<!-- ============ COLOR FLASH (correct-answer reinforcement) ============ -->
+<div class="color-flash" id="colorFlash"></div>
+
 <!-- ============ MODAL ============ -->
 <div class="modal-bg" id="modal">
   <div class="modal">
@@ -2408,6 +2423,30 @@ function newRound() {
   playCurrentChord();
 }
 
+function flashColor(hex) {
+  const el = document.getElementById('colorFlash');
+  if (!el) return;
+  el.style.background = hex;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 480);
+}
+
+function tintPlayButton(hex, durationMs) {
+  const btn = document.getElementById('playBtn');
+  if (!btn) return;
+  // Sessions in baseline/probe don't reveal the color — skip tint
+  if (sessionMode === 'baseline' || sessionMode === 'probe') return;
+  const prevBg = btn.style.background;
+  const prevColor = btn.style.color;
+  btn.style.background = hex;
+  btn.style.color = '#fff';
+  btn.style.transition = 'background 0.3s, color 0.3s';
+  setTimeout(() => {
+    btn.style.background = prevBg;
+    btn.style.color = prevColor;
+  }, durationMs);
+}
+
 function playCurrentChord() {
   if (currentChordIdx === null) {
     currentChordIdx = pickNextChord();
@@ -2499,16 +2538,20 @@ function handleAnswer(idx) {
       const replayTag = trialReplays > 0 ? ` · ${trialReplays} replay${trialReplays > 1 ? 's' : ''}` : '';
       const right = CHORDS[currentChordIdx];
       fb.innerHTML = `${refTag}<span style="color:${right.hex};font-weight:500;">${right.name}</span> ✓<small>${Math.round(rt)}ms · ${rtNote}${varTag}${replayTag}</small>`;
+      // Full-screen color flash + play button tint — reveals the cor-som binding after answer
+      flashColor(right.hex);
+      tintPlayButton(right.hex, 1200);
     } else {
       fb.classList.add('wrong', 'show');
       const right = CHORDS[currentChordIdx];
       fb.innerHTML = `${refTag}Era <span style="color:${right.hex};font-weight:500;">${right.name}</span><small>${right.chordSym} · ${right.kanji}</small>`;
-      // Play correct chord + pulse the correct color
+      // Play correct chord + pulse the correct color + tint the play button (answer already revealed)
       if (state.settings.playCorrectOnError === 'on' && buttons[currentChordIdx]) {
         const correctIdx = currentChordIdx;
         setTimeout(() => {
           buttons[correctIdx].classList.add('pulse-reveal');
           playChord(currentVariation.freqs, currentInstrument);
+          tintPlayButton(right.hex, 1600);
         }, 650);
         setTimeout(() => buttons[correctIdx].classList.remove('pulse-reveal'), 1900);
       }
@@ -3084,13 +3127,26 @@ function showLessonCard(chordIdx, returnTo, fromUnlock) {
     saveState();
   }
   goTo('lessonCard');
-  // Auto-play the chord after a moment
-  setTimeout(() => playLessonChord(), 600);
-  // Pulse the play button gently
+  // Auto-play the chord 3× spaced with color pulses on the swatch — strong cor-som binding
+  const sw = document.getElementById('lessonSwatch');
+  function pulseSwatch() {
+    if (!sw) return;
+    sw.style.transition = 'transform 0.18s, box-shadow 0.18s';
+    sw.style.transform = 'scale(1.06)';
+    sw.style.boxShadow = `0 0 0 12px ${c.hex}55`;
+    setTimeout(() => {
+      sw.style.transform = 'scale(1)';
+      sw.style.boxShadow = '0 0 0 0 transparent';
+    }, 360);
+  }
+  setTimeout(() => { playLessonChord(); pulseSwatch(); }, 600);
+  setTimeout(() => { playLessonChord(); pulseSwatch(); }, 2400);
+  setTimeout(() => { playLessonChord(); pulseSwatch(); }, 4200);
+  // Pulse the play button gently for invitation
   const pb = document.getElementById('lessonPlayBtn');
   if (pb) {
     pb.classList.add('lesson-pulse');
-    setTimeout(() => pb.classList.remove('lesson-pulse'), 4000);
+    setTimeout(() => pb.classList.remove('lesson-pulse'), 6000);
   }
 }
 
