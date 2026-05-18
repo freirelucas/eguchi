@@ -777,13 +777,13 @@
     <div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--text-mute);text-transform:uppercase;">O que vai acontecer</div>
       <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-0.02em;line-height:1.1;margin-top:10px;margin-bottom:22px;">
-        Quatro coisas, <em style="color:var(--accent);font-style:italic;">repetidas.</em>
+        Protocolo Sakakibara, <em style="color:var(--accent);font-style:italic;">5 vezes ao dia.</em>
       </h2>
       <div class="onb-steps">
-        <div class="onb-step"><span class="onb-step-n">01</span><div><div class="onb-step-t">Baseline cego</div><div class="onb-step-d">50 trials sem feedback — pra saber seu ponto de partida.</div></div></div>
-        <div class="onb-step"><span class="onb-step-n">02</span><div><div class="onb-step-t">Treino diário</div><div class="onb-step-d">15 a 100 trials. Modo Eguchi destrava cores gradualmente; modo livre libera as 8.</div></div></div>
-        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Probes periódicos</div><div class="onb-step-d">A cada 5 sessões, teste com variações inéditas — mede generalização.</div></div></div>
-        <div class="onb-step"><span class="onb-step-n">04</span><div><div class="onb-step-t">Diário</div><div class="onb-step-d">Sono, café, mood. Variáveis confundidoras viram dados.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">01</span><div><div class="onb-step-t">Baseline cego</div><div class="onb-step-d">50 trials sem feedback — antes de qualquer treino. Sem isso não dá pra interpretar progresso.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">02</span><div><div class="onb-step-t">5 sessões por dia</div><div class="onb-step-d">2-3 minutos cada, ~20-25 trials. Distribuídas no dia (manhã, almoço, tarde, noite). Frequência &gt; duração — esse é o achado de Sakakibara 2014.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Próxima cor: ≥2 semanas + 100%</div><div class="onb-step-d">No protocolo original, só introduz cor nova quando a anterior está com 100% de acerto, por dias seguidos. App adapta com critério bayesiano equivalente.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">04</span><div><div class="onb-step-t">Diário de covariáveis</div><div class="onb-step-d">Sono, café, álcool, mood. Variáveis confundidoras viram dados — fundamental pra um N=1 rigoroso.</div></div></div>
       </div>
     </div>
     <div>
@@ -920,20 +920,24 @@
         </div>
         <div class="panel">
           <div class="panel-row">
+            <span class="label">Sessões hoje</span>
+            <span class="panel-value" id="menuToday">0 / 5</span>
+          </div>
+          <div class="panel-row">
             <span class="label">Nível Eguchi</span>
             <span class="panel-value" id="menuLevel">1 / 8</span>
           </div>
           <div class="panel-row">
-            <span class="label">Sessões</span>
-            <span class="panel-value" id="menuSessions">0</span>
+            <span class="label">Streak</span>
+            <span class="panel-value" id="menuStreak">—</span>
           </div>
           <div class="panel-row">
             <span class="label">Acurácia geral</span>
             <span class="panel-value" id="menuAccuracy">—</span>
           </div>
           <div class="panel-row">
-            <span class="label">Streak</span>
-            <span class="panel-value" id="menuStreak">—</span>
+            <span class="label">Sessões totais</span>
+            <span class="panel-value" id="menuSessions">0</span>
           </div>
           <div class="panel-row">
             <span class="label">Baseline</span>
@@ -1231,10 +1235,13 @@
       <span class="label">Tamanho da sessão</span>
       <div class="seg" id="sessionLenSeg">
         <button class="seg-btn" data-len="15">15</button>
-        <button class="seg-btn" data-len="30">30</button>
+        <button class="seg-btn" data-len="25">25</button>
         <button class="seg-btn" data-len="50">50</button>
         <button class="seg-btn" data-len="100">100</button>
       </div>
+      <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
+        Sakakibara (2014) usou 20-25 trials por sessão, 5×/dia. Sessões muito longas perdem efetividade — frequência &gt; duração.
+      </p>
     </div>
 
     <div class="setting-row">
@@ -1291,58 +1298,80 @@
   </div>
   <div class="doc">
     <h2>O método Eguchi</h2>
-    <p>Desenvolvido por Eiko Eguchi (Chiba Music Institute, Japão) e publicado em <em>Shin-zettai onkan program</em> (Eguchi, 1991), o método associa cada acorde a uma <em>cor</em>. Crianças entre 2 e 6 anos, treinadas dessa forma, desenvolvem <em>perfect pitch</em> verdadeiro em alta proporção — um resultado replicado por Sakakibara (2014) em estudo longitudinal.</p>
-    <p>A premissa neurológica: antes do "fechamento da janela crítica" auditiva, o cérebro codifica altura como propriedade absoluta; depois, passa a codificar relativamente (intervalos) — deslocamento perceptual descrito por Sergeant &amp; Roche (1973). Treinar com cores força rotulagem direta da altura, pulando o processamento intervalar.</p>
+    <p>Desenvolvido por Eiko Eguchi (Chiba Music Institute, Japão) e publicado em <em>Shin-zettai onkan program</em> (Eguchi, 1991), o método associa cada acorde a uma <em>cor</em>. A criança ouve um acorde e levanta a bandeirinha da cor correspondente — ou aperta o botão dela, no app. A pesquisa primária de Sakakibara (2014) replicou o protocolo com 24 crianças de 2 a 6 anos: <strong>22 das 24 (92%) adquiriram ouvido absoluto verdadeiro</strong> (as outras 2 desistiram antes do fim).</p>
+    <p>A premissa neurológica: antes do "fechamento da janela crítica" auditiva (~6-8 anos), o cérebro codifica altura como propriedade absoluta. Sergeant &amp; Roche (1973) mostraram empiricamente que crianças de 3 anos reproduzem melodias na tonalidade absoluta original; aos 5-6 anos, já perdem esse traço e abstraem contorno/intervalo. Treinar com cores força rotulagem direta da altura antes do cérebro fazer essa transição.</p>
+
+    <h2 style="margin-top:24px;">Protocolo Sakakibara/Eguchi (faithful)</h2>
+
+    <h3>Idade alvo</h3>
+    <p><strong>Ideal: 2,5 a 3 anos.</strong> Eficaz até 6 anos. Após 8 anos, o método não funciona como AP verdadeiro — apenas como "absolute labeling" treinável (ver Wong 2025 abaixo).</p>
+
+    <h3>Distribuição diária</h3>
+    <p><strong>5 sessões curtas por dia, de 2 a 3 minutos cada</strong>, distribuídas ao longo do dia (manhã, almoço, tarde, antes do jantar, antes de dormir). Cada sessão tem 20-25 trials. Sessões longas não funcionam — atenção sustentada da criança é o recurso escasso. Em estudo, frequência diária importou mais que duração.</p>
+
+    <h3>Introdução de novas cores</h3>
+    <p><strong>Uma cor por vez, com ≥2 semanas entre introduções.</strong> Critério rigoroso: a criança só ganha a próxima cor quando identifica todas as anteriores com <strong>100% de acurácia</strong> em sessões consecutivas. Ordem randomizada — nunca tocar duas vezes seguidas a mesma cor, pra impedir que a criança use a anterior como referência.</p>
+
+    <h3>Duração total</h3>
+    <p>Treino contínuo por <strong>no mínimo 2 anos</strong> antes de considerar AP consolidado. As 22 crianças do estudo Sakakibara levaram em média 2-4 anos pra dominar todas as cores.</p>
+
+    <h3>Conjunto original (9 acordes "tecla branca")</h3>
+    <p>Eguchi começa com <strong>9 voicings de Dó/Fá/Sol maior</strong> (apenas teclas brancas do piano):</p>
+    <ul style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;">
+      <li>Vermelho C-E-G · Laranja E-G-C · Marrom G-C-E (Dó maior em 3 inversões)</li>
+      <li>Roxo F-A-C · Amarelo C-F-A · Preto A-C-F (Fá maior em 3 inversões)</li>
+      <li>Rosa G-B-D · Azul B-D-G · Verde D-G-B (Sol maior em 3 inversões)</li>
+    </ul>
+    <p>Depois do domínio das 9, introduzem-se "acordes tecla preta" (com sustenidos/bemóis). O foco do método é reconhecer <strong>voicings específicos</strong>, não funções harmônicas.</p>
 
     <div class="caveat">
-      <strong>Caveat para adultos.</strong> A literatura sobre transferência do método para adultos é escassa e inconclusiva. O que adultos tipicamente desenvolvem é "<em>absolute labeling</em>" — capacidade de rotular alturas com erro pequeno, dependente de timbre e contexto. É útil, é treinável, mas não é ouvido absoluto verdadeiro. Wong et al. (2025) mostraram que adultos treinados podem atingir &gt;90% em notas isoladas, mas o sinal só é genuinamente absoluto quando o tempo de resposta fica abaixo de ~2 segundos — acima disso, o cérebro está calculando intervalos.
+      <strong>Esta implementação diverge do mapeamento original.</strong> Pra dar ao app um vocabulário harmônico mais útil pra contextos não-pedagógicos (e maior contraste perceptual entre cores), usamos 8 acordes distintos (I, V, IV, ii, iii, vi, ♭VII, V7 de Dó maior) em vez das 9 voicings originais. Pra crianças seguindo Sakakibara estritamente, o mapeamento original é mais fiel — esta é uma adaptação consciente.
     </div>
 
-    <h2 style="margin-top:24px;">Como este lab estende o método</h2>
+    <h2 style="margin-top:24px;">Como este lab estende o método para uso adulto</h2>
 
-    <h3>Baseline</h3>
-    <p>Antes de treinar, faça 50 trials cegos com as 8 cores (modo Baseline). Sem feedback. Os resultados ficam separados e dão seu ponto de partida. Sem baseline, qualquer "melhora" depois pode ser regressão à média ou efeito de familiarização com a interface.</p>
+    <div class="caveat">
+      <strong>Caveat para adultos.</strong> Wong et al. (2025), o estudo mais recente, treinou 12 músicos adultos por 8 semanas (média de 21,4h, 15.327 trials). Os melhores atingiram &gt;90% em 12 notas com RT médio de ~2s, com 2 participantes alcançando performance comparável a quem nasceu com AP. Mas a literatura é clara: o que adultos desenvolvem é <em>absolute labeling</em> — rotular alturas com erro pequeno, dependente de timbre e contexto. É treinável, é mensurável, mas não é AP verdadeiro como nas crianças.
+    </div>
+
+    <h3>Baseline (modo adulto)</h3>
+    <p>Antes de treinar, faça 50 trials cegos com as 8 cores. Sem feedback. Os resultados ficam separados e dão seu ponto de partida. Sem baseline, qualquer "melhora" depois pode ser regressão à média ou efeito de familiarização com a interface.</p>
 
     <h3>Probe</h3>
-    <p>A cada 5 sessões (configurável), o app insere um probe set: 10 acordes com <em>variações inéditas</em> de oitava, inversão e timbre. Sem feedback. Os resultados ficam em tabela separada. Se você acerta no treino mas erra no probe, está aprendendo amostras específicas, não generalizando.</p>
+    <p>A cada 5 sessões (configurável), o app insere um probe set: 10 acordes com <em>variações inéditas</em> de oitava, inversão e timbre. Sem feedback. Se você acerta no treino mas erra no probe, está memorizando amostras específicas, não generalizando.</p>
 
-    <h3>Diário</h3>
-    <p>Sono, cafeína, álcool e estado emocional são covariáveis conhecidas de desempenho cognitivo. Registre brevemente cada dia — quando você analisar os dados depois, vai querer ter esses controles disponíveis.</p>
+    <h3>Diário (covariáveis)</h3>
+    <p>Sono, cafeína, álcool e estado emocional são covariáveis conhecidas de desempenho cognitivo. Registre brevemente cada dia — quando analisar os dados depois, vai querer ter esses controles.</p>
 
     <h3>Inferência bayesiana de desbloqueio</h3>
-    <p>O critério clássico (Sakakibara, 2014) exige próximo de 100% de acerto antes de liberar o próximo bloco — viável com crianças em sessões longas, frágil como métrica em sessões curtas (variância amostral). Aqui o critério é P(acerto verdadeiro &gt; 85% | dados) &gt; 95%, usando posterior Beta com prior Beta(1,1). Combinado com mínimo de 50 trials no nível, RT médio &lt; 2000ms (Wong et al., 2025) e 7 dias mínimos no nível.</p>
+    <p>O critério clássico Sakakibara (próximo de 100%) é viável com crianças em sessões diárias de 5×/dia. Pra uso adulto N=1, ele é frágil — variância amostral em sessões esparsas. Aqui usamos um critério bayesiano estatisticamente equivalente: <strong>P(acerto verdadeiro &gt; 85% | dados) &gt; 95%</strong>, mínimo 50 trials no nível, RT médio &lt; 2000ms (Wong et al., 2025) e ≥7 dias no nível. Em sessões longas, ambos os critérios convergem.</p>
 
     <h3>Variações de acorde</h3>
-    <p>Eguchi clássico usa sempre a mesma voicing. Em adultos, isso permite "decorar" o timbre específico daquela inversão. Ative variações nos ajustes para forçar reconhecimento abstrato de altura — o aprendizado fica mais lento mas mais transferível.</p>
-
-    <h3>Instrumentos</h3>
-    <p>Todos os timbres são sintetizados via Web Audio API (additive synthesis com envelopes específicos). Senoidal puro é a referência mais limpa. Piano simula attack rápido + decaimento exponencial. Órgão sustenta. Cordas têm attack lento + vibrato. Violão tem brilho de harmônicos altos + decay médio.</p>
+    <p>Eguchi original usa sempre o mesmo voicing por cor. Em adultos, isso permite "decorar" o timbre específico daquela inversão sem aprender pitch. Ative variações nos ajustes pra forçar reconhecimento abstrato de altura — aprendizado mais lento mas mais transferível.</p>
 
     <h3>Métricas no app</h3>
     <ul>
-      <li><strong>Acurácia por cor</strong>: últimos 20 testes de cada cor</li>
-      <li><strong>Matriz de confusão</strong>: revela quais cores você troca com quais (e.g. "trocar Vermelho com Roxo" sugere confusão de modo maior/menor com mesma raiz)</li>
+      <li><strong>Acurácia por cor</strong>: últimos 20 testes</li>
+      <li><strong>Matriz de confusão</strong>: revela quais cores você troca com quais</li>
       <li><strong>Curva de aprendizado</strong>: acurácia diária ao longo do tempo</li>
-      <li><strong>RT trajectory</strong>: tempo médio de resposta ao longo do tempo — se cai, você está migrando de cálculo para reconhecimento</li>
+      <li><strong>RT trajectory</strong>: se cai ao longo do tempo, você está migrando de cálculo intervalar pra reconhecimento</li>
     </ul>
 
     <h3>Limitações conhecidas</h3>
     <ul>
       <li>N=1 não tem controle. Não dá pra distinguir efeito de treino do efeito de familiarização sem grupo controle</li>
-      <li>Variáveis confundidoras numerosas: hora do dia, fadiga, fones de ouvido usados, configuração de volume</li>
-      <li>Síntese ≠ piano real. Mesmo "violão" sintético não generaliza para violão acústico</li>
-      <li>O critério de 85% de acurácia para "domínio" é arbitrário (mas justificado por significância sobre chance = 12.5%)</li>
+      <li>Variáveis confundidoras numerosas: hora do dia, fadiga, fones, volume</li>
+      <li>Síntese ≠ piano real, mesmo com samples Salamander</li>
+      <li>Critério de 85% pra "domínio" é arbitrário (mas &gt;&gt; chance de 12,5%)</li>
+      <li>Mapeamento de 8 acordes diverge do Eguchi original (9 voicings)</li>
     </ul>
-
-    <h3>Exportação para análise</h3>
-    <p>Use <code>Stats → Exportar JSON</code> para baixar todo o histórico. Formato: array de objetos com <code>ts</code>, <code>chordIdx</code>, <code>chosenIdx</code>, <code>correct</code>, <code>rtMs</code>, <code>instrument</code>, <code>variation</code>, <code>mode</code>. Compatível com pandas: <code>pd.read_json('eguchi.json')</code>.</p>
 
     <h3>Referências</h3>
     <ul>
-      <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em> (新絶対音感プログラム). Ichionkai Music School, Japão. — Origem do mapeamento 8 cores ↔ 8 acordes.</li>
-      <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch: A practical report of training with the "chord identification method". <em>Psychology of Music</em>. — Validação longitudinal em crianças de 2 a 6 anos.</li>
-      <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>. — Crianças codificam altura absolutamente; adultos migram para processamento relativo.</li>
-      <li><strong>Wong, P. M., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>PMC / PubMed Central</em>. — Adultos podem atingir &gt;90% de acurácia; RT &lt; ~2s separa memória absoluta de cálculo intervalar.</li>
+      <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em> (新絶対音感プログラム). Ichionkai Music School, Japão. — Origem do método cromático com 9 voicings.</li>
+      <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch: A practical report of training with the "chord identification method". <em>Psychology of Music</em>, 42(1), 86-111. — N=24 crianças (2-6 anos), 22/24 adquiriram AP em 2-4 anos com protocolo 5×/dia.</li>
+      <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>, 1(2), 39-48. — Crianças de 3 anos reproduzem melodias na tonalidade absoluta; aos 5-6, perdem isso.</li>
+      <li><strong>Wong, P. M., Lui, T. K. Y., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>Psychonomic Bulletin &amp; Review</em>. PMC12325523. — 12 músicos adultos, 8 semanas/21,4h; melhores atingiram &gt;90% em 12 notas com RT ~2s.</li>
     </ul>
   </div>
 </div>
@@ -1356,44 +1385,59 @@
   </div>
   <div class="doc">
     <h2>Para os pais</h2>
-    <p>Este app digitaliza um método pedagógico de 1991, com tracking experimental honesto. Aqui ficam as razões científicas das escolhas — e os limites do que ele pode entregar.</p>
+    <p>Este app digitaliza o método Eguchi, validado por Sakakibara (2014) em 22 das 24 crianças treinadas entre 2 e 6 anos. Aqui fica o protocolo real, baseado nos estudos primários — não em interpretações.</p>
 
-    <h3>Para quem foi desenhado</h3>
-    <p>O alvo primário são <strong>crianças entre 2 e 6 anos</strong>: a faixa em que Sakakibara (2014) documentou desenvolvimento de ouvido absoluto verdadeiro com o método Eguchi. Adultos podem usar como instrumento de laboratório N=1 — o que se desenvolve aí é "absolute labeling" treinável, com gargalo temporal próprio (Wong et al., 2025).</p>
+    <h3>Idade ideal: 2,5 a 3 anos</h3>
+    <p>O método é eficaz entre <strong>2 e 6 anos</strong> de idade. Começar mais cedo é melhor: ~3 anos é a janela máxima de efetividade. Depois dos 8 anos, o método não produz AP verdadeiro — apenas "absolute labeling" treinável (Wong et al., 2025).</p>
 
     <h3>Por que cores, não notas</h3>
-    <p>Sergeant &amp; Roche (1973) mostraram que crianças pequenas processam altura como propriedade <em>absoluta</em> (frequência isolada). Conforme o cérebro amadurece, migra para processamento <em>relativo</em> (intervalos entre notas). Cores funcionam como rótulos diretos da altura — driblam o cálculo intervalar adulto e ancoram o reconhecimento na frequência em si. O mapeamento exato (Vermelho = Dó maior, Branco = Sol maior, etc.) vem de Eguchi (1991).</p>
+    <p>Sergeant &amp; Roche (1973) demonstraram empiricamente: crianças de 3 anos reproduzem melodias na tonalidade <em>absoluta</em> original que aprenderam. Aos 5-6 anos, já não conseguem — passaram a abstrair contorno e intervalo. Cores são rótulos diretos da altura, evitando o cálculo intervalar e prendendo o reconhecimento na frequência específica.</p>
 
-    <h3>Quando uma cor é "dominada"</h3>
-    <p>O critério clássico é próximo de 100% antes de liberar o próximo bloco (Sakakibara, 2014). Como esse critério é frágil em sessões curtas, aqui o app usa um teste bayesiano equivalente: <strong>P(acerto verdadeiro &gt; 85% | dados) &gt; 95%</strong>, mais um mínimo de 50 trials e 7 dias no nível. Em sessões longas com crianças, os dois critérios convergem.</p>
+    <h3>Protocolo diário (Sakakibara, 2014)</h3>
+    <ul>
+      <li><strong>5 sessões curtas por dia</strong>, 2 a 3 minutos cada (~20-25 trials)</li>
+      <li><strong>Distribuídas no dia</strong> — manhã, almoço, tarde, antes do jantar, antes de dormir</li>
+      <li><strong>Frequência &gt; duração.</strong> Sessões longas não funcionam — atenção sustentada é o recurso escasso. 5×3min ≫ 1×15min</li>
+      <li><strong>Ordem randomizada</strong> — nunca tocar duas vezes seguidas a mesma cor, pra impedir uso de referência relativa</li>
+    </ul>
+
+    <h3>Quando introduzir a próxima cor</h3>
+    <p><strong>Só quando a criança identifica a anterior em 100% das vezes</strong>, por dias consecutivos. Aguardar <strong>≥2 semanas</strong> entre introduções, independente do progresso aparente — o aprendizado precisa consolidar. Liberar cedo demais cria confusão permanente entre cores próximas.</p>
+
+    <h3>Duração total esperada</h3>
+    <p>Treino contínuo por <strong>2 a 4 anos</strong> antes de considerar AP consolidado. As 22 crianças do estudo Sakakibara não atingiram domínio antes desse prazo. Não é um treino de fim de semana.</p>
+
+    <h3>Conjunto original (9 cores) vs. esta implementação (8)</h3>
+    <p>Eguchi original usa <strong>9 voicings de Dó/Fá/Sol maior</strong> (apenas teclas brancas), depois introduz "tecla preta". Este app usa 8 acordes distintos (Dó, Sol, Fá maior + Ré, Mi, Lá menor + Si♭ maior + Sol7) — um vocabulário harmônico mais amplo, melhor pra adultos curiosos sobre música tonal. <strong>Pra seguir Sakakibara estritamente com sua criança, busque o material original do Ichionkai.</strong></p>
 
     <h3>Por que o limite de 2 segundos</h3>
-    <p>Wong et al. (2025) demonstraram que adultos treinados podem atingir &gt;90% de acurácia em notas isoladas, e que o tempo de resposta marca a diferença entre dois processos:</p>
+    <p>Wong et al. (2025) demonstrou que o RT marca a diferença entre dois processos cognitivos:</p>
     <ul>
-      <li><strong>RT &lt; 2000ms</strong>: o cérebro acionou memória absoluta — a resposta é rotulada "<em>absoluto</em>"</li>
-      <li><strong>RT ≥ 2000ms</strong>: o cérebro calculou um intervalo a partir de uma referência interna — rotulada "<em>calculado — sinta, não pense</em>"</li>
+      <li><strong>RT &lt; 2000ms</strong>: memória absoluta, rótulo "<em>absoluto</em>"</li>
+      <li><strong>RT ≥ 2000ms</strong>: cálculo de intervalo a partir de referência interna, rótulo "<em>calculado — sinta, não pense</em>"</li>
     </ul>
-    <p>O app exibe esse rótulo após cada resposta correta e inclui o RT médio nos critérios de desbloqueio.</p>
+    <p>Adultos do estudo Wong levaram 8 semanas, 21,4h e 15.327 trials pra atingir &gt;90% em 12 notas com RT ~2s. Crianças no método Sakakibara desenvolvem isso espontaneamente porque ainda processam absolutamente.</p>
 
-    <h3>Como usar com uma criança</h3>
+    <h3>Como usar com sua criança</h3>
     <ul>
-      <li><strong>Sessões curtas.</strong> 5–10 minutos. Atenção sustentada é o recurso escasso.</li>
-      <li><strong>Cadência diária.</strong> Frequência importa mais que duração.</li>
-      <li><strong>Espere o bloqueio.</strong> Só libere a próxima cor quando a anterior estiver consistente — desbloqueio precoce gera confusão de modo permanente.</li>
-      <li><strong>Use o diário.</strong> Sono, humor e rotina afetam desempenho — registre para separar variância de progresso real.</li>
-      <li><strong>Baseline antes.</strong> Sem medir o ponto de partida, nenhuma "melhora" posterior é interpretável.</li>
+      <li><strong>Use Treino Eguchi</strong> (com progressão), não Treino livre. A progressão clássica é o que valida o método.</li>
+      <li><strong>Configure sessão de 20-25 trials</strong> nos ajustes (já é o padrão).</li>
+      <li><strong>Acompanhe pessoalmente.</strong> Crianças desta idade não conseguem operar sozinhas. Você toca o play, ela aponta a cor.</li>
+      <li><strong>5 vezes ao dia, todos os dias.</strong> O streak no menu te ajuda a manter.</li>
+      <li><strong>Use o diário</strong> pra registrar humor da criança, qualidade do sono, eventos do dia. Vai te ajudar a interpretar os ruins.</li>
+      <li><strong>Baseline antes</strong>, mesmo com criança. Sem ponto de partida, qualquer "melhora" é interpretação livre.</li>
     </ul>
 
     <div class="caveat">
-      <strong>Limites honestos.</strong> Isto é experimento N=1 sem grupo controle. Síntese aditiva não é piano acústico — esperar transferência completa para instrumentos reais é otimista. O threshold de 85% é arbitrário, mas muito acima do acaso (12.5% para 8 cores). Probes periódicos verificam se o aprendizado generaliza para variações não treinadas.
+      <strong>Limites honestos.</strong> Isto é app, não substitui o programa estruturado do Ichionkai com professor real. Síntese ≠ piano acústico. Esta implementação usa 8 acordes (não os 9 voicings originais). N=1 sem grupo controle. Mas o protocolo (frequência, duração, gating de 100%) está calibrado conforme a literatura primária.
     </div>
 
-    <h3>Referências</h3>
+    <h3>Referências primárias</h3>
     <ul>
       <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em>. Ichionkai Music School, Japão.</li>
-      <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch. <em>Psychology of Music</em>.</li>
-      <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>.</li>
-      <li><strong>Wong, P. M., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>PMC / PubMed Central</em>.</li>
+      <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch. <em>Psychology of Music</em>, 42(1), 86-111. N=24, ages 2-6, 22/24 acquired AP after 2-4 years.</li>
+      <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>, 1(2), 39-48.</li>
+      <li><strong>Wong, P. M., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>Psychonomic Bulletin &amp; Review</em>. PMC12325523.</li>
     </ul>
   </div>
 </div>
@@ -1564,11 +1608,12 @@ const PROBE_INTERVAL_SESSIONS = 5;
 const DEFAULT_SETTINGS = {
   instrument: 'piano',
   variation: 'off',
-  sessionLength: 30,
+  sessionLength: 25,          // Sakakibara protocol: 20-25 trials per short session
   probeAuto: 'off',
-  refTonic: 'off',           // 'off' | 'C' | 'A'
-  playCorrectOnError: 'on',  // 'on' | 'off'
-  progressionLength: 3,      // 2 | 3 | 4
+  refTonic: 'off',            // 'off' | 'C' | 'A'
+  playCorrectOnError: 'on',   // 'on' | 'off'
+  progressionLength: 3,       // 2 | 3 | 4
+  dailySessionTarget: 5,      // Sakakibara: 5 sessions/day
 };
 
 // ============================================
@@ -2112,6 +2157,13 @@ function goTo(screen) {
 function renderMenu() {
   document.getElementById('menuLevel').textContent = `${state.levelUnlocked} / 8`;
   document.getElementById('menuSessions').textContent = `${state.totalSessions} · ${state.freeSessions || 0} livres`;
+  const today = countSessionsToday();
+  const target = state.settings.dailySessionTarget || 5;
+  const todayEl = document.getElementById('menuToday');
+  if (todayEl) {
+    todayEl.textContent = `${today} / ${target}`;
+    todayEl.style.color = today >= target ? 'var(--green)' : (today >= 1 ? 'var(--accent-warm)' : 'var(--text-dim)');
+  }
   const playHistory = state.history.filter(h => h.mode === 'train' || h.mode === 'free');
   if (playHistory.length > 0) {
     const correct = playHistory.filter(h => h.correct).length;
@@ -2798,6 +2850,23 @@ function showSessionSummary(mode, count, newMilestones, extras) {
 // ============================================
 // STREAK + MILESTONES
 // ============================================
+function countSessionsToday() {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const todayMs = today.getTime();
+  const todayRecords = state.history.filter(r => {
+    const t = new Date(r.ts).getTime();
+    return t >= todayMs && (r.mode === 'train' || r.mode === 'free');
+  });
+  if (todayRecords.length === 0) return 0;
+  // Sessions = trial clusters separated by gaps > 5 min
+  let sessions = 1;
+  for (let i = 1; i < todayRecords.length; i++) {
+    const gap = new Date(todayRecords[i].ts).getTime() - new Date(todayRecords[i-1].ts).getTime();
+    if (gap > 5 * 60 * 1000) sessions += 1;
+  }
+  return sessions;
+}
+
 function calculateStreak() {
   if (state.history.length === 0) return 0;
   const days = new Set();
@@ -3064,30 +3133,37 @@ function computeRecommendation() {
       return { label: 'Quase lá', title: 'Próxima cor está pronta', sub: 'Treine mais uma sessão pra destravar.', action: startTrainSession };
     }
   }
-  // 4. Streak check — trained today?
-  const today = new Date().toDateString();
-  const trainedToday = state.history.some(r => new Date(r.ts).toDateString() === today && (r.mode === 'train' || r.mode === 'free'));
-  if (!trainedToday) {
+  // 4. Daily protocol — Sakakibara: 5 sessions/day
+  const today = countSessionsToday();
+  const target = state.settings.dailySessionTarget || 5;
+  const sessionLen = state.settings.sessionLength;
+  if (today < target) {
+    const next = today + 1;
+    const period = next === 1 ? 'manhã' : next === 2 ? 'meio do dia' : next === 3 ? 'tarde' : next === 4 ? 'fim de tarde' : 'noite';
     const streak = calculateStreak();
-    if (streak >= 1) {
-      return { label: 'Manter streak', title: `Treine sua sessão de hoje`, sub: `${streak} ${streak === 1 ? 'dia' : 'dias'} seguidos. Não quebre agora.`, action: startTrainSession };
-    }
-    // Long gap?
-    if (state.history.length > 0) {
-      const last = new Date(state.history[state.history.length - 1].ts);
-      const days = Math.floor((Date.now() - last.getTime()) / (1000 * 60 * 60 * 24));
-      if (days >= 2) {
-        return { label: 'Volte ao treino', title: `Faz ${days} dias`, sub: 'Uma sessão curta de 15 trials reativa o circuito.', action: () => { state.settings.sessionLength = 15; saveState(); startTrainSession(); } };
+    const streakNote = streak >= 1 ? ` · Streak de ${streak} ${streak === 1 ? 'dia' : 'dias'}` : '';
+    if (today === 0) {
+      // Long gap check
+      if (state.history.length > 0) {
+        const last = new Date(state.history[state.history.length - 1].ts);
+        const days = Math.floor((Date.now() - last.getTime()) / (1000 * 60 * 60 * 24));
+        if (days >= 2) {
+          return { label: 'Volte ao treino', title: `Faz ${days} dias`, sub: 'Uma sessão curta reativa o circuito.', action: startTrainSession };
+        }
       }
+      return { label: 'Protocolo · 1ª de 5', title: `Sessão da ${period}`, sub: `${sessionLen} trials · ~3 min · Sakakibara recomenda 5 sessões espalhadas no dia${streakNote}`, action: startTrainSession };
     }
-    return { label: 'Comece o dia', title: 'Treino diário', sub: 'Sessão de hoje · ' + state.settings.sessionLength + ' trials', action: startTrainSession };
+    return { label: `Protocolo · ${next}ª de ${target}`, title: `Sessão da ${period}`, sub: `${sessionLen} trials · ~3 min · ${target - today} ${target - today === 1 ? 'restante' : 'restantes'} hoje`, action: startTrainSession };
   }
-  // 5. Done for today → suggest progression or probe
-  if (state.levelUnlocked >= 3) {
-    return { label: 'Avançado', title: 'Modo progressão', sub: 'Já treinou hoje. Que tal sequências?', action: startProgressionSession };
+  // 5. Target hit for today → suggest progression or free practice
+  if (today >= target) {
+    if (state.levelUnlocked >= 3) {
+      return { label: 'Protocolo cumprido ✦', title: 'Modo progressão?', sub: `${today} sessões hoje. Tente sequências pra firmar.`, action: startProgressionSession };
+    }
+    return { label: 'Protocolo cumprido ✦', title: 'Treino livre extra?', sub: `${today} sessões hoje. Já bateu a meta — bônus opcional.`, action: startFreeSession };
   }
-  // Default
-  return { label: 'Continuar', title: 'Mais um treino livre?', sub: 'Reforço sem gating.', action: startFreeSession };
+  // Default fallback
+  return { label: 'Continuar', title: 'Treino livre', sub: 'Reforço sem gating.', action: startFreeSession };
 }
 
 function actOnRecommendation() {

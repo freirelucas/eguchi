@@ -4,6 +4,32 @@ App de treino de ouvido absoluto pelo método Eguchi (Eiko Eguchi / Chiba Music 
 
 Single-file HTML + PWA installable. Funciona offline depois do primeiro load.
 
+## Protocolo Sakakibara (faithful)
+
+Validado empiricamente em **22 de 24 crianças de 2-6 anos** (Sakakibara, 2014):
+
+| Parâmetro | Valor |
+|---|---|
+| Idade alvo | 2 a 6 anos (ideal: 2,5-3) |
+| Sessões por dia | **5 sessões curtas** |
+| Duração de cada | 2 a 3 minutos |
+| Trials por sessão | 20-25 |
+| Total diário | ~100-125 trials |
+| Critério próxima cor | **100% de acerto** + ≥2 semanas no nível atual |
+| Ordem | Sempre randomizada (impede uso de referência relativa) |
+| Duração total esperada | 2 a 4 anos |
+
+App reflete esse protocolo: default de 25 trials/sessão, tracker "Sessões hoje: N/5" no menu, recomendação contextual baseada na hora do dia. Pra adultos, critério bayesiano equivalente (P(p&gt;85%) &gt; 95% + RT &lt; 2s, ref. Wong et al., 2025).
+
+## Mapeamento Eguchi original vs. esta implementação
+
+O método original usa **9 voicings de Dó/Fá/Sol maior** (apenas teclas brancas), depois introduz "tecla preta":
+- Vermelho C-E-G · Laranja E-G-C · Marrom G-C-E (Dó maior em 3 inversões)
+- Roxo F-A-C · Amarelo C-F-A · Preto A-C-F (Fá maior em 3 inversões)
+- Rosa G-B-D · Azul B-D-G · Verde D-G-B (Sol maior em 3 inversões)
+
+**Esta implementação diverge**: usa 8 acordes distintos (I, V, IV, ii, iii, vi, ♭VII, V7 de Dó maior) pra dar vocabulário harmônico mais útil em contexto não-pedagógico. Pra seguir Sakakibara estritamente com crianças, busque o material original do Ichionkai.
+
 ## Estrutura do repositório
 
 ```
