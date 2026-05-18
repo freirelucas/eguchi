@@ -1,7 +1,7 @@
 // Eguchi Lab — Service Worker
 // Cache-first strategy for app shell; network-first for fonts with cache fallback
 
-const CACHE_VERSION = 'eguchi-lab-v2';
+const CACHE_VERSION = 'eguchi-lab-v3';
 const APP_SHELL = [
   './',
   './index.html',

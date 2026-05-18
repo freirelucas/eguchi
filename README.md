@@ -90,6 +90,8 @@ JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcoo
 
 ## Sequência das cores (método Eguchi)
 
+Mapeamento original: Eguchi (1991), *Shin-zettai onkan program*.
+
 | # | Cor | Kanji | Acorde |
 |---|-----|-------|--------|
 | 1 | Vermelho | 赤 | Dó Maior |
@@ -100,6 +102,19 @@ JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcoo
 | 6 | Roxo     | 紫 | Lá menor |
 | 7 | Azul     | 青 | Si♭ Maior |
 | 8 | Marrom   | 茶 | Sol 7 |
+
+## Fundamentação científica
+
+O método cromático é de **Eguchi (1991)**, *Shin-zettai onkan program* (Ichionkai Music School, Japão). A validação longitudinal em crianças de 2 a 6 anos vem de **Sakakibara (2014)**, *Psychology of Music*. A premissa neurológica — crianças codificam altura como propriedade absoluta, adultos migram para processamento relativo (intervalar) — foi documentada por **Sergeant & Roche (1973)**, *Psychology of Music*.
+
+Para adultos, **Wong et al. (2025)** (PMC) mostraram que &gt;90% de acurácia em notas isoladas é alcançável com treino intensivo, e que o tempo de resposta abaixo de ~2 segundos é o marcador que distingue memória absoluta genuína de cálculo de intervalo. O app implementa esse gargalo: respostas correctas com RT abaixo de 2000ms são rotuladas "absoluto"; acima, "calculado".
+
+### Referências completas
+
+- **Eguchi, M. (1991).** *Shin-zettai onkan program* (新絶対音感プログラム). Ichionkai Music School, Japão.
+- **Sakakibara, A. (2014).** A longitudinal study of the process of acquiring absolute pitch: A practical report of training with the "chord identification method". *Psychology of Music*.
+- **Sergeant, D. C., & Roche, S. (1973).** Perceptual shifts in the auditory information processing of young children. *Psychology of Music*.
+- **Wong, P. M., et al. (2025).** Learning fast and accurate absolute pitch judgment in adulthood. *PMC / PubMed Central*.
 
 ## Caveat científico
 

@@ -228,13 +228,16 @@ function ScrMethod() {
       <div style={{ flex: 1, overflowY: 'auto', padding: '14px 22px 28px' }}>
         <h2 style={{ fontFamily: T.serif, fontWeight: 400, fontSize: 28, letterSpacing: '-0.02em', marginBottom: 12 }}>O método Eguchi</h2>
         <p style={{ fontFamily: T.serif, fontSize: 14.5, lineHeight: 1.6, color: T.text, marginBottom: 10 }}>
-          Eiko Eguchi (Chiba Music Institute, Japão) associa cada acorde a uma <em style={{ color: T.accent }}>cor</em>. Crianças de 2 a 6 anos treinadas assim desenvolvem <em style={{ color: T.accent }}>perfect pitch</em> verdadeiro em alta proporção — replicado por Sakakibara (2014).
+          Eiko Eguchi (Chiba Music Institute, Japão) associa cada acorde a uma <em style={{ color: T.accent }}>cor</em> — publicado em <em>Shin-zettai onkan program</em> (Eguchi, 1991). Crianças de 2 a 6 anos treinadas assim desenvolvem <em style={{ color: T.accent }}>perfect pitch</em> verdadeiro em alta proporção — replicado por Sakakibara (2014).
+        </p>
+        <p style={{ fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.textDim, marginBottom: 10 }}>
+          A premissa neurológica: crianças codificam altura como propriedade <em>absoluta</em>; adultos migram para processamento <em>relativo</em> — deslocamento perceptual descrito por Sergeant &amp; Roche (1973). Cores forçam rotulagem direta da altura.
         </p>
 
         <div style={{ padding: 14, background: 'rgba(212,101,74,0.07)', borderLeft: `2px solid ${T.accent}`, borderRadius: 2, margin: '14px 0' }}>
           <strong style={{ color: T.accent, fontFamily: T.serif, fontSize: 14 }}>Caveat para adultos.</strong>
           <p style={{ fontFamily: T.serif, fontSize: 13, color: T.textDim, lineHeight: 1.55, marginTop: 6 }}>
-            A literatura para adultos é escassa. O que tipicamente se desenvolve é <em>absolute labeling</em> — capacidade treinada de rotular alturas, dependente de timbre e contexto. É útil, é mensurável, mas não é ouvido absoluto verdadeiro.
+            A literatura para adultos é escassa. O que tipicamente se desenvolve é <em>absolute labeling</em> — capacidade treinada de rotular alturas, dependente de timbre e contexto. Wong et al. (2025) mostraram que &gt;90% é viável em notas isoladas, mas o sinal só é absoluto quando RT &lt; ~2s.
           </p>
         </div>
 
@@ -243,7 +246,7 @@ function ScrMethod() {
           <li style={{ marginBottom: 6 }}><strong>Baseline</strong> — 50 trials cegos antes de qualquer treino.</li>
           <li style={{ marginBottom: 6 }}><strong>Probe</strong> — a cada 5 sessões, 10 trials com variações inéditas.</li>
           <li style={{ marginBottom: 6 }}><strong>Diário</strong> — covariáveis registradas (sono, café, mood).</li>
-          <li style={{ marginBottom: 6 }}><strong>Inferência bayesiana</strong> — P(acerto &gt; 85% | dados) &gt; 95% para desbloquear, com Beta(1,1).</li>
+          <li style={{ marginBottom: 6 }}><strong>Inferência bayesiana</strong> — P(acerto &gt; 85% | dados) &gt; 95% para desbloquear, com Beta(1,1). RT médio alvo &lt; 2000ms (Wong et al., 2025).</li>
         </ul>
 
         <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Limitações</h3>
@@ -252,9 +255,80 @@ function ScrMethod() {
           <li style={{ marginBottom: 6 }}>Síntese ≠ piano real</li>
           <li style={{ marginBottom: 6 }}>Threshold de 85% é arbitrário (mas &gt;&gt; chance de 12.5%)</li>
         </ul>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Referências</h3>
+        <ul style={{ paddingLeft: 16, fontFamily: T.serif, fontSize: 12.5, lineHeight: 1.55, color: T.textDim }}>
+          <li style={{ marginBottom: 5 }}>Eguchi, M. (1991). <em>Shin-zettai onkan program</em>. Ichionkai.</li>
+          <li style={{ marginBottom: 5 }}>Sakakibara, A. (2014). <em>Psychology of Music</em>.</li>
+          <li style={{ marginBottom: 5 }}>Sergeant &amp; Roche (1973). <em>Psychology of Music</em>.</li>
+          <li style={{ marginBottom: 5 }}>Wong, P. M. et al. (2025). <em>PMC</em>.</li>
+        </ul>
       </div>
     </div>
   );
 }
 
-Object.assign(window, { ScrDiary, ScrExplore, ScrSettings, ScrMethod, Field, SettingRow, SettingHelp });
+// ─── Para os Pais ───
+function ScrParents() {
+  return (
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <TopBar back="← Menu" title="para os pais" meta="" />
+      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 22px 28px' }}>
+        <h2 style={{ fontFamily: T.serif, fontWeight: 400, fontSize: 28, letterSpacing: '-0.02em', marginBottom: 12 }}>Para os pais</h2>
+        <p style={{ fontFamily: T.serif, fontSize: 14.5, lineHeight: 1.6, color: T.text, marginBottom: 10 }}>
+          Este app digitaliza um método pedagógico de 1991, com tracking experimental honesto. Aqui ficam as razões científicas das escolhas — e os limites do que ele pode entregar.
+        </p>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Para quem foi desenhado</h3>
+        <p style={{ fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.text }}>
+          Alvo primário: <strong>crianças 2–6 anos</strong>, faixa em que Sakakibara (2014) documentou desenvolvimento de ouvido absoluto verdadeiro com o método Eguchi. Adultos podem usar como instrumento N=1 — o que se desenvolve é "<em>absolute labeling</em>", com gargalo temporal próprio (Wong et al., 2025).
+        </p>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Por que cores, não notas</h3>
+        <p style={{ fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.text }}>
+          Sergeant &amp; Roche (1973) mostraram que crianças pequenas processam altura como propriedade <em>absoluta</em>. O cérebro adulto migra para <em>relativa</em> (intervalos). Cores são rótulos diretos — driblam o cálculo intervalar. Mapeamento exato: Eguchi (1991).
+        </p>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Quando uma cor é "dominada"</h3>
+        <p style={{ fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.text }}>
+          Critério clássico (Sakakibara, 2014): ~100% antes de liberar próximo bloco. Aqui o equivalente bayesiano: <strong>P(p &gt; 85% | dados) &gt; 95%</strong>, mínimo 50 trials e 7 dias no nível. Em sessões longas, os dois critérios convergem.
+        </p>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Por que o limite de 2 segundos</h3>
+        <p style={{ fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.text, marginBottom: 8 }}>
+          Wong et al. (2025): RT marca a diferença entre dois processos.
+        </p>
+        <ul style={{ paddingLeft: 16, fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.text }}>
+          <li style={{ marginBottom: 6 }}><strong>RT &lt; 2000ms</strong> — memória absoluta, rótulo "<em>absoluto</em>"</li>
+          <li style={{ marginBottom: 6 }}><strong>RT ≥ 2000ms</strong> — cálculo intervalar, rótulo "<em>calculado — sinta, não pense</em>"</li>
+        </ul>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Como usar com uma criança</h3>
+        <ul style={{ paddingLeft: 16, fontFamily: T.serif, fontSize: 13.5, lineHeight: 1.6, color: T.text }}>
+          <li style={{ marginBottom: 6 }}><strong>Sessões curtas.</strong> 5–10 min.</li>
+          <li style={{ marginBottom: 6 }}><strong>Cadência diária</strong> &gt; duração longa.</li>
+          <li style={{ marginBottom: 6 }}><strong>Espere o bloqueio</strong> antes de liberar a próxima cor.</li>
+          <li style={{ marginBottom: 6 }}><strong>Use o diário</strong> para separar variância de progresso.</li>
+          <li style={{ marginBottom: 6 }}><strong>Baseline antes</strong> — sem ponto de partida, melhora não é interpretável.</li>
+        </ul>
+
+        <div style={{ padding: 14, background: 'rgba(212,101,74,0.07)', borderLeft: `2px solid ${T.accent}`, borderRadius: 2, margin: '14px 0' }}>
+          <strong style={{ color: T.accent, fontFamily: T.serif, fontSize: 14 }}>Limites honestos.</strong>
+          <p style={{ fontFamily: T.serif, fontSize: 13, color: T.textDim, lineHeight: 1.55, marginTop: 6 }}>
+            N=1 sem grupo controle. Síntese aditiva ≠ piano acústico. Threshold de 85% é arbitrário (mas &gt;&gt; chance 12.5%). Probes periódicos verificam generalização.
+          </p>
+        </div>
+
+        <h3 style={{ fontFamily: T.serif, fontWeight: 500, fontStyle: 'italic', fontSize: 17, color: T.accent, marginTop: 22, marginBottom: 6 }}>Referências</h3>
+        <ul style={{ paddingLeft: 16, fontFamily: T.serif, fontSize: 12.5, lineHeight: 1.55, color: T.textDim }}>
+          <li style={{ marginBottom: 5 }}>Eguchi, M. (1991). <em>Shin-zettai onkan program</em>. Ichionkai.</li>
+          <li style={{ marginBottom: 5 }}>Sakakibara, A. (2014). <em>Psychology of Music</em>.</li>
+          <li style={{ marginBottom: 5 }}>Sergeant &amp; Roche (1973). <em>Psychology of Music</em>.</li>
+          <li style={{ marginBottom: 5 }}>Wong, P. M. et al. (2025). <em>PMC</em>.</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { ScrDiary, ScrExplore, ScrSettings, ScrMethod, ScrParents, Field, SettingRow, SettingHelp });

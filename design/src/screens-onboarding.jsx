@@ -128,6 +128,10 @@ function ScrOnboardColors() {
         ))}
       </div>
 
+      <div style={{ fontFamily: T.mono, fontSize: 9, color: T.textMute, marginTop: 12, letterSpacing: '0.04em' }}>
+        Mapeamento cor ↔ acorde: Eguchi (1991).
+      </div>
+
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 14 }}>
         {[0,1,2,3].map(i => <div key={i} style={{ flex: 1, height: 2, background: i === 3 ? T.accent : T.bg3, borderRadius: 1 }} />)}
       </div>

@@ -624,6 +624,7 @@
           <button class="btn btn-ghost" onclick="goTo('settings')">Ajustes</button>
           <button class="btn btn-ghost" onclick="goTo('science')">Método</button>
         </div>
+        <button class="btn btn-ghost btn-block" onclick="goTo('parents')">Para os pais<small>introdução pedagógica · referências</small></button>
       </div>
     </div>
   </div>
@@ -860,11 +861,11 @@
   </div>
   <div class="doc">
     <h2>O método Eguchi</h2>
-    <p>Desenvolvido por Eiko Eguchi (Chiba Music Institute, Japão), o método associa cada acorde a uma <em>cor</em>. Crianças entre 2 e 6 anos, treinadas dessa forma, desenvolvem <em>perfect pitch</em> verdadeiro em alta proporção — um resultado replicado por Sakakibara (2014) em estudo longitudinal.</p>
-    <p>A premissa neurológica: antes do "fechamento da janela crítica" auditiva, o cérebro codifica altura como propriedade absoluta. Depois, passa a codificar relativamente (intervalos). Treinar com cores força rotulagem direta da altura, pulando o processamento intervalar.</p>
+    <p>Desenvolvido por Eiko Eguchi (Chiba Music Institute, Japão) e publicado em <em>Shin-zettai onkan program</em> (Eguchi, 1991), o método associa cada acorde a uma <em>cor</em>. Crianças entre 2 e 6 anos, treinadas dessa forma, desenvolvem <em>perfect pitch</em> verdadeiro em alta proporção — um resultado replicado por Sakakibara (2014) em estudo longitudinal.</p>
+    <p>A premissa neurológica: antes do "fechamento da janela crítica" auditiva, o cérebro codifica altura como propriedade absoluta; depois, passa a codificar relativamente (intervalos) — deslocamento perceptual descrito por Sergeant &amp; Roche (1973). Treinar com cores força rotulagem direta da altura, pulando o processamento intervalar.</p>
 
     <div class="caveat">
-      <strong>Caveat para adultos.</strong> A literatura sobre transferência do método para adultos é escassa e inconclusiva. O que adultos tipicamente desenvolvem é "<em>absolute labeling</em>" — capacidade de rotular alturas com erro pequeno, dependente de timbre e contexto. É útil, é treinável, mas não é ouvido absoluto verdadeiro.
+      <strong>Caveat para adultos.</strong> A literatura sobre transferência do método para adultos é escassa e inconclusiva. O que adultos tipicamente desenvolvem é "<em>absolute labeling</em>" — capacidade de rotular alturas com erro pequeno, dependente de timbre e contexto. É útil, é treinável, mas não é ouvido absoluto verdadeiro. Wong et al. (2025) mostraram que adultos treinados podem atingir &gt;90% em notas isoladas, mas o sinal só é genuinamente absoluto quando o tempo de resposta fica abaixo de ~2 segundos — acima disso, o cérebro está calculando intervalos.
     </div>
 
     <h2 style="margin-top:24px;">Como este lab estende o método</h2>
@@ -879,7 +880,7 @@
     <p>Sono, cafeína, álcool e estado emocional são covariáveis conhecidas de desempenho cognitivo. Registre brevemente cada dia — quando você analisar os dados depois, vai querer ter esses controles disponíveis.</p>
 
     <h3>Inferência bayesiana de desbloqueio</h3>
-    <p>O critério para abrir a próxima cor não é "100% em N tentativas" (loteria de variância amostral) e sim P(acerto verdadeiro &gt; 85% | dados) &gt; 95%, usando posterior Beta com prior Beta(1,1). Combinado com mínimo de 50 trials no nível, RT médio &lt; 1500ms e 7 dias mínimos no nível.</p>
+    <p>O critério clássico (Sakakibara, 2014) exige próximo de 100% de acerto antes de liberar o próximo bloco — viável com crianças em sessões longas, frágil como métrica em sessões curtas (variância amostral). Aqui o critério é P(acerto verdadeiro &gt; 85% | dados) &gt; 95%, usando posterior Beta com prior Beta(1,1). Combinado com mínimo de 50 trials no nível, RT médio &lt; 2000ms (Wong et al., 2025) e 7 dias mínimos no nível.</p>
 
     <h3>Variações de acorde</h3>
     <p>Eguchi clássico usa sempre a mesma voicing. Em adultos, isso permite "decorar" o timbre específico daquela inversão. Ative variações nos ajustes para forçar reconhecimento abstrato de altura — o aprendizado fica mais lento mas mais transferível.</p>
@@ -905,6 +906,65 @@
 
     <h3>Exportação para análise</h3>
     <p>Use <code>Stats → Exportar JSON</code> para baixar todo o histórico. Formato: array de objetos com <code>ts</code>, <code>chordIdx</code>, <code>chosenIdx</code>, <code>correct</code>, <code>rtMs</code>, <code>instrument</code>, <code>variation</code>, <code>mode</code>. Compatível com pandas: <code>pd.read_json('eguchi.json')</code>.</p>
+
+    <h3>Referências</h3>
+    <ul>
+      <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em> (新絶対音感プログラム). Ichionkai Music School, Japão. — Origem do mapeamento 8 cores ↔ 8 acordes.</li>
+      <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch: A practical report of training with the "chord identification method". <em>Psychology of Music</em>. — Validação longitudinal em crianças de 2 a 6 anos.</li>
+      <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>. — Crianças codificam altura absolutamente; adultos migram para processamento relativo.</li>
+      <li><strong>Wong, P. M., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>PMC / PubMed Central</em>. — Adultos podem atingir &gt;90% de acurácia; RT &lt; ~2s separa memória absoluta de cálculo intervalar.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ PARA OS PAIS ============ -->
+<div class="screen" id="parents">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goTo('menu')">← Menu</button>
+    <span class="topbar-title">para os pais</span>
+    <span class="topbar-meta"></span>
+  </div>
+  <div class="doc">
+    <h2>Para os pais</h2>
+    <p>Este app digitaliza um método pedagógico de 1991, com tracking experimental honesto. Aqui ficam as razões científicas das escolhas — e os limites do que ele pode entregar.</p>
+
+    <h3>Para quem foi desenhado</h3>
+    <p>O alvo primário são <strong>crianças entre 2 e 6 anos</strong>: a faixa em que Sakakibara (2014) documentou desenvolvimento de ouvido absoluto verdadeiro com o método Eguchi. Adultos podem usar como instrumento de laboratório N=1 — o que se desenvolve aí é "absolute labeling" treinável, com gargalo temporal próprio (Wong et al., 2025).</p>
+
+    <h3>Por que cores, não notas</h3>
+    <p>Sergeant &amp; Roche (1973) mostraram que crianças pequenas processam altura como propriedade <em>absoluta</em> (frequência isolada). Conforme o cérebro amadurece, migra para processamento <em>relativo</em> (intervalos entre notas). Cores funcionam como rótulos diretos da altura — driblam o cálculo intervalar adulto e ancoram o reconhecimento na frequência em si. O mapeamento exato (Vermelho = Dó maior, Branco = Sol maior, etc.) vem de Eguchi (1991).</p>
+
+    <h3>Quando uma cor é "dominada"</h3>
+    <p>O critério clássico é próximo de 100% antes de liberar o próximo bloco (Sakakibara, 2014). Como esse critério é frágil em sessões curtas, aqui o app usa um teste bayesiano equivalente: <strong>P(acerto verdadeiro &gt; 85% | dados) &gt; 95%</strong>, mais um mínimo de 50 trials e 7 dias no nível. Em sessões longas com crianças, os dois critérios convergem.</p>
+
+    <h3>Por que o limite de 2 segundos</h3>
+    <p>Wong et al. (2025) demonstraram que adultos treinados podem atingir &gt;90% de acurácia em notas isoladas, e que o tempo de resposta marca a diferença entre dois processos:</p>
+    <ul>
+      <li><strong>RT &lt; 2000ms</strong>: o cérebro acionou memória absoluta — a resposta é rotulada "<em>absoluto</em>"</li>
+      <li><strong>RT ≥ 2000ms</strong>: o cérebro calculou um intervalo a partir de uma referência interna — rotulada "<em>calculado — sinta, não pense</em>"</li>
+    </ul>
+    <p>O app exibe esse rótulo após cada resposta correta e inclui o RT médio nos critérios de desbloqueio.</p>
+
+    <h3>Como usar com uma criança</h3>
+    <ul>
+      <li><strong>Sessões curtas.</strong> 5–10 minutos. Atenção sustentada é o recurso escasso.</li>
+      <li><strong>Cadência diária.</strong> Frequência importa mais que duração.</li>
+      <li><strong>Espere o bloqueio.</strong> Só libere a próxima cor quando a anterior estiver consistente — desbloqueio precoce gera confusão de modo permanente.</li>
+      <li><strong>Use o diário.</strong> Sono, humor e rotina afetam desempenho — registre para separar variância de progresso real.</li>
+      <li><strong>Baseline antes.</strong> Sem medir o ponto de partida, nenhuma "melhora" posterior é interpretável.</li>
+    </ul>
+
+    <div class="caveat">
+      <strong>Limites honestos.</strong> Isto é experimento N=1 sem grupo controle. Síntese aditiva não é piano acústico — esperar transferência completa para instrumentos reais é otimista. O threshold de 85% é arbitrário, mas muito acima do acaso (12.5% para 8 cores). Probes periódicos verificam se o aprendizado generaliza para variações não treinadas.
+    </div>
+
+    <h3>Referências</h3>
+    <ul>
+      <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em>. Ichionkai Music School, Japão.</li>
+      <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch. <em>Psychology of Music</em>.</li>
+      <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>.</li>
+      <li><strong>Wong, P. M., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>PMC / PubMed Central</em>.</li>
+    </ul>
   </div>
 </div>
 
@@ -1064,7 +1124,7 @@ function pickProbeVariation(chordIdx) {
 const STORAGE_KEY = 'eguchi_lab_v2';
 const TARGET_ACCURACY = 0.85;
 const POSTERIOR_THRESHOLD = 0.95;
-const MAX_RT_MS = 1500;
+const MAX_RT_MS = 2000;
 const MIN_TESTS_FOR_UNLOCK = 50;
 const MIN_DAYS_AT_LEVEL = 7;
 const BASELINE_LENGTH = 50;
@@ -2059,14 +2119,14 @@ function renderRtChart(data) {
   const yScale = y => padT + (1 - (y - minY) / (maxY - minY)) * ch;
   const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${padL + i * xStep},${yScale(p.y)}`).join(' ');
   const dots = points.map((p, i) => `<circle class="chart-rt-dot" cx="${padL + i * xStep}" cy="${yScale(p.y)}" r="3" />`).join('');
-  const targetY = yScale(1500);
+  const targetY = yScale(2000);
 
   svg.innerHTML = `
     <line class="chart-axis" x1="${padL}" y1="${padT}" x2="${padL}" y2="${padT + ch}" />
     <line class="chart-axis" x1="${padL}" y1="${padT + ch}" x2="${padL + cw}" y2="${padT + ch}" />
     <line class="chart-target" x1="${padL}" y1="${targetY}" x2="${padL + cw}" y2="${targetY}" />
     <text class="chart-label" x="${padL - 4}" y="${padT + 4}" text-anchor="end">${Math.round(maxY)}ms</text>
-    <text class="chart-label" x="${padL - 4}" y="${targetY + 4}" text-anchor="end" fill="#8fb874">1500</text>
+    <text class="chart-label" x="${padL - 4}" y="${targetY + 4}" text-anchor="end" fill="#8fb874">2000</text>
     <text class="chart-label" x="${padL - 4}" y="${padT + ch}" text-anchor="end">0</text>
     <text class="chart-label" x="${padL}" y="${H - 6}" text-anchor="start">${days[0] ? days[0].slice(5) : ''}</text>
     <text class="chart-label" x="${padL + cw}" y="${H - 6}" text-anchor="end">${days[days.length-1] ? days[days.length-1].slice(5) : ''}</text>
@@ -2086,7 +2146,7 @@ function renderUnlockStatus() {
   const checks = [
     `${c.minTests ? '✓' : '○'} <strong>${c.minTestsCount}</strong>/${MIN_TESTS_FOR_UNLOCK} testes no nível`,
     `${c.bayesianPass ? '✓' : '○'} P(p&gt;85%) = <strong>${(c.posteriorProb*100).toFixed(1)}%</strong> <span style="color:var(--text-mute);">(meta 95%)</span>`,
-    `${c.avgRtPass ? '✓' : '○'} RT médio = <strong>${c.avgRt ? Math.round(c.avgRt) + 'ms' : '—'}</strong> <span style="color:var(--text-mute);">(meta &lt;1500ms)</span>`,
+    `${c.avgRtPass ? '✓' : '○'} RT médio = <strong>${c.avgRt ? Math.round(c.avgRt) + 'ms' : '—'}</strong> <span style="color:var(--text-mute);">(meta &lt;2000ms, Wong et al. 2025)</span>`,
     `${c.daysPass ? '✓' : '○'} <strong>${Math.floor(c.daysAtLevel)}</strong>/${MIN_DAYS_AT_LEVEL} dias no nível`,
   ];
   u.innerHTML = `
