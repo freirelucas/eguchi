@@ -1,7 +1,7 @@
-/* Eguchi Cheat Sheet — A3 editorial poster styles */
+/* Eguchi Cheat Sheet — A3 LANDSCAPE editorial poster styles
+   420mm × 297mm — wide format. Cards: vertical color band on left + horizontal body. */
 
-/* SHEET */
-@page { size: A3 portrait; margin: 0; }
+@page { size: A3 landscape; margin: 0; }
 
 body {
   font-family: 'Fraunces', Georgia, serif;
@@ -13,8 +13,8 @@ body {
 }
 
 .sheet {
-  width: 297mm;
-  min-height: 420mm;
+  width: 420mm;
+  min-height: 297mm;
   background: #faf6ef;
   margin: 24px auto;
   position: relative;
@@ -28,26 +28,21 @@ body {
   .no-print { display: none !important; }
 }
 
-/* HEADER STRIP */
+/* HEADER STRIP — sits across the top, single row */
 .poster-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 12mm 18mm 0;
+  padding: 10mm 14mm 5mm;
   border-bottom: 1px solid rgba(20,16,12,0.12);
-  padding-bottom: 8mm;
-  margin-bottom: 10mm;
 }
-.poster-header .left {
-  display: flex;
-  align-items: baseline;
-  gap: 8mm;
-}
+.poster-header .left { display: flex; align-items: baseline; gap: 8mm; }
 .poster-header .brand {
   font-family: 'Fraunces', serif;
   font-weight: 400;
-  font-size: 36pt;
+  font-size: 42pt;
   letter-spacing: -0.04em;
+  line-height: 1;
 }
 .poster-header .brand em { font-style: italic; color: #c8332a; }
 .poster-header .kanji-sub {
@@ -63,37 +58,39 @@ body {
   color: #6e6253;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 .poster-header .right .inst {
-  font-size: 14pt;
+  font-size: 18pt;
   color: #14100c;
   font-weight: 500;
 }
 
-/* FAMILY ROW */
+/* FAMILY ROWS — 3 stacked, each holds 3 voicings horizontal */
+#familiesWrap {
+  padding: 6mm 14mm 0;
+}
 .family-row {
-  padding: 0 18mm;
-  margin-bottom: 8mm;
+  margin-bottom: 4mm;
 }
 .family-label {
   display: flex;
   align-items: baseline;
-  gap: 6mm;
-  margin-bottom: 4mm;
+  gap: 5mm;
+  margin-bottom: 2mm;
+  padding-bottom: 1mm;
   border-bottom: 0.5px solid rgba(20,16,12,0.18);
-  padding-bottom: 2mm;
 }
 .family-label .roman {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
-  font-size: 14pt;
+  font-size: 13pt;
   color: #c8332a;
   letter-spacing: 0.08em;
 }
 .family-label .name {
   font-family: 'Fraunces', serif;
-  font-size: 18pt;
+  font-size: 16pt;
   font-weight: 500;
   letter-spacing: -0.01em;
 }
@@ -106,58 +103,64 @@ body {
   text-transform: uppercase;
 }
 
-/* THREE VOICING CARDS */
+/* VOICING TRIO — 3 cards side-by-side in a family row */
 .voicing-trio {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 4mm;
 }
 .voicing {
+  display: flex;
+  flex-direction: row;     /* HORIZONTAL — band left, body right */
   background: white;
   border-radius: 3mm;
   overflow: hidden;
+  box-shadow: 0 2px 6px rgba(20,16,12,0.06);
+  min-height: 70mm;
+}
+
+/* COLOR BAND — vertical, full card height, ~28% of card width */
+.voicing .color-band {
+  flex: 0 0 38mm;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 6px rgba(20,16,12,0.06);
-}
-.voicing .color-band {
-  height: 38mm;
-  display: flex;
   align-items: center;
   justify-content: center;
+  gap: 2mm;
   position: relative;
+  padding: 4mm 2mm;
 }
 .voicing .color-band .kanji {
   font-family: 'Fraunces', serif;
   font-weight: 400;
-  font-size: 64pt;
+  font-size: 76pt;
   line-height: 1;
 }
 .voicing .color-band .kanji-reading {
-  position: absolute;
-  bottom: 2mm;
-  right: 3mm;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8pt;
-  letter-spacing: 0.16em;
+  font-size: 9pt;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   opacity: 0.7;
 }
 .voicing .color-band .inv-tag {
   position: absolute;
-  top: 2mm;
+  top: 3mm;
   left: 3mm;
   font-family: 'JetBrains Mono', monospace;
   font-size: 9pt;
   letter-spacing: 0.12em;
   opacity: 0.85;
 }
+
+/* BODY — chord info + diagram */
 .voicing .body {
-  padding: 4mm 4mm 5mm;
+  flex: 1;
+  padding: 4mm 5mm 4mm;
   display: flex;
   flex-direction: column;
-  gap: 3mm;
-  flex: 1;
+  gap: 2mm;
+  min-width: 0;
 }
 .voicing .name-line {
   display: flex;
@@ -166,9 +169,10 @@ body {
 }
 .voicing .pt-name {
   font-family: 'Fraunces', serif;
-  font-size: 17pt;
+  font-size: 18pt;
   font-weight: 500;
   letter-spacing: -0.01em;
+  line-height: 1.05;
 }
 .voicing .cifra {
   font-family: 'JetBrains Mono', monospace;
@@ -187,22 +191,26 @@ body {
   border-bottom: 0.5px solid rgba(20,16,12,0.08);
 }
 .voicing .notes .arrow { color: #b09b80; margin: 0 5px; font-size: 10pt; }
+
 .voicing .diagram {
   flex: 1;
-  min-height: 40mm;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2mm 0;
+  min-height: 0;
+  padding: 1mm 0;
 }
-.voicing .diagram svg { width: 100%; max-height: 50mm; }
+.voicing .diagram svg {
+  width: 100%;
+  height: 100%;
+  max-height: 42mm;
+}
 .voicing .voicing-detail {
   font-family: 'JetBrains Mono', monospace;
   font-size: 8pt;
   color: #6e6253;
   text-align: center;
   letter-spacing: 0.06em;
-  margin-top: -1mm;
 }
 
 /* FOOTER STRIP */
@@ -211,7 +219,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 6mm 18mm 8mm;
+  padding: 5mm 14mm 6mm;
   border-top: 1px solid rgba(20,16,12,0.12);
   display: flex;
   justify-content: space-between;
@@ -227,7 +235,7 @@ body {
 
 /* NO-PRINT CONTROLS */
 .no-print {
-  max-width: 1100px;
+  max-width: 1300px;
   margin: 24px auto;
   padding: 16px;
   background: #14100c;
