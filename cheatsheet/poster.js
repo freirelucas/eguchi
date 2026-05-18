@@ -5,7 +5,7 @@ const POSTER_INSTRUMENTS = {
   piano:    { label: 'Piano',                tagline: 'Teclado · acorde simultâneo',         renderFn: 'pianoSVG',     svgOpts: { keyWidth: 14, keyHeight: 58 } },
   violao:   { label: 'Violão',               tagline: 'Afinação padrão · voicing de 3 cordas', renderFn: 'guitarSVG',    svgOpts: {} },
   trompete: { label: 'Trompete em Dó',       tagline: 'Concert pitch · arpejo monofônico',    renderFn: 'trumpetSVG',   svgOpts: {} },
-  gaita:    { label: 'Gaita Diatônica em Dó', tagline: 'Richter · 10 furos · ↑sopra ↓puxa',    renderFn: 'harmonicaSVG', svgOpts: {} },
+  flauta:   { label: 'Flauta Doce em Dó',    tagline: 'Soprano barroca · 1 oitava acima · arpejo', renderFn: 'recorderSVG', svgOpts: {} },
 };
 
 const FAMILIES = [

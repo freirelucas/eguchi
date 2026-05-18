@@ -322,94 +322,99 @@ function trumpetSVG(voicing, opts = {}) {
 }
 
 // ============================================================
-// HARMONICA — C diatonic Richter, 10 holes
+// FLAUTA DOCE SOPRANO em Dó — Baroque fingering
+// Range: C5 a B6. Voicings (originalmente C4-B5) tocados transpostos
+// 1 oitava acima — registro natural da flauta doce.
+// T (polegar) + 7 furos. Valor 1=fechado, 0=aberto, 0.5=meio-furo (polegar).
 // ============================================================
-// Hole | Blow | Draw
-// 1    | C4   | D4
-// 2    | E4   | G4
-// 3    | G4   | B4
-// 4    | C5   | D5
-// 5    | E5   | F5
-// 6    | G5   | A5
-// 7    | C6   | B5  (special — draw lower than blow)
-// 8    | E6   | D6
-// 9    | G6   | F6
-// 10   | C7   | A6
-
-const HARMONICA_NOTES = {
-  'C4': { hole: 1, dir: 'blow' },
-  'D4': { hole: 1, dir: 'draw' },
-  'E4': { hole: 2, dir: 'blow' },
-  'F4': null, // F4 not on C harmonica directly (would be hole 2 bend; we'll skip)
-  'G4': { hole: 2, dir: 'draw' },
-  'A4': null,
-  'B4': { hole: 3, dir: 'draw' },
-  'C5': { hole: 4, dir: 'blow' },
-  'D5': { hole: 4, dir: 'draw' },
-  'E5': { hole: 5, dir: 'blow' },
-  'F5': { hole: 5, dir: 'draw' },
-  'G5': { hole: 6, dir: 'blow' },
-  'A5': { hole: 6, dir: 'draw' },
-  'B5': { hole: 7, dir: 'draw' },
-  'C6': { hole: 7, dir: 'blow' },
+const RECORDER_FINGERINGS = {
+  'C5': { T: 1,   holes: [1,1,1,1,1,1,1] },
+  'D5': { T: 1,   holes: [1,1,1,1,1,1,0] },
+  'E5': { T: 1,   holes: [1,1,1,1,1,0,0] },
+  'F5': { T: 1,   holes: [1,1,1,1,0,1,1] },  // Baroque
+  'G5': { T: 1,   holes: [1,1,1,1,0,0,0] },
+  'A5': { T: 1,   holes: [1,1,1,0,0,0,0] },
+  'B5': { T: 1,   holes: [1,1,0,0,0,0,0] },
+  'C6': { T: 1,   holes: [0,1,0,0,0,0,0] },
+  'D6': { T: 0,   holes: [0,1,1,1,1,1,0] },
+  'E6': { T: 0.5, holes: [1,1,0,1,1,0,0] },
+  'F6': { T: 0.5, holes: [1,0,1,1,0,1,1] },
+  'G6': { T: 0.5, holes: [1,1,1,0,0,0,0] },
+  'A6': { T: 0.5, holes: [1,1,0,1,1,1,0] },
+  'B6': { T: 0.5, holes: [1,0,1,1,1,0,0] },
 };
 
-function harmonicaSVG(voicing, opts = {}) {
+function recorderSVG(voicing, opts = {}) {
   const bw = !!opts.bw;
-  const holeW = 22;
-  const padLeft = 8;
-  const padTop = 12;
-  const w = padLeft * 2 + holeW * 10;
-  const h = 80;
-  const rowH = 18;
-  const boxColor = bw ? '#222' : '#3a2f24';
-  const bgColor = bw ? '#fff' : '#f6f0e6';
-  const highlightFill = voicing.hex;
-  const highlightText = voicing.text;
+  const colW = 28;
+  const w = colW * 3;
+  const padTop = 14;
+  const holeR = 4.8;
+  const holeGap = 9;
+  const holeStart = padTop + 10;
+  const h = holeStart + 8 * holeGap + 12;
+  const stroke = bw ? '#222' : '#3a2f24';
+  const closedFill = voicing.hex;
   const labelColor = bw ? '#222' : '#3a2f24';
+  const captionColor = bw ? '#555' : '#6e6253';
+
+  function transposeOctaveUp(noteOct) {
+    return noteOct.replace(/(\d+)/, (m, n) => (parseInt(n) + 1));
+  }
 
   let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
 
-  // Header row: hole numbers
-  svg += `<text x="${padLeft - 4}" y="${padTop + 10}" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="8" fill="${labelColor}">↑ sopra</text>`;
-  svg += `<text x="${padLeft - 4}" y="${padTop + rowH + 14}" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="8" fill="${labelColor}">↓ puxa</text>`;
-
-  for (let i = 1; i <= 10; i++) {
-    const x = padLeft + (i - 1) * holeW;
-    // Hole number on top
-    svg += `<text x="${x + holeW / 2}" y="${padTop - 2}" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="500" fill="${labelColor}">${i}</text>`;
-    // Blow row
-    svg += `<rect x="${x}" y="${padTop}" width="${holeW - 2}" height="${rowH}" fill="${bgColor}" stroke="${boxColor}" stroke-width="1"/>`;
-    // Draw row
-    svg += `<rect x="${x}" y="${padTop + rowH + 4}" width="${holeW - 2}" height="${rowH}" fill="${bgColor}" stroke="${boxColor}" stroke-width="1"/>`;
-  }
-
-  // Highlight the 3 voicing notes
   voicing.notes.forEach((noteOct, i) => {
-    const info = HARMONICA_NOTES[noteOct];
-    if (!info) return;
-    const x = padLeft + (info.hole - 1) * holeW;
-    const y = info.dir === 'blow' ? padTop : padTop + rowH + 4;
-    svg += `<rect x="${x}" y="${y}" width="${holeW - 2}" height="${rowH}" fill="${highlightFill}" stroke="${boxColor}" stroke-width="1.3"/>`;
-    svg += `<text x="${x + holeW / 2}" y="${y + rowH / 2 + 4}" text-anchor="middle" font-family="'Fraunces', serif" font-size="11" font-weight="500" fill="${highlightText}">${i + 1}</text>`;
+    const note = transposeOctaveUp(noteOct);
+    const fing = RECORDER_FINGERINGS[note];
+    const cx = i * colW + colW / 2;
+    // Note label (Portuguese pitch name)
+    svg += `<text x="${cx}" y="${padTop}" text-anchor="middle" font-family="'Fraunces', serif" font-size="11.5" font-weight="500" fill="${labelColor}">${voicing.notesPt[i]}</text>`;
+    // Order index (1, 2, 3)
+    svg += `<text x="${cx - colW/2 + 4}" y="${padTop}" text-anchor="start" font-family="'JetBrains Mono', monospace" font-size="8" font-weight="700" fill="${closedFill}">${i+1}</text>`;
+
+    if (!fing) {
+      svg += `<text x="${cx}" y="${holeStart + 20}" text-anchor="middle" font-size="9" fill="${labelColor}">—</text>`;
+      return;
+    }
+
+    // Thumb hole
+    const tCy = holeStart;
+    const tVal = fing.T;
+    if (tVal === 0) {
+      svg += `<circle cx="${cx}" cy="${tCy}" r="${holeR}" fill="white" stroke="${stroke}" stroke-width="1.2"/>`;
+    } else if (tVal === 0.5) {
+      svg += `<circle cx="${cx}" cy="${tCy}" r="${holeR}" fill="white" stroke="${stroke}" stroke-width="1.2"/>`;
+      svg += `<path d="M ${cx-holeR} ${tCy} A ${holeR} ${holeR} 0 0 1 ${cx+holeR} ${tCy} Z" fill="${closedFill}" stroke="none"/>`;
+    } else {
+      svg += `<circle cx="${cx}" cy="${tCy}" r="${holeR}" fill="${closedFill}" stroke="${stroke}" stroke-width="1.2"/>`;
+    }
+    // 'T' label to the left of thumb
+    svg += `<text x="${cx - holeR - 3}" y="${tCy + 3}" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="7" fill="${labelColor}">T</text>`;
+
+    // 7 finger holes
+    fing.holes.forEach((closed, idx) => {
+      const cy = holeStart + (idx + 1) * holeGap;
+      const fill = closed ? closedFill : 'white';
+      svg += `<circle cx="${cx}" cy="${cy}" r="${holeR}" fill="${fill}" stroke="${stroke}" stroke-width="1.2"/>`;
+      // small index for finger position
+      if (idx === 0) {
+        svg += `<text x="${cx - holeR - 3}" y="${cy + 3}" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="6.5" fill="${labelColor}">${idx+1}</text>`;
+      }
+    });
   });
 
-  // Order indicator below
-  const seqText = voicing.notes.map((noteOct, i) => {
-    const info = HARMONICA_NOTES[noteOct];
-    if (!info) return `${i + 1}: ${voicing.notesPt[i]} (sem)`;
-    return `${i + 1}: ${info.hole}${info.dir === 'blow' ? '↑' : '↓'}`;
-  }).join('  ');
-  svg += `<text x="${w / 2}" y="${h - 6}" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="10" fill="${labelColor}">${seqText}</text>`;
+  // Caption
+  svg += `<text x="${w/2}" y="${h - 2}" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="7" fill="${captionColor}">● fechado · ○ aberto · ◐ meio-polegar</text>`;
 
   svg += '</svg>';
   return svg;
 }
 
-// Helper for the harmonica note availability message
-const HARMONICA_MISSING_NOTES = ['F4', 'A4']; // Not on standard C diatonic without bends
+// Helper exposed for backward compat — harmonica replaced by recorder
+const RECORDER_MISSING_NOTES = []; // all voicings fit C5-B6 transposed range
 
 // Export-friendly (no module system, just attach to window)
 if (typeof window !== 'undefined') {
-  window.EguchiCheat = { VOICINGS, pianoSVG, guitarSVG, trumpetSVG, harmonicaSVG, HARMONICA_MISSING_NOTES };
+  window.EguchiCheat = { VOICINGS, pianoSVG, guitarSVG, trumpetSVG, recorderSVG, RECORDER_MISSING_NOTES };
 }

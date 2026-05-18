@@ -88,7 +88,7 @@
   <div class="header">
     <div>
       <div class="title">Eguchi · <em>9 voicings</em></div>
-      <div class="subtitle">江口式 · piano · violão · trompete (em C) · gaita (C diatônica)</div>
+      <div class="subtitle">江口式 · piano · violão · trompete (em C) · flauta doce (soprano em C)</div>
     </div>
     <div style="text-align:right;">
       <div style="font-family:'Fraunces',serif;font-size:9pt;font-style:italic;">A4 · preto e branco · consulta</div>
@@ -101,7 +101,7 @@
     <div class="header-cell">piano</div>
     <div class="header-cell">violão</div>
     <div class="header-cell">trompete (C)</div>
-    <div class="header-cell">gaita (C)</div>
+    <div class="header-cell">flauta doce (C)</div>
   </div>
 
   <div class="legend">
@@ -109,7 +109,7 @@
     No piano, os números 1·2·3 indicam a ordem bass→top.
     No violão, dots filled = pressionados; números = dedos sugeridos; × = corda muda; ○ = corda solta.
     No trompete, valves preenchidos = pressionados (3 dedilhados em sequência para o arpejo).
-    Na gaita, ↑ = sopra (blow), ↓ = puxa (draw); F4 e A4 não estão na C diatônica Richter sem bends.
+    Na flauta doce (soprano Barroca), os 8 furos (T+1-7) ficam ● fechado / ○ aberto / ◐ meio-polegar. Voicings tocados 1 oitava acima do registro Eguchi.
     <br><strong>Protocolo Sakakibara (2014):</strong> 5 sessões/dia, 2-3 min cada, ~20-25 trials, ≥2 semanas entre cores novas, ordem aleatória.
   </div>
 
@@ -155,7 +155,7 @@ EguchiCheat.VOICINGS.forEach(v => {
   // Harmonica
   cell = document.createElement('div');
   cell.className = 'cell';
-  cell.innerHTML = EguchiCheat.harmonicaSVG(v, { bw: true });
+  cell.innerHTML = EguchiCheat.recorderSVG(v, { bw: true });
   grid.appendChild(cell);
 });
 </script>
