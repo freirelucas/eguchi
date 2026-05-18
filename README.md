@@ -34,12 +34,18 @@ O método original usa **9 voicings de Dó/Fá/Sol maior** (apenas teclas branca
 
 ```
 .
-├── index.html              App PWA completo (HTML + CSS + JS inline, ~92KB)
+├── index.html              App PWA completo (HTML + CSS + JS inline)
 ├── manifest.json           Manifest PWA
 ├── sw.js                   Service worker (offline cache)
-├── icon-192.png            Ícone PWA 192×192
-├── icon-512.png            Ícone PWA 512×512
-├── icon-maskable-512.png   Ícone adaptativo para Android
+├── icon-*.png              Ícones PWA
+├── cheatsheet/             Material impresso para prática em instrumento
+│   ├── index.html          Landing
+│   ├── lib.js              SVG generators + 9 voicings autênticas Eguchi
+│   ├── a4-bw.html          A4 paisagem · 9 voicings × 4 instrumentos · P&B
+│   ├── a3-piano.html       A3 retrato · piano · colorido
+│   ├── a3-violao.html      A3 retrato · violão
+│   ├── a3-trompete.html    A3 retrato · trompete em C
+│   └── a3-gaita.html       A3 retrato · gaita C diatônica
 ├── design/                 Design canvas / handoff
 │   ├── index.html          Mockups e specs (React + Babel no browser)
 │   └── src/                Tokens, ui-kit, screens, specs (JSX)

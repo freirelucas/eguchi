@@ -969,6 +969,7 @@
           <button class="btn btn-ghost" onclick="goTo('science')">Método</button>
           <button class="btn btn-ghost" onclick="goTo('parents')">Para os pais</button>
         </div>
+        <a href="cheatsheet/" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:0.12em;text-decoration:none;text-transform:uppercase;">cheat sheets · piano · violão · trompete · gaita →</a>
       </div>
     </div>
   </div>
@@ -982,6 +983,7 @@
     <span class="topbar-meta"><span id="trainCount">0</span> / <span id="trainTotal">30</span></span>
   </div>
   <div class="train-progress-bar"><div class="train-progress-fill" id="trainBar"></div></div>
+  <div id="focusHint" style="display:none;padding:6px 18px;background:rgba(232,160,74,0.08);border-bottom:1px solid rgba(232,160,74,0.18);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent-warm);letter-spacing:0.06em;text-align:center;"></div>
 
   <div class="play-area">
     <button class="play-btn" id="playBtn" onclick="playCurrentChord()">▶</button>
@@ -1343,8 +1345,14 @@
     <h3>Diário (covariáveis)</h3>
     <p>Sono, cafeína, álcool e estado emocional são covariáveis conhecidas de desempenho cognitivo. Registre brevemente cada dia — quando analisar os dados depois, vai querer ter esses controles.</p>
 
-    <h3>Inferência bayesiana de desbloqueio</h3>
-    <p>O critério clássico Sakakibara (próximo de 100%) é viável com crianças em sessões diárias de 5×/dia. Pra uso adulto N=1, ele é frágil — variância amostral em sessões esparsas. Aqui usamos um critério bayesiano estatisticamente equivalente: <strong>P(acerto verdadeiro &gt; 85% | dados) &gt; 95%</strong>, mínimo 50 trials no nível, RT médio &lt; 2000ms (Wong et al., 2025) e ≥7 dias no nível. Em sessões longas, ambos os critérios convergem.</p>
+    <h3>Desbloqueio adaptativo</h3>
+    <p>O critério clássico Sakakibara (próximo de 100%) só funciona com crianças em sessões diárias de 5×/dia ao longo de semanas. Pra adultos em sessões esparsas, isso é punitivo demais — você nunca destrava nada. Aqui usamos um critério de duas camadas:</p>
+    <ol>
+      <li><strong>Estabelecimento da cor atual (foco):</strong> últimos 12 trials da cor mais nova precisam ter ≥85% de acerto. Isso garante que ela está consolidada antes da próxima.</li>
+      <li><strong>Confirmação bayesiana global</strong> (a partir do 2º nível): P(acerto &gt; 85% | dados) &gt; 95%, mínimo 15 trials no nível, RT médio &lt; 2000ms (Wong et al., 2025). Garante rigor estatístico sem pedir sessões longas.</li>
+    </ol>
+    <p>A primeira cor (Vermelho) destrava só com o critério de estabelecimento — sem Bayes, porque com 1 cor só a estatística agregada degenera. <strong>Sem trava temporal arbitrária</strong> — o tempo é dado pelo seu desempenho, não pelo calendário.</p>
+    <p>Em modo treino, o app <em>viesa</em> a escolha do próximo acorde pra cor de foco até ela ter trials suficientes — pra você não esperar 50 sessões até ver a cor nova aparecer.</p>
 
     <h3>Variações de acorde</h3>
     <p>Eguchi original usa sempre o mesmo voicing por cor. Em adultos, isso permite "decorar" o timbre específico daquela inversão sem aprender pitch. Ative variações nos ajustes pra forçar reconhecimento abstrato de altura — aprendizado mais lento mas mais transferível.</p>
@@ -1599,8 +1607,10 @@ const STORAGE_KEY = 'eguchi_lab_v2';
 const TARGET_ACCURACY = 0.85;
 const POSTERIOR_THRESHOLD = 0.95;
 const MAX_RT_MS = 2000;
-const MIN_TESTS_FOR_UNLOCK = 50;
-const MIN_DAYS_AT_LEVEL = 7;
+const MIN_TESTS_FOR_UNLOCK = 15;   // Drops from 50 — adaptive unlock fires sooner
+const MIN_DAYS_AT_LEVEL = 0;       // Removed — was 7. No artificial time gate.
+const ESTABLISH_RECENT_TRIALS = 12; // Per-color "established" check: last N trials of current focus
+const ESTABLISH_TARGET_ACC = 0.85;
 const BASELINE_LENGTH = 50;
 const PROBE_LENGTH = 10;
 const PROBE_INTERVAL_SESSIONS = 5;
@@ -2025,11 +2035,18 @@ function pickNextChord() {
   const unlocked = sessionMode === 'free' ? CHORDS.length : state.levelUnlocked;
   const available = CHORDS.slice(0, unlocked).map((_, i) => i);
   const accuracies = computeAccuraciesByColor();
+  const focusIdx = state.levelUnlocked - 1;
 
   const weights = available.map(idx => {
     if (idx === lastChordIdx && available.length > 1) return 0;
+    // In train mode, bias toward the newest/focus color until it has enough trials to evaluate
+    if (sessionMode === 'train' && idx === focusIdx) {
+      const focusTrials = state.history.filter(h => h.mode === 'train' && h.chordIdx === idx).length;
+      if (focusTrials < ESTABLISH_RECENT_TRIALS) return 4.0;   // strong bias when fresh
+      if (focusTrials < ESTABLISH_RECENT_TRIALS * 2) return 2.5; // moderate bias while consolidating
+    }
     const acc = accuracies[idx];
-    if (acc !== null && acc < 0.80) return 2.0;
+    if (acc !== null && acc < 0.80) return 2.0;  // re-emphasize weak chords
     return 1.0;
   });
 
@@ -2093,10 +2110,16 @@ function checkUnlockCriteria() {
   const unlocked = state.levelUnlocked;
   if (unlocked >= CHORDS.length) return { ready: false, reason: 'Todas as cores desbloqueadas.' };
 
+  const focusIdx = unlocked - 1; // current "newest" color is the focus for establishment
   const sinceUnlock = state.history.filter(h =>
     new Date(h.ts) >= new Date(state.lastUnlockDate) && h.mode === 'train'
   );
   const recent = sinceUnlock.slice(-MIN_TESTS_FOR_UNLOCK);
+
+  // Per-focus-color recent trials (across all sessions, not just since-unlock)
+  const focusRecent = state.history.filter(h =>
+    h.mode === 'train' && h.chordIdx === focusIdx
+  ).slice(-ESTABLISH_RECENT_TRIALS);
 
   const c = {
     minTests: recent.length >= MIN_TESTS_FOR_UNLOCK,
@@ -2106,7 +2129,10 @@ function checkUnlockCriteria() {
     avgRt: null,
     avgRtPass: false,
     daysAtLevel: 0,
-    daysPass: false,
+    daysPass: true, // No-op now that MIN_DAYS_AT_LEVEL = 0
+    focusEstablished: false,
+    focusAcc: 0,
+    focusTrials: focusRecent.length,
   };
 
   if (recent.length > 0) {
@@ -2119,9 +2145,20 @@ function checkUnlockCriteria() {
     c.avgRtPass = c.avgRt < MAX_RT_MS;
   }
 
+  // Establishment: per-focus-color acc on last N trials of that color
+  if (focusRecent.length >= ESTABLISH_RECENT_TRIALS) {
+    c.focusAcc = focusRecent.filter(t => t.correct).length / focusRecent.length;
+    c.focusEstablished = c.focusAcc >= ESTABLISH_TARGET_ACC;
+  }
+
   c.daysAtLevel = (Date.now() - new Date(state.lastUnlockDate).getTime()) / (1000 * 60 * 60 * 24);
-  c.daysPass = c.daysAtLevel >= MIN_DAYS_AT_LEVEL;
-  c.ready = c.minTests && c.bayesianPass && c.avgRtPass && c.daysPass;
+  // First chord (level 1, only Red) unlocks on focus alone — no minTests/Bayes/RT required
+  // since aggregate stats degenerate to a single chord.
+  if (unlocked === 1) {
+    c.ready = c.focusEstablished;
+  } else {
+    c.ready = c.minTests && c.bayesianPass && c.avgRtPass && c.focusEstablished;
+  }
   return c;
 }
 
@@ -2281,6 +2318,25 @@ function updateTrainHeader() {
                 state.settings.sessionLength;
   const pct = Math.min(100, (sessionCount / total) * 100);
   document.getElementById('trainBar').style.width = pct + '%';
+  // Show focus-color establishment hint in Eguchi train mode
+  const hint = document.getElementById('focusHint');
+  if (!hint) return;
+  if (sessionMode === 'train' && state.levelUnlocked < CHORDS.length) {
+    const c = checkUnlockCriteria();
+    const focus = CHORDS[state.levelUnlocked - 1];
+    if (c.focusEstablished) {
+      hint.style.display = 'block';
+      hint.textContent = `${focus.name} estabelecida · próxima cor desbloqueando...`;
+    } else if (c.focusTrials > 0) {
+      hint.style.display = 'block';
+      hint.textContent = `${focus.name}: ${Math.round(c.focusAcc * 100)}% (${c.focusTrials}/${ESTABLISH_RECENT_TRIALS} trials) — alvo ≥${Math.round(ESTABLISH_TARGET_ACC * 100)}% pra liberar próxima`;
+    } else {
+      hint.style.display = 'block';
+      hint.textContent = `Foco: ${focus.name} — toque ${ESTABLISH_RECENT_TRIALS} trials desta cor pra avaliar`;
+    }
+  } else {
+    hint.style.display = 'none';
+  }
 }
 
 function renderColorGrid() {
@@ -2441,11 +2497,12 @@ function handleAnswer(idx) {
       fb.classList.add('correct', 'show');
       const varTag = currentVariation.type !== 'root' ? ` · ${currentVariation.type}` : '';
       const replayTag = trialReplays > 0 ? ` · ${trialReplays} replay${trialReplays > 1 ? 's' : ''}` : '';
-      fb.innerHTML = `${refTag}Correto<small>${Math.round(rt)}ms · ${rtNote}${varTag}${replayTag}</small>`;
+      const right = CHORDS[currentChordIdx];
+      fb.innerHTML = `${refTag}<span style="color:${right.hex};font-weight:500;">${right.name}</span> ✓<small>${Math.round(rt)}ms · ${rtNote}${varTag}${replayTag}</small>`;
     } else {
       fb.classList.add('wrong', 'show');
       const right = CHORDS[currentChordIdx];
-      fb.innerHTML = `${refTag}Era ${right.name}<small>${right.chordSym} · ${right.kanji}</small>`;
+      fb.innerHTML = `${refTag}Era <span style="color:${right.hex};font-weight:500;">${right.name}</span><small>${right.chordSym} · ${right.kanji}</small>`;
       // Play correct chord + pulse the correct color
       if (state.settings.playCorrectOnError === 'on' && buttons[currentChordIdx]) {
         const correctIdx = currentChordIdx;
@@ -2820,11 +2877,14 @@ function showSessionSummary(mode, count, newMilestones, extras) {
     if (mode === 'train') {
       const c = checkUnlockCriteria();
       if (c && typeof c.ready !== 'undefined') {
-        html += `<h3>Critérios de unlock</h3><ul>`;
-        html += `<li>${c.minTests ? '✓' : '○'} ${c.minTestsCount}/${MIN_TESTS_FOR_UNLOCK} trials no nível</li>`;
-        html += `<li>${c.bayesianPass ? '✓' : '○'} posterior <strong>${Math.round((c.posteriorProb || 0) * 100)}%</strong> (alvo ≥95%)</li>`;
-        html += `<li>${c.avgRtPass ? '✓' : '○'} RT médio <strong>${c.avgRt ? Math.round(c.avgRt) + 'ms' : '—'}</strong> (alvo &lt;2000ms)</li>`;
-        html += `<li>${c.daysPass ? '✓' : '○'} <strong>${Math.floor(c.daysAtLevel)}</strong>/${MIN_DAYS_AT_LEVEL} dias no nível</li>`;
+        const focusChord = CHORDS[state.levelUnlocked - 1];
+        html += `<h3>Critérios para destravar próxima cor</h3><ul>`;
+        html += `<li>${c.focusEstablished ? '✓' : '○'} <strong>${focusChord.name}</strong> estabelecida — <strong>${Math.round((c.focusAcc || 0) * 100)}%</strong> nos últimos ${c.focusTrials}/${ESTABLISH_RECENT_TRIALS} trials (alvo ≥${Math.round(ESTABLISH_TARGET_ACC*100)}%)</li>`;
+        if (state.levelUnlocked > 1) {
+          html += `<li>${c.minTests ? '✓' : '○'} ${c.minTestsCount}/${MIN_TESTS_FOR_UNLOCK} trials totais no nível</li>`;
+          html += `<li>${c.bayesianPass ? '✓' : '○'} posterior <strong>${Math.round((c.posteriorProb || 0) * 100)}%</strong> ≥ 95%</li>`;
+          html += `<li>${c.avgRtPass ? '✓' : '○'} RT médio <strong>${c.avgRt ? Math.round(c.avgRt) + 'ms' : '—'}</strong> &lt; 2000ms</li>`;
+        }
         html += `</ul>`;
       }
     }

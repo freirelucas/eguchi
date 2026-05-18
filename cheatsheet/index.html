@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eguchi · Cheat Sheets</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Fraunces', Georgia, serif; background: #14100c; color: #ede4d3; min-height: 100vh; padding: 24px; }
+  .container { max-width: 900px; margin: 0 auto; }
+  .head { text-align: center; margin-bottom: 36px; }
+  .kanji { font-family: 'Fraunces', serif; font-size: 16px; color: #a89a87; letter-spacing: 0.3em; }
+  h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(48px, 9vw, 72px); letter-spacing: -0.04em; margin: 12px 0 8px; line-height: 0.95; }
+  h1 em { color: #c8332a; font-style: italic; }
+  .tagline { font-style: italic; font-size: 14px; color: #a89a87; max-width: 580px; margin: 12px auto; line-height: 1.5; }
+  .back-link { display: inline-block; margin-top: 12px; color: #e8a04a; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .back-link:hover { color: #d4654a; }
+
+  .section { margin: 36px 0; }
+  .section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6e6253; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .section-title em { color: #e8a04a; font-style: italic; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: #1f1813;
+    border: 1px solid rgba(232,224,212,0.08);
+    border-radius: 8px;
+    padding: 18px;
+    transition: border-color 0.15s, transform 0.15s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card:hover { border-color: rgba(232,160,74,0.5); transform: translateY(-2px); }
+  .card .label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #e8a04a; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .card .name { font-family: 'Fraunces', serif; font-size: 20px; line-height: 1.2; }
+  .card .desc { font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: #a89a87; margin-top: 6px; line-height: 1.4; }
+  .card .swatches { display: flex; gap: 4px; margin-top: 10px; }
+  .swatch { width: 16px; height: 16px; border-radius: 3px; }
+
+  .notes {
+    background: #1f1813;
+    border-left: 2px solid #d4654a;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-top: 28px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #a89a87;
+    font-family: 'Fraunces', serif;
+  }
+  .notes strong { color: #ede4d3; }
+  .notes ul { padding-left: 18px; margin-top: 6px; }
+  .notes a { color: #e8a04a; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="kanji">江口式 · チートシート</div>
+    <h1>cheat <em>sheets.</em></h1>
+    <div class="tagline">Material impresso para praticar o método Eguchi em quatro instrumentos. Fiel às 9 voicings originais do <em>Shin-zettai onkan program</em> (Eguchi, 1991), validadas por Sakakibara (2014) em 22 de 24 crianças.</div>
+    <a class="back-link" href="../">← voltar ao app</a>
+  </div>
+
+  <div class="section">
+    <div class="section-label">a4 · preto e branco</div>
+    <div class="section-title">Para <em>consulta &amp; estudo</em></div>
+    <div class="grid">
+      <a class="card" href="a4-bw.html">
+        <div class="label">A4 paisagem · 1 página</div>
+        <div class="name">Referência completa</div>
+        <div class="desc">Todas as 9 voicings × 4 instrumentos (piano, violão, trompete em C, gaita C) em uma única folha. Compacto, para mesa de estudo.</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">a3 · colorido</div>
+    <div class="section-title">Para <em>parede &amp; estúdio</em></div>
+    <div class="grid">
+      <a class="card" href="a3-piano.html">
+        <div class="label">A3 retrato · piano</div>
+        <div class="name">Piano</div>
+        <div class="desc">Nove voicings no teclado, 3×3, com inversão e notas destacadas na cor exata.</div>
+        <div class="swatches">
+          <div class="swatch" style="background:#c8332a;"></div>
+          <div class="swatch" style="background:#e88a33;"></div>
+          <div class="swatch" style="background:#7a4d2a;"></div>
+        </div>
+      </a>
+      <a class="card" href="a3-violao.html">
+        <div class="label">A3 retrato · violão</div>
+        <div class="name">Violão</div>
+        <div class="desc">Voicings de 3 cordas em afinação padrão, preservando cada inversão.</div>
+        <div class="swatches">
+          <div class="swatch" style="background:#7a3d8a;"></div>
+          <div class="swatch" style="background:#1a1614;"></div>
+          <div class="swatch" style="background:#e8c83a;"></div>
+        </div>
+      </a>
+      <a class="card" href="a3-trompete.html">
+        <div class="label">A3 retrato · trompete</div>
+        <div class="name">Trompete em C</div>
+        <div class="desc">Arpejos monofônicos com dedilhado de 3 valves por nota.</div>
+        <div class="swatches">
+          <div class="swatch" style="background:#e89aaa;"></div>
+          <div class="swatch" style="background:#3a6a9a;"></div>
+          <div class="swatch" style="background:#5a8a3a;"></div>
+        </div>
+      </a>
+      <a class="card" href="a3-gaita.html">
+        <div class="label">A3 retrato · gaita</div>
+        <div class="name">Gaita Diatônica C</div>
+        <div class="desc">10 furos Richter, blow/draw destacados. Avisa quando uma nota precisa de bend.</div>
+        <div class="swatches">
+          <div class="swatch" style="background:#c8332a;"></div>
+          <div class="swatch" style="background:#7a3d8a;"></div>
+          <div class="swatch" style="background:#3a6a9a;"></div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="notes">
+    <strong>Como imprimir:</strong> abra a página, Ctrl+P (Cmd+P no Mac) → no diálogo, escolha "Save as PDF" ou imprima direto. As páginas têm <code>@page size: A4 landscape</code> / <code>A3 portrait</code> embutido — o browser configura automaticamente. Marque "Background graphics" / "Cores e imagens de fundo" pra preservar as cores das voicings.
+    <br><br><strong>Combinação como pôster:</strong> os 4 A3 podem ser impressos lado a lado (2×2) num único pôster A1, ou montados separadamente. Cada um é autoexplicativo.
+    <br><br><strong>Referências:</strong> Eguchi, M. (1991). <em>Shin-zettai onkan program</em>. Ichionkai Music School. · Sakakibara, A. (2014). A longitudinal study of the process of acquiring absolute pitch. <em>Psychology of Music</em>, 42(1), 86-111.
+  </div>
+</div>
+</body>
+</html>
