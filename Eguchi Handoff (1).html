@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eguchi · Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: -apple-system, system-ui, sans-serif; }
+  em { font-style: italic; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="src/tokens.jsx"></script>
+<script type="text/babel" src="src/ui-kit.jsx"></script>
+<script type="text/babel" src="src/cards-system.jsx"></script>
+<script type="text/babel" src="src/screens-onboarding.jsx"></script>
+<script type="text/babel" src="src/screens-core.jsx"></script>
+<script type="text/babel" src="src/screens-loop.jsx"></script>
+<script type="text/babel" src="src/screens-insights.jsx"></script>
+<script type="text/babel" src="src/screens-supporting.jsx"></script>
+<script type="text/babel" src="src/screens-states.jsx"></script>
+<script type="text/babel" src="src/specs.jsx"></script>
+<script type="text/babel" src="src/design-canvas.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+
+
+function App() {
+  return (
+    <DesignCanvas>
+
+      {/* ================================================ */}
+      {/* 00 — INTRO                                       */}
+      {/* ================================================ */}
+      <DCSection id="00-intro" title="00 · Eguchi · experiência completa" subtitle="Repensado do zero. Mobile PWA. 19 telas, 3 variações de treino, sistema de design completo, specs para Claude Code.">
+        <DCArtboard id="manifesto" label="Manifesto" width={800} height={520} style={{ background: '#14100c', color: '#ede4d0' }}>
+          <div style={{ padding: '52px 60px', fontFamily: '"JetBrains Mono", monospace', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontFamily: '"JetBrains Mono"', fontSize: 10, letterSpacing: '0.32em', textTransform: 'uppercase', color: '#6e6253' }}>江口式実験室 · n=1</div>
+            <h1 style={{ fontFamily: '"Fraunces", serif', fontWeight: 400, fontSize: 88, letterSpacing: '-0.04em', lineHeight: 0.95, margin: '20px 0 8px' }}>
+              eguchi<em style={{ color: '#d4654a', fontStyle: 'italic' }}>lab.</em>
+            </h1>
+            <p style={{ fontFamily: '"Fraunces", serif', fontStyle: 'italic', fontSize: 22, color: '#a89a87', maxWidth: 580, lineHeight: 1.4, marginBottom: 22 }}>
+              Treino de ouvido pelo método Eguchi, repensado como instrumento de laboratório N=1.
+            </p>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', gap: 40 }}>
+              {[
+                ['8 cores', '× 8 acordes — paleta refinada'],
+                ['19 telas', 'fluxo completo, mobile-first'],
+                ['3 modos', 'treino, baseline, probe'],
+                ['Specs', 'motion, IA, microinterações'],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <div style={{ fontFamily: '"Fraunces", serif', fontSize: 28, color: '#ede4d0' }}>{k}</div>
+                  <div style={{ fontFamily: '"JetBrains Mono"', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#6e6253', marginTop: 6 }}>{v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </DCArtboard>
+
+        <DCPostIt width={300}>
+          <strong>Como usar.</strong> Cada seção é uma área temática. Tokens e specs ficam à esquerda (arquivos da UI Kit). À direita, todas as telas como mockups iPhone — Onboarding → Core → Loop → Insights → Supporting → Estados. Use para implementar passo-a-passo com Claude Code.
+        </DCPostIt>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 01 — FOUNDATIONS                                 */}
+      {/* ================================================ */}
+      <DCSection id="01-tokens" title="01 · Foundations" subtitle="Paleta, tipografia, neutros, raios e espaços. Tokens prontos para virar CSS variables.">
+        <DCArtboard id="palette" label="Paleta Eguchi" width={760} height={520}><PaletteCard/></DCArtboard>
+        <DCArtboard id="neutrals" label="Neutros & Funcionais" width={500} height={520}><NeutralsCard/></DCArtboard>
+        <DCArtboard id="type" label="Tipografia" width={560} height={520}><TypeCard/></DCArtboard>
+        <DCArtboard id="spacing" label="Raios & Espaços" width={400} height={520}><SpacingCard/></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 02 — COMPONENTS                                  */}
+      {/* ================================================ */}
+      <DCSection id="02-components" title="02 · Componentes" subtitle="Building blocks. Cada um é exportado em ui-kit.jsx — copiar é direto.">
+        <DCArtboard id="btns" label="Botões & Tags" width={400} height={520}><ButtonsCard/></DCArtboard>
+        <DCArtboard id="playbtn" label="Play · estados" width={500} height={520}><PlayBtnCard/></DCArtboard>
+        <DCArtboard id="grid" label="Color grid" width={400} height={520}><ColorGridCard/></DCArtboard>
+        <DCArtboard id="panels" label="Painéis & métricas" width={400} height={520}><PanelsCard/></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 03 — ONBOARDING                                  */}
+      {/* ================================================ */}
+      <DCSection id="03-onboarding" title="03 · Onboarding" subtitle="Primeira execução · 5 telas. Ancorar a expectativa antes do primeiro tap. Termina forçando baseline.">
+        <DCArtboard id="onb-welcome" label="01 · Welcome" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrOnboardWelcome/></Phone></DCArtboard>
+        <DCArtboard id="onb-goal" label="02 · Goal" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrOnboardGoal/></Phone></DCArtboard>
+        <DCArtboard id="onb-calibrate" label="03 · Calibração áudio" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrOnboardCalibrate/></Phone></DCArtboard>
+        <DCArtboard id="onb-colors" label="04 · Cores" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrOnboardColors/></Phone></DCArtboard>
+        <DCArtboard id="onb-baseline" label="05 · Baseline" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrOnboardBaseline/></Phone></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 04 — CORE                                        */}
+      {/* ================================================ */}
+      <DCSection id="04-core" title="04 · Core loop" subtitle="Menu (hub) + treino em duas variações divergentes. A · clássico refinado. B · radial — o ícone vira UI.">
+        <DCArtboard id="menu" label="Menu / hub" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrMenu/></Phone></DCArtboard>
+        <DCArtboard id="train-a-idle" label="Treino A · idle" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrTrainA/></Phone></DCArtboard>
+        <DCArtboard id="train-a-fb" label="Treino A · feedback" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrTrainAFeedback/></Phone></DCArtboard>
+        <DCArtboard id="train-b-idle" label="Treino B · radial" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrTrainB/></Phone></DCArtboard>
+        <DCArtboard id="train-b-fb" label="Treino B · feedback" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrTrainBFeedback/></Phone></DCArtboard>
+
+        <DCPostIt width={280}>
+          <strong>Variação A vs B.</strong> A é familiar (alvo no centro, grade abaixo) e suporta mãos pequenas e respostas rápidas com o polegar. B é mais sensorial — toda a interface fica numa região circular, conectada espacialmente. B é mais bonita; A é mais escalável (8 cores cabem). Recomendação: A como padrão, B como modo "instrumento" (em Ajustes).
+        </DCPostIt>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 05 — LOOP & PROGRESS                             */}
+      {/* ================================================ */}
+      <DCSection id="05-loop" title="05 · Loop & progresso" subtitle="O que acontece depois de uma sessão. Summary rico, streak, drill focado, comparação com baseline.">
+        <DCArtboard id="session-end" label="Fim de sessão" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrSessionEnd/></Phone></DCArtboard>
+        <DCArtboard id="streak" label="Streak" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrStreak/></Phone></DCArtboard>
+        <DCArtboard id="drill" label="Drill focado" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrDrill/></Phone></DCArtboard>
+        <DCArtboard id="bvn" label="Baseline vs agora" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrBaselineVsNow/></Phone></DCArtboard>
+        <DCArtboard id="unlock" label="Unlock · cor" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrUnlock/></Phone></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 06 — INSIGHTS & DATA                             */}
+      {/* ================================================ */}
+      <DCSection id="06-insights" title="06 · Insights & dados" subtitle="O lado experimental. Insights automáticos, histórico de probes, estatísticas profundas.">
+        <DCArtboard id="insights" label="Insights auto" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrInsights/></Phone></DCArtboard>
+        <DCArtboard id="probes" label="Probes · timeline" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrProbes/></Phone></DCArtboard>
+        <DCArtboard id="stats" label="Estatísticas" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrStats/></Phone></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 07 — SUPPORTING                                  */}
+      {/* ================================================ */}
+      <DCSection id="07-supporting" title="07 · Suporte" subtitle="Telas-satélite que sustentam o método: diário (covariáveis), explorar (educação), ajustes, método.">
+        <DCArtboard id="diary" label="Diário" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrDiary/></Phone></DCArtboard>
+        <DCArtboard id="explore" label="Explorar" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrExplore/></Phone></DCArtboard>
+        <DCArtboard id="settings" label="Ajustes" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrSettings/></Phone></DCArtboard>
+        <DCArtboard id="method" label="Método" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrMethod/></Phone></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 08 — STATES                                      */}
+      {/* ================================================ */}
+      <DCSection id="08-states" title="08 · Estados" subtitle="Edge cases. Loading inicial, vazio (pós-reset), erro (áudio bloqueado), sucesso (unlock).">
+        <DCArtboard id="loading" label="Loading" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrLoading/></Phone></DCArtboard>
+        <DCArtboard id="empty" label="Empty" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrEmpty/></Phone></DCArtboard>
+        <DCArtboard id="error" label="Erro · áudio" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrError/></Phone></DCArtboard>
+        <DCArtboard id="success" label="Success · unlock" width={360} height={760} style={{ background: 'transparent', boxShadow: 'none' }}><Phone><ScrUnlock/></Phone></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 09 — SPECS                                       */}
+      {/* ================================================ */}
+      <DCSection id="09-specs" title="09 · Specs de interação" subtitle="Tudo o que um screenshot não diz. Timings, easings, transições, microinterações, IA, a11y, cross-platform.">
+        <DCArtboard id="trial"  label="Trial choreography" width={520} height={520}><SpecTrialChoreo/></DCArtboard>
+        <DCArtboard id="motion" label="Easings & durations" width={440} height={520}><SpecMotion/></DCArtboard>
+        <DCArtboard id="nav"    label="Navegação · transições" width={480} height={520}><SpecNav/></DCArtboard>
+        <DCArtboard id="micro"  label="Microinterações" width={480} height={520}><SpecMicro/></DCArtboard>
+        <DCArtboard id="a11y"   label="Acessibilidade" width={440} height={460}><SpecA11y/></DCArtboard>
+        <DCArtboard id="ia"     label="Arquitetura de informação" width={500} height={520}><SpecIA/></DCArtboard>
+        <DCArtboard id="platform" label="Cross-platform · iOS + Android" width={520} height={560}><SpecPlatform/></DCArtboard>
+      </DCSection>
+
+      {/* ================================================ */}
+      {/* 10 — HANDOFF                                     */}
+      {/* ================================================ */}
+      <DCSection id="10-handoff" title="10 · Para o Claude Code" subtitle="Instruções de implementação. Como mapear isto para código.">
+        <DCArtboard id="instr" label="Implementação · passo a passo" width={760} height={560}>
+          <Card w={760} h={560} pad={32}>
+            <CardTitle kicker="Handoff" title="Como implementar isto" sub="Ordem sugerida. Tudo cabe num único index.html PWA, igual ao código atual." />
+            <ol style={{ fontFamily: '"Fraunces", serif', fontSize: 14, lineHeight: 1.6, color: T.text, paddingLeft: 20, marginTop: 4 }}>
+              <li style={{ marginBottom: 12 }}>
+                <strong>Tokens primeiro.</strong> Crie um bloco <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm, background: T.bg2, padding: '1px 5px', borderRadius: 3 }}>:root { '{--cor: ...}' }</code> com a paleta dos cards 01–02. Os 8 hex de acordes ficam num array JS no topo (já é assim no atual).
+              </li>
+              <li style={{ marginBottom: 12 }}>
+                <strong>Componentes base.</strong> <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>.panel</code>, <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>.btn / .btn-primary / .btn-ghost</code>, <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>.seg</code>, <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>.color-btn</code>, <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>.play-btn</code>. Já existem no código atual — repinte com os tokens novos.
+              </li>
+              <li style={{ marginBottom: 12 }}>
+                <strong>Adicionar telas novas.</strong> Onboarding (5), Streak, Drill, Baseline-vs-Now, Insights, Unlock, Probes timeline. Mesmo padrão <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>{'<div class="screen" id="...">'}</code> + <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>goTo()</code> do código atual.
+              </li>
+              <li style={{ marginBottom: 12 }}>
+                <strong>Lógica derivada.</strong> Insights = funções puras sobre <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>state.history</code>. Streak = contar dias consecutivos com ≥1 trial. Drill = sessão filtrada para 1–2 chord indices. Comparação = baseline já está salvo.
+              </li>
+              <li style={{ marginBottom: 12 }}>
+                <strong>Motion.</strong> Aplicar tokens de Specs · 02. Halo é <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>@keyframes pulseGlow</code> (já existe). Adicionar suporte a <code style={{ fontFamily: T.mono, fontSize: 11, color: T.warm }}>prefers-reduced-motion</code>.
+              </li>
+              <li>
+                <strong>Manter o que funciona.</strong> Web Audio engine, localStorage, manifest PWA, sw.js. Só a UI é redesenhada.
+              </li>
+            </ol>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="features" label="O que muda · feature list" width={560} height={560}>
+          <Card w={560} h={560} pad={32}>
+            <CardTitle kicker="Diff" title="Novas funcionalidades" sub="Em relação ao app atual." />
+            {[
+              ['Onboarding', '5 telas guiando do welcome ao baseline. Substitui o "auto-direto" atual.', 'novo'],
+              ['Calibração de áudio', 'Tela dedicada com Lá4 senoidal de teste.', 'novo'],
+              ['Streak / heatmap', '8 semanas, dia-a-dia. Mais 4 métricas de consistência.', 'novo'],
+              ['Drill focado', 'Treino de 1–2 cores · 5min · iniciado a partir de insights.', 'novo'],
+              ['Insights automáticos', 'Heurísticas: confusões, RT trend, gap treino-probe, correlações com sono/hora.', 'novo'],
+              ['Baseline vs Agora', 'Comparação visual por cor + delta. Tela dedicada.', 'novo'],
+              ['Probes timeline', 'Linha do tempo dedicada + gráfico treino vs probe.', 'novo'],
+              ['Unlock screen', 'Tela hero quando uma cor é desbloqueada — mais ritualística.', 'novo'],
+              ['Menu redesenhado', 'Hoje + streak + nível/acurácia em destaque + drill + insights.', 'redesign'],
+              ['Treino A', 'Layout clássico polido. Mesma mecânica.', 'redesign'],
+              ['Treino B', 'Variação radial. Modo "instrumento", opt-in via Ajustes.', 'novo'],
+              ['Diário', 'Histórico de 5 dias inline. Lembrete diário configurável.', 'redesign'],
+            ].map(([k, v, tag], i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '8px 0', borderBottom: `1px solid ${T.line}` }}>
+                <span style={{
+                  fontFamily: T.mono, fontSize: 8.5, letterSpacing: '0.12em', textTransform: 'uppercase',
+                  padding: '2px 6px', borderRadius: 3, marginTop: 3,
+                  background: tag === 'novo' ? 'rgba(143,184,116,0.16)' : 'rgba(112,144,176,0.16)',
+                  color: tag === 'novo' ? T.green : T.cool,
+                  flexShrink: 0,
+                }}>{tag}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: T.serif, fontSize: 14 }}>{k}</div>
+                  <div style={{ fontFamily: T.serif, fontStyle: 'italic', fontSize: 11.5, color: T.textMute, marginTop: 2 }}>{v}</div>
+                </div>
+              </div>
+            ))}
+          </Card>
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
