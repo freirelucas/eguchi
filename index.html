@@ -364,6 +364,79 @@
     margin: 4px 6px 4px 0;
   }
 
+  /* PROGRESSIONS CURRICULUM */
+  .prog-curr-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    margin-bottom: 8px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .prog-curr-row:hover { border-color: var(--line-strong, rgba(232,224,212,0.18)); }
+  .prog-curr-row.locked { opacity: 0.45; }
+  .prog-curr-row.established { border-color: rgba(143,184,116,0.3); background: rgba(143,184,116,0.04); }
+  .prog-curr-num {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text-mute);
+    width: 38px;
+    text-align: center;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .prog-curr-body { flex: 1; min-width: 0; }
+  .prog-curr-head {
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 5px;
+  }
+  .prog-curr-nashville {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent-warm);
+    letter-spacing: 0.06em;
+  }
+  .prog-curr-chords-text {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .prog-curr-chips {
+    display: flex; gap: 4px; margin-bottom: 5px;
+  }
+  .chord-chip {
+    width: 24px; height: 24px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-size: 13px;
+    flex-shrink: 0;
+  }
+  .prog-curr-vibe {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 12px; color: var(--text-dim);
+  }
+  .prog-curr-note {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--text-mute); letter-spacing: 0.04em; margin-top: 3px;
+  }
+  .prog-curr-status {
+    display: flex; align-items: center;
+    flex-shrink: 0;
+  }
+  .prog-curr-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 8px; border-radius: 3px;
+    white-space: nowrap;
+  }
+  .locked-badge { background: rgba(110,98,83,0.18); color: var(--text-mute); border: 1px solid rgba(110,98,83,0.3); }
+  .done-badge { background: rgba(143,184,116,0.15); color: var(--green); border: 1px solid var(--green); }
+  .inprog-badge { background: rgba(232,160,74,0.15); color: var(--accent-warm); border: 1px solid var(--accent-warm); }
+  .new-badge { background: rgba(112,144,176,0.15); color: var(--accent-cool); border: 1px solid rgba(112,144,176,0.4); }
+
   /* COLOR FLASH on correct (full-screen brief tint) */
   .color-flash {
     position: fixed;
@@ -964,7 +1037,8 @@
       <div class="btn-row">
         <button class="btn btn-primary btn-block" onclick="startFreeSession()">Treino livre<small>todas as 8 cores · prática direta</small></button>
         <button class="btn btn-block" onclick="startTrainSession()">Treino Eguchi<small>progressão clássica · desbloqueio gradual</small></button>
-        <button class="btn btn-ghost btn-block" onclick="startProgressionSession()">Modo progressão<small>2–4 acordes em sequência</small></button>
+        <button class="btn btn-block" onclick="goTo('progressionsCurriculum')">Currículo · 20 progressões<small>pop, jazz, gospel, folk · destrava em ordem</small></button>
+        <button class="btn btn-ghost btn-block" onclick="startProgressionSession()">Sequência aleatória<small>2–4 acordes randomizados</small></button>
         <div class="menu-grid">
           <button class="btn" onclick="goTo('curriculum')">Currículo<small>mapa das 8 cores</small></button>
           <button class="btn" onclick="goTo('explore')">Explorar<small>cada cor em detalhe</small></button>
@@ -1004,6 +1078,24 @@
   </div>
 
   <div class="color-grid" id="colorGrid"></div>
+</div>
+
+<!-- ============ PROGRESSIONS CURRICULUM ============ -->
+<div class="screen" id="progressionsCurriculum">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goTo('menu')">← Menu</button>
+    <span class="topbar-title">currículo de progressões</span>
+    <span class="topbar-meta" id="progCurrMeta">0 / 20</span>
+  </div>
+  <div class="screen-pad">
+    <p style="font-family:'Fraunces',serif;font-size:13.5px;color:var(--text-dim);line-height:1.5;margin-bottom:14px;">
+      Vinte progressões clássicas do pop, rock, jazz, gospel e folk — em <strong>Dó maior</strong>. Cada uma destravada após estabelecer a anterior (4+ sequências perfeitas em 5).
+    </p>
+    <div id="progCurriculumList"></div>
+    <div style="margin-top:14px;padding:12px;background:rgba(112,144,176,0.06);border-left:2px solid var(--accent-cool);border-radius:4px;font-family:'Fraunces',serif;font-size:11px;color:var(--text-dim);line-height:1.5;">
+      <strong style="color:var(--text);">Caveat sobre cromatismo:</strong> nosso sistema cobre os 8 acordes diatônicos de Dó maior + ♭VII + V7. Progressão <strong>#4</strong> usa Dm7 (sem 7ª no app, vira Dm); <strong>#17</strong> usa Bdim (substituído por G7, função dominante equivalente). Pra um sistema cromático completo (12 notas, todas as tonalidades), Boomwhackers é a referência moderna — mas isso é outro projeto.
+    </div>
+  </div>
 </div>
 
 <!-- ============ PROGRESSION ============ -->
@@ -1690,6 +1782,7 @@ function loadState() {
         parsed.onboardingDone = (parsed.history && parsed.history.length > 0) || (parsed.baseline !== null);
       }
       if (!parsed.unlockSeen) parsed.unlockSeen = [];
+      if (!parsed.progressionCurriculum) parsed.progressionCurriculum = { unlocked: 1, established: [], results: {} };
       if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
       return parsed;
@@ -1705,6 +1798,7 @@ function loadState() {
     dailyLogs: [],
     milestones: [],
     unlockSeen: [],
+    progressionCurriculum: { unlocked: 1, established: [], results: {} },
     onboardingDone: false,
     startDate: new Date().toISOString(),
     lastUnlockDate: new Date().toISOString(),
@@ -2201,6 +2295,7 @@ function goTo(screen) {
   if (screen === 'log') renderLog();
   if (screen === 'settings') renderSettings();
   if (screen === 'curriculum') renderCurriculum();
+  if (screen === 'progressionsCurriculum') renderProgressionsCurriculum();
   if (screen === 'onbColors') populateOnboardingColors();
   // 'train' / 'progression' navigation is direct — callers (startTrainSession, startFreeSession,
   // actuallyStartBaseline, startProbeSession, startProgressionSession) own session setup.
@@ -2693,25 +2788,145 @@ function startProgressionSession() {
 }
 
 let progressionTotalRounds = 0;
-let progressionRoundIdx = 0;
-let progressionResults = [];
+// ============================================
+// CHORD PROGRESSIONS CURRICULUM
+// 20 progressões clássicas (Shaun O'Reilly) mapeadas às nossas 8 cores.
+// CHORDS indexes: 0=Vermelho(C) 1=Branco(G) 2=Amarelo(F) 3=Verde(Dm) 4=Preto(Em)
+//                  5=Roxo(Am) 6=Azul(Bb) 7=Marrom(G7)
+// #4 substitui Dm7→Dm (sem 7ª no set). #17 substitui Bdim→G7 (dominante).
+// ============================================
+const PROGRESSIONS = [
+  { n: 1,  nashville: 'I-IV-V-I',         chordsInC: ['C','F','G','C'],     colorIdx: [0,2,1,0],   vibe: 'Folk, alegre, cantarolar' },
+  { n: 2,  nashville: 'I-vi-IV-V',         chordsInC: ['C','Am','F','G'],    colorIdx: [0,5,2,1],   vibe: 'Soft pop, romântico (50s doo-wop)' },
+  { n: 3,  nashville: 'I-V-vi-IV',         chordsInC: ['C','G','Am','F'],    colorIdx: [0,1,5,2],   vibe: 'Pop anthem (a "progressão dos millennials")' },
+  { n: 4,  nashville: 'ii-V-I',            chordsInC: ['Dm','G7','C'],       colorIdx: [3,7,0],     vibe: 'Turnaround jazz', note: 'Dm7→Dm (sem 7ª no nosso set)' },
+  { n: 5,  nashville: 'I-vi-ii-V',         chordsInC: ['C','Am','Dm','G'],   colorIdx: [0,5,3,1],   vibe: 'Old-school baladas, jazz pop' },
+  { n: 6,  nashville: 'I-iii-IV-V',        chordsInC: ['C','Em','F','G'],    colorIdx: [0,4,2,1],   vibe: 'Bright, animado' },
+  { n: 7,  nashville: 'I-IV-vi-V',         chordsInC: ['C','F','Am','G'],    colorIdx: [0,2,5,1],   vibe: 'Pop-rock moderno' },
+  { n: 8,  nashville: 'I-iii-vi-IV',       chordsInC: ['C','Em','Am','F'],   colorIdx: [0,4,5,2],   vibe: 'Sonhador, emocional' },
+  { n: 9,  nashville: 'I-IV-ii-V',         chordsInC: ['C','F','Dm','G'],    colorIdx: [0,2,3,1],   vibe: 'R&B com alma' },
+  { n: 10, nashville: 'vi-IV-I-V',         chordsInC: ['Am','F','C','G'],    colorIdx: [5,2,0,1],   vibe: 'Quente, paz · fingerstyle' },
+  { n: 11, nashville: 'I-♭VII-IV',         chordsInC: ['C','Bb','F'],        colorIdx: [0,6,2],     vibe: 'Gritty, blues sulista' },
+  { n: 12, nashville: 'I-V-vi-iii-IV',     chordsInC: ['C','G','Am','Em','F'], colorIdx: [0,1,5,4,2], vibe: 'Energético, "Canon" anthem' },
+  { n: 13, nashville: 'I-V-IV-I',          chordsInC: ['C','G','F','C'],     colorIdx: [0,1,2,0],   vibe: 'Rock & roll vintage' },
+  { n: 14, nashville: 'vi-I-vi-V',         chordsInC: ['Am','C','Am','G'],   colorIdx: [5,0,5,1],   vibe: 'Triste, reflexivo' },
+  { n: 15, nashville: 'I-vi-V-IV',         chordsInC: ['C','Am','G','F'],    colorIdx: [0,5,1,2],   vibe: 'Trilha épica, jornada' },
+  { n: 16, nashville: 'I-vi-V-IV',         chordsInC: ['C','Am','G','F'],    colorIdx: [0,5,1,2],   vibe: 'Gospel, balada esperançosa' },
+  { n: 17, nashville: 'I-vi-iii-vii°',     chordsInC: ['C','Am','Em','Bdim'], colorIdx: [0,5,4,7],  vibe: 'Cinematográfico, tensão', note: 'Bdim→G7 (mesma função dominante)' },
+  { n: 18, nashville: 'I-IV-♭VII-I',       chordsInC: ['C','F','Bb','C'],    colorIdx: [0,2,6,0],   vibe: 'Singer-songwriter, popular' },
+  { n: 19, nashville: 'I-IV-♭VII-I',       chordsInC: ['C','F','Bb','C'],    colorIdx: [0,2,6,0],   vibe: 'Folk irlandês, contação' },
+  { n: 20, nashville: 'V-IV-I',            chordsInC: ['G','F','C'],         colorIdx: [1,2,0],     vibe: 'Resolução final · loop' },
+];
+
+let curriculumIdx = null; // null = random progression; integer = curriculum index (0-based)
+
+function getProgression(idx) {
+  return PROGRESSIONS[idx];
+}
+
+function startCurriculumProgression(idx) {
+  curriculumIdx = idx;
+  const p = PROGRESSIONS[idx];
+  if (!p) return;
+  showSessionIntro('progression', () => {
+    sessionMode = 'progression';
+    sessionCount = 0;
+    lastChordIdx = null;
+    acceptingInput = false;
+    goTo('progression');
+    const totalRounds = 5; // 5 repetições por progressão pra estabelecer
+    document.getElementById('progTotal').textContent = totalRounds;
+    document.getElementById('progCount').textContent = 0;
+    document.getElementById('progBar').style.width = '0%';
+    document.getElementById('progFeedback').classList.remove('show', 'correct', 'wrong');
+    document.getElementById('progFeedback').innerHTML = `<small><strong>#${p.n} ${p.nashville}</strong> · ${p.chordsInC.join(' → ')} · ${p.vibe}${p.note ? ' · ' + p.note : ''}</small>`;
+    document.getElementById('progFeedback').classList.add('show');
+    renderProgressionColorGrid();
+    progressionTotalRounds = totalRounds;
+    progressionRoundIdx = 0;
+    progressionResults = [];
+    setTimeout(() => {
+      if (document.getElementById('progression').classList.contains('active')) startProgressionRound();
+    }, 400);
+  });
+}
+
+function ensureProgressionCurriculumState() {
+  if (!state.progressionCurriculum) {
+    state.progressionCurriculum = { unlocked: 1, established: [], results: {} };
+  }
+  if (typeof state.progressionCurriculum.unlocked !== 'number') state.progressionCurriculum.unlocked = 1;
+  if (!Array.isArray(state.progressionCurriculum.established)) state.progressionCurriculum.established = [];
+  if (!state.progressionCurriculum.results) state.progressionCurriculum.results = {};
+}
+
+function renderProgressionsCurriculum() {
+  ensureProgressionCurriculumState();
+  const list = document.getElementById('progCurriculumList');
+  if (!list) return;
+  list.innerHTML = '';
+  const cur = state.progressionCurriculum;
+  const meta = document.getElementById('progCurrMeta');
+  if (meta) meta.textContent = `${cur.established.length} / ${PROGRESSIONS.length}`;
+  PROGRESSIONS.forEach((p, i) => {
+    const unlocked = (i + 1) <= cur.unlocked;
+    const established = cur.established.includes(p.n);
+    const results = cur.results[p.n] || [];
+    const perfectCount = results.filter(r => r.perfect).length;
+    const row = document.createElement('div');
+    row.className = 'prog-curr-row';
+    if (!unlocked) row.classList.add('locked');
+    if (established) row.classList.add('established');
+    const chordChips = p.colorIdx.map((idx, i) => {
+      const c = CHORDS[idx];
+      return `<span class="chord-chip" style="background:${c.hex};color:${c.text};" title="${c.name} · ${p.chordsInC[i] || ''}">${c.kanji}</span>`;
+    }).join('');
+    row.innerHTML = `
+      <div class="prog-curr-num">${p.n.toString().padStart(2, '0')}</div>
+      <div class="prog-curr-body">
+        <div class="prog-curr-head">
+          <span class="prog-curr-nashville">${p.nashville}</span>
+          <span class="prog-curr-chords-text">${p.chordsInC.join(' → ')}</span>
+        </div>
+        <div class="prog-curr-chips">${chordChips}</div>
+        <div class="prog-curr-vibe">${p.vibe}</div>
+        ${p.note ? `<div class="prog-curr-note">${p.note}</div>` : ''}
+      </div>
+      <div class="prog-curr-status">
+        ${!unlocked ? '<span class="prog-curr-badge locked-badge">🔒 destrava após anterior</span>' :
+          established ? `<span class="prog-curr-badge done-badge">✓ ${perfectCount}/5 perfeitas</span>` :
+          results.length > 0 ? `<span class="prog-curr-badge inprog-badge">em treino · ${perfectCount}/5</span>` :
+          '<span class="prog-curr-badge new-badge">novo</span>'}
+      </div>
+    `;
+    if (unlocked) {
+      row.style.cursor = 'pointer';
+      row.addEventListener('click', () => startCurriculumProgression(i));
+    }
+    list.appendChild(row);
+  });
+}
 
 function startProgressionRound() {
   acceptingInput = false;
   progressionSlot = 0;
   progressionChoices = [];
-  const len = state.settings.progressionLength;
-  // Pick `len` distinct chord indices from unlocked or all (free in progression)
-  // Progression uses all 8 chords always (it's intended as advanced practice)
-  const pool = CHORDS.map((_, i) => i);
-  progressionSeq = [];
-  let prev = -1;
-  for (let i = 0; i < len; i++) {
-    const candidates = pool.filter(c => c !== prev);
-    const pick = candidates[Math.floor(Math.random() * candidates.length)];
-    progressionSeq.push(pick);
-    progressionChoices.push(null);
-    prev = pick;
+  // Curriculum mode: use the fixed sequence; random mode: build one
+  if (curriculumIdx !== null && PROGRESSIONS[curriculumIdx]) {
+    progressionSeq = [...PROGRESSIONS[curriculumIdx].colorIdx];
+    progressionChoices = progressionSeq.map(() => null);
+  } else {
+    const len = state.settings.progressionLength;
+    const pool = CHORDS.map((_, i) => i);
+    progressionSeq = [];
+    let prev = -1;
+    for (let i = 0; i < len; i++) {
+      const candidates = pool.filter(c => c !== prev);
+      const pick = candidates[Math.floor(Math.random() * candidates.length)];
+      progressionSeq.push(pick);
+      progressionChoices.push(null);
+      prev = pick;
+    }
   }
   renderProgressionSlots();
   document.getElementById('progFeedback').classList.remove('show', 'correct', 'wrong');
@@ -2818,8 +3033,42 @@ function endProgressionSession() {
   state.progressions.push({
     date: new Date().toISOString(),
     rounds: progressionResults,
+    curriculumIdx: curriculumIdx,
   });
   state.progressionSessions += 1;
+
+  // Curriculum bookkeeping
+  let unlockedNext = false;
+  let curriculumLine = '';
+  if (curriculumIdx !== null) {
+    ensureProgressionCurriculumState();
+    const p = PROGRESSIONS[curriculumIdx];
+    const perfectRounds = progressionResults.filter(r => r.perfect).length;
+    if (!state.progressionCurriculum.results[p.n]) state.progressionCurriculum.results[p.n] = [];
+    state.progressionCurriculum.results[p.n].push({
+      date: new Date().toISOString(),
+      perfect: perfectRounds,
+      rounds: progressionResults.length,
+    });
+    // Establish if 4+/5 perfect this session, OR 8+/10 perfect across last two sessions
+    const recent = state.progressionCurriculum.results[p.n].slice(-2);
+    const totalPerfect = recent.reduce((a, r) => a + r.perfect, 0);
+    const totalRoundsRec = recent.reduce((a, r) => a + r.rounds, 0);
+    if ((perfectRounds >= 4 || (totalRoundsRec >= 10 && totalPerfect >= 8)) && !state.progressionCurriculum.established.includes(p.n)) {
+      state.progressionCurriculum.established.push(p.n);
+      if (state.progressionCurriculum.unlocked < PROGRESSIONS.length && state.progressionCurriculum.unlocked === p.n) {
+        state.progressionCurriculum.unlocked += 1;
+        unlockedNext = true;
+      }
+    }
+    curriculumLine = unlockedNext
+      ? `✦ Progressão #${p.n} estabelecida — #${p.n + 1} destravada!`
+      : (state.progressionCurriculum.established.includes(p.n)
+        ? `Progressão #${p.n} já estabelecida — pratique mais ou siga adiante`
+        : `Progressão #${p.n}: ${perfectRounds}/5 perfeitas — alvo: 4+ pra estabelecer`);
+  }
+
+  curriculumIdx = null; // reset
   const newMilestones = checkMilestones();
   saveState();
   const perfect = progressionResults.filter(r => r.perfect).length;
@@ -2828,7 +3077,7 @@ function endProgressionSession() {
   const accStr = totalChords > 0 ? Math.round(correctChords / totalChords * 100) + '%' : '—';
   showSessionSummary('progression', progressionRoundIdx, newMilestones, {
     accLine: `${accStr} (${correctChords}/${totalChords} acordes)`,
-    extraLine: `Sequências perfeitas: <strong>${perfect}/${progressionResults.length}</strong>`,
+    extraLine: `Sequências perfeitas: <strong>${perfect}/${progressionResults.length}</strong>` + (curriculumLine ? `<br>${curriculumLine}` : ''),
   });
 }
 
