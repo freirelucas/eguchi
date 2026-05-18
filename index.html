@@ -1010,7 +1010,7 @@
           </div>
           <div class="panel-row">
             <span class="label">Nível Eguchi</span>
-            <span class="panel-value" id="menuLevel">1 / 8</span>
+            <span class="panel-value" id="menuLevel">1 / 12</span>
           </div>
           <div class="panel-row">
             <span class="label">Streak</span>
@@ -1093,7 +1093,7 @@
     </p>
     <div id="progCurriculumList"></div>
     <div style="margin-top:14px;padding:12px;background:rgba(112,144,176,0.06);border-left:2px solid var(--accent-cool);border-radius:4px;font-family:'Fraunces',serif;font-size:11px;color:var(--text-dim);line-height:1.5;">
-      <strong style="color:var(--text);">Caveat sobre cromatismo:</strong> nosso sistema cobre os 8 acordes diatônicos de Dó maior + ♭VII + V7. Progressão <strong>#4</strong> usa Dm7 (sem 7ª no app, vira Dm); <strong>#17</strong> usa Bdim (substituído por G7, função dominante equivalente). Pra um sistema cromático completo (12 notas, todas as tonalidades), Boomwhackers é a referência moderna — mas isso é outro projeto.
+      <strong style="color:var(--text);">Sobre o sistema cromático:</strong> após destravar as 8 cores Eguchi (níveis 1-8), o app abre <strong>4 cores cromáticas adicionais</strong> nos níveis 9-12 — Coral (D), Lilás (A), Turquesa (E), Areia (E♭). Isso completa todos os 12 pitches como raízes maiores. As 20 progressões deste currículo estão todas em Dó maior; futuras progressões poderão explorar dominantes secundárias e empréstimos modais. Progressão <strong>#4</strong> usa Dm7→Dm (sem 7ª no set); <strong>#17</strong> usa Bdim→G7 (mesma função dominante).
     </div>
   </div>
 </div>
@@ -1421,7 +1421,17 @@
     <h3>Duração total</h3>
     <p>Treino contínuo por <strong>no mínimo 2 anos</strong> antes de considerar AP consolidado. As 22 crianças do estudo Sakakibara levaram em média 2-4 anos pra dominar todas as cores.</p>
 
-    <h3>Conjunto original (9 acordes "tecla branca")</h3>
+    <h3>Extensão cromática (níveis 9-12 deste app)</h3>
+    <p>Após destravar as 8 cores Eguchi diatônicas, o app abre <strong>4 cores cromáticas adicionais</strong> — graus maiores fora do diatônico que aparecem com altíssima frequência em pop, rock, jazz e gospel:</p>
+    <ul>
+      <li><strong>Coral (D maior)</strong> — II grau Mixolídio, presente em modal rock e folk</li>
+      <li><strong>Lilás (A maior)</strong> — V/ii (dominante secundária de Dm), comum em jazz e baladas</li>
+      <li><strong>Turquesa (E maior)</strong> — V/vi (dominante secundária de Am), onipresente em pop emocional</li>
+      <li><strong>Areia (E♭ maior)</strong> — ♭III emprestado do paralelo menor, característico Beatles/soundtrack</li>
+    </ul>
+    <p>Isso completa <strong>12 dos 12 pitches cromáticos como raízes</strong>, cobrindo a grande maioria das progressões reais sem precisar transpor de tonalidade. Não é Eguchi original — é extensão pragmática pra adultos que tocam música ocidental. Pra cromático absoluto-completo em todas as tonalidades, o sistema de referência é Boomwhackers (12 cores arco-íris, uma por pitch class, sem qualidade de acorde).</p>
+
+    <h3>Conjunto original Eguchi (9 acordes "tecla branca")</h3>
     <p>Eguchi começa com <strong>9 voicings de Dó/Fá/Sol maior</strong> (apenas teclas brancas do piano):</p>
     <ul style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;">
       <li>Vermelho C-E-G · Laranja E-G-C · Marrom G-C-E (Dó maior em 3 inversões)</li>
@@ -1666,6 +1676,59 @@ const CHORDS = [
     whyColor: 'Marrom (茶) é literalmente "chá" — a cor da madeira, da terra molhada, do que está em transformação. Não é o vermelho puro nem o preto absoluto: é o estado intermediário, fértil, instável. Perfeito para o acorde que existe pra ir embora.',
     example: 'Qualquer blues em Dó (estrutura I-IV-V7), Ray Charles — "Hit the Road Jack" tem G7 abrindo',
     mnemonic: 'Tronco caído na floresta — ainda não é terra, mas vai ser.',
+  },
+  // ============================================
+  // EXTENSÃO CROMÁTICA (níveis 9-12 · destrava após Eguchi 8)
+  // Adiciona os 4 graus maiores cromáticos mais úteis em Dó:
+  // II (D), V/ii (A), V/vi (E), ♭III (E♭) — borrowed chords & secondary dominants.
+  // ============================================
+  {
+    id: 'coral', name: 'Coral', kanji: 'D', kanjiReading: 'ni',
+    hex: '#e8784a', text: '#1a1614',
+    chord: 'Ré Maior', chordSym: 'D', notes: ['Ré', 'Fá♯', 'Lá'],
+    freqs: [293.66, 369.99, 440.00],
+    intervals: ['fundamental', 'terça maior', 'quinta justa'],
+    function: 'II maior (Mixolídio) — relativo brilhante, sem modulação',
+    feel: 'Ensolarado, mais "amplo" que o Vermelho. Surge sem modular pra Sol maior — característico de pop modal e folk-rock (Beatles, REM). Não é diatônico de Dó mas pousa naturalmente.',
+    whyColor: 'Coral é o laranja-rosado entre o Vermelho da tônica e o Amarelo da subdominante — uma cor intermediária pra um acorde que existe na fronteira do diatônico.',
+    example: 'Beatles — "Eight Days a Week" (Mixolídio explícito), REM — "Losing My Religion" abertura',
+    mnemonic: 'Sol mais quente passando do meio-dia — quase laranja, ainda dourado.',
+  },
+  {
+    id: 'lilas', name: 'Lilás', kanji: 'A', kanjiReading: 'i',
+    hex: '#b07ac8', text: '#fff',
+    chord: 'Lá Maior', chordSym: 'A', notes: ['Lá', 'Dó♯', 'Mi'],
+    freqs: [440.00, 554.37, 659.25],
+    intervals: ['fundamental', 'terça maior', 'quinta justa'],
+    function: 'V/ii (dominante secundária pra Ré menor)',
+    feel: 'Lustroso, ligeiramente artificial — anuncia algo. Cria expectativa de resolução em Ré menor. Quase sempre passa antes do Verde, raramente fica.',
+    whyColor: 'Lilás é o Roxo aclarado — mesmo eixo cromático, menos peso. Sinaliza parentesco com o vi (Roxo) sem ser ele mesmo.',
+    example: 'Beatles — "I Saw Her Standing There" usa A pra ir pra Dm em alguns pontos',
+    mnemonic: 'Lilás da primavera — abre o caminho pra o roxo profundo do outono.',
+  },
+  {
+    id: 'turquesa', name: 'Turquesa', kanji: 'E', kanjiReading: 'ho',
+    hex: '#4ac4b8', text: '#1a1614',
+    chord: 'Mi Maior', chordSym: 'E', notes: ['Mi', 'Sol♯', 'Si'],
+    freqs: [329.63, 415.30, 493.88],
+    intervals: ['fundamental', 'terça maior', 'quinta justa'],
+    function: 'V/vi (dominante secundária pra Lá menor)',
+    feel: 'Brilhante, ascendente. Resolve quase invariavelmente em Lá menor (Roxo). É a "porta lateral" pro vi grau — onipresente em baladas folk e pop emocional.',
+    whyColor: 'Turquesa abre do Verde do Mi menor diatônico — mesma raiz, qualidade diferente. Indica que algo se transformou: a terça subiu.',
+    example: 'Beatles — "Something" (Bm-E7 modula), grande parte do pop com Am como repouso emocional usa E antes',
+    mnemonic: 'Lago verde mudando pra azul-céu — superfície mexeu mas a profundidade é a mesma.',
+  },
+  {
+    id: 'areia', name: 'Areia', kanji: 'E♭', kanjiReading: 'henho',
+    hex: '#c8b078', text: '#1a1614',
+    chord: 'Mi♭ Maior', chordSym: 'E♭', notes: ['Mi♭', 'Sol', 'Si♭'],
+    freqs: [311.13, 392.00, 466.16],
+    intervals: ['fundamental', 'terça maior', 'quinta justa'],
+    function: '♭III maior (emprestado do paralelo menor)',
+    feel: 'Quente, melancólico, contemplativo. Empresta peso emocional do Dó menor sem mudar de tonalidade. Mediante achatada — móvel rara e marcante.',
+    whyColor: 'Areia é o Amarelo "lavado", neutralizado — terra clara sem o brilho. Sinaliza algo emprestado, modal, fora do azul-amarelo diatônico.',
+    example: 'Beatles — "Let It Be" tem E♭ no contexto bIII. Muito usado em soundtracks épicos.',
+    mnemonic: 'Pôr-do-sol filtrado pela poeira — não é mais ouro, ainda não é noite.',
   },
 ];
 
@@ -2302,7 +2365,7 @@ function goTo(screen) {
 }
 
 function renderMenu() {
-  document.getElementById('menuLevel').textContent = `${state.levelUnlocked} / 8`;
+  document.getElementById('menuLevel').textContent = `${state.levelUnlocked} / ${CHORDS.length}`;
   document.getElementById('menuSessions').textContent = `${state.totalSessions} · ${state.freeSessions || 0} livres`;
   const today = countSessionsToday();
   const target = state.settings.dailySessionTarget || 5;
@@ -3256,7 +3319,9 @@ const MILESTONE_DEFS = [
   { id: 'streak-7', label: 'Streak de 7 dias', test: (s) => calculateStreak() >= 7 },
   { id: 'baseline-done', label: 'Baseline registrado', test: (s) => s.baseline && s.baseline.results && s.baseline.results.length > 0 },
   { id: 'unlock-2', label: 'Segunda cor desbloqueada', test: (s) => s.levelUnlocked >= 2 },
-  { id: 'unlock-all', label: 'Todas as 8 cores desbloqueadas', test: (s) => s.levelUnlocked >= 8 },
+  { id: 'unlock-eguchi', label: 'Diatônico completo (8 cores Eguchi)', test: (s) => s.levelUnlocked >= 8 },
+  { id: 'chromatic-1', label: 'Primeira cor cromática (D maior · Coral)', test: (s) => s.levelUnlocked >= 9 },
+  { id: 'unlock-all', label: 'Cromático completo (12 cores)', test: (s) => s.levelUnlocked >= 12 },
   { id: 'progression-1', label: 'Primeira progressão', test: (s) => s.progressionSessions >= 1 },
 ];
 
@@ -3714,10 +3779,11 @@ function renderConfusionMatrix(data) {
     cont.innerHTML = '<p style="color:var(--text-mute);font-style:italic;font-family:Fraunces,serif;text-align:center;padding:20px;">Sem dados suficientes</p>';
     return;
   }
-  // 8x8 matrix
-  const m = Array.from({length: 8}, () => Array(8).fill(0));
+  // NxN matrix (N = number of chords; chromatic extension supported)
+  const N = CHORDS.length;
+  const m = Array.from({length: N}, () => Array(N).fill(0));
   data.forEach(d => {
-    if (d.chordIdx < 8 && d.chosenIdx < 8) m[d.chordIdx][d.chosenIdx]++;
+    if (d.chordIdx < N && d.chosenIdx < N) m[d.chordIdx][d.chosenIdx]++;
   });
 
   let html = '<table class="matrix"><thead><tr><th class="label-axis"></th>';
