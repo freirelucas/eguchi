@@ -7,6 +7,7 @@ const VOICINGS = [
   { name: 'Vermelho', kanji: '赤', kanjiReading: 'aka', hex: '#c8332a', text: '#fff',
     chord: 'Dó maior', chordSym: 'C', inv: 'fundamental', invShort: 'I',
     notes: ['C4', 'E4', 'G4'], notesPt: ['Dó', 'Mi', 'Sol'],
+    introOrder: 0,
     etymology: 'fogo amplo · sol nascendo',
     bass: 'Dó (tônica) grave',
     feel: 'lar firme · ponto de repouso',
@@ -15,6 +16,7 @@ const VOICINGS = [
   { name: 'Laranja', kanji: '橙', kanjiReading: 'daidai', hex: '#e88a33', text: '#1a1614',
     chord: 'Dó maior', chordSym: 'C/E', inv: '1ª inversão', invShort: 'I⁶',
     notes: ['E4', 'G4', 'C5'], notesPt: ['Mi', 'Sol', 'Dó'],
+    introOrder: 5,
     etymology: 'laranja-amarga · daidai',
     bass: 'Mi (terça) grave',
     feel: 'movimento ascendente · abertura',
@@ -23,6 +25,7 @@ const VOICINGS = [
   { name: 'Marrom', kanji: '茶', kanjiReading: 'cha', hex: '#7a4d2a', text: '#fff',
     chord: 'Dó maior', chordSym: 'C/G', inv: '2ª inversão', invShort: 'I⁶₄',
     notes: ['G4', 'C5', 'E5'], notesPt: ['Sol', 'Dó', 'Mi'],
+    introOrder: 8,
     etymology: 'chá fermentado · wabi',
     bass: 'Sol (quinta) grave',
     feel: 'suspensão · à espera',
@@ -32,6 +35,7 @@ const VOICINGS = [
   { name: 'Roxo', kanji: '紫', kanjiReading: 'murasaki', hex: '#7a3d8a', text: '#fff',
     chord: 'Fá maior', chordSym: 'F', inv: 'fundamental', invShort: 'IV',
     notes: ['F4', 'A4', 'C5'], notesPt: ['Fá', 'Lá', 'Dó'],
+    introOrder: 6,
     etymology: 'flor gromwell · cor imperial',
     bass: 'Fá (tônica de F) grave',
     feel: 'outro lar · aspiração',
@@ -40,6 +44,7 @@ const VOICINGS = [
   { name: 'Preto', kanji: '黒', kanjiReading: 'kuro', hex: '#1a1614', text: '#ede4d0',
     chord: 'Fá maior', chordSym: 'F/A', inv: '1ª inversão', invShort: 'IV⁶',
     notes: ['A4', 'C5', 'F5'], notesPt: ['Lá', 'Dó', 'Fá'],
+    introOrder: 3,
     etymology: 'escuridão · profundidade',
     bass: 'Lá (terça) grave',
     feel: 'mistério · peso emocional',
@@ -47,6 +52,7 @@ const VOICINGS = [
 
   { name: 'Amarelo', kanji: '黄', kanjiReading: 'kii', hex: '#e8c83a', text: '#1a1614',
     chord: 'Fá maior', chordSym: 'F/C', inv: '2ª inversão', invShort: 'IV⁶₄',
+    introOrder: 1,
     notes: ['C5', 'F5', 'A5'], notesPt: ['Dó', 'Fá', 'Lá'],
     etymology: 'sol no zênite · ouro',
     bass: 'Dó (quinta) grave',
@@ -57,6 +63,7 @@ const VOICINGS = [
   { name: 'Rosa', kanji: '桃', kanjiReading: 'momo', hex: '#e89aaa', text: '#1a1614',
     chord: 'Sol maior', chordSym: 'G', inv: 'fundamental', invShort: 'V',
     notes: ['G4', 'B4', 'D5'], notesPt: ['Sol', 'Si', 'Ré'],
+    introOrder: 7,
     etymology: 'flor de pessegueiro · primavera',
     bass: 'Sol (tônica de G) grave',
     feel: 'anúncio · promessa',
@@ -65,6 +72,7 @@ const VOICINGS = [
   { name: 'Azul', kanji: '青', kanjiReading: 'ao', hex: '#3a6a9a', text: '#fff',
     chord: 'Sol maior', chordSym: 'G/B', inv: '1ª inversão', invShort: 'V⁶',
     notes: ['B4', 'D5', 'G5'], notesPt: ['Si', 'Ré', 'Sol'],
+    introOrder: 2,
     etymology: 'azul-verde · céu, mar, broto',
     bass: 'Si (terça) grave',
     feel: 'tensão lateral · sutileza',
@@ -73,6 +81,7 @@ const VOICINGS = [
   { name: 'Verde', kanji: '緑', kanjiReading: 'midori', hex: '#5a8a3a', text: '#fff',
     chord: 'Sol maior', chordSym: 'G/D', inv: '2ª inversão', invShort: 'V⁶₄',
     notes: ['D5', 'G5', 'B5'], notesPt: ['Ré', 'Sol', 'Si'],
+    introOrder: 4,
     etymology: 'broto novo · midori',
     bass: 'Ré (quinta) grave',
     feel: 'preparação · iminência',
@@ -322,7 +331,87 @@ function trumpetSVG(voicing, opts = {}) {
 }
 
 // ============================================================
-// FLAUTA DOCE SOPRANO em Dó — Baroque fingering
+// STAFF / PARTITURA — Treble clef + 3 note heads
+// White-key notes only (our voicings). Range C4–C6.
+// ============================================================
+const STAFF_PITCH_Y = {
+  // y-coord in viewBox where each pitch sits (step = 5px, stave 5 lines of 10px gap)
+  'C4': 70, 'D4': 65, 'E4': 60, 'F4': 55, 'G4': 50, 'A4': 45, 'B4': 40,
+  'C5': 35, 'D5': 30, 'E5': 25, 'F5': 20, 'G5': 15, 'A5': 10, 'B5': 5, 'C6': 0,
+};
+
+function staffSVG(voicing, opts = {}) {
+  const bw = !!opts.bw;
+  const w = 200, h = 88;
+  const staveLeftX = 38;
+  const staveRightX = w - 10;
+  const staveTopY = 20;   // top line = F5
+  const staveBottomY = 60; // bottom line = E4
+  const lineColor = bw ? '#111' : '#1a1614';
+  const dotFill = voicing.hex;
+  const dotStroke = bw ? '#000' : '#1a1614';
+  const labelColor = bw ? '#444' : '#6e6253';
+
+  let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // 5 stave lines
+  for (let i = 0; i < 5; i++) {
+    const y = staveTopY + i * 10;
+    svg += `<line x1="${staveLeftX - 4}" y1="${y}" x2="${staveRightX}" y2="${y}" stroke="${lineColor}" stroke-width="0.8"/>`;
+  }
+  // Left bar
+  svg += `<line x1="${staveLeftX - 4}" y1="${staveTopY}" x2="${staveLeftX - 4}" y2="${staveBottomY}" stroke="${lineColor}" stroke-width="1.5"/>`;
+  // Right end bar (double)
+  svg += `<line x1="${staveRightX - 2}" y1="${staveTopY}" x2="${staveRightX - 2}" y2="${staveBottomY}" stroke="${lineColor}" stroke-width="0.8"/>`;
+  svg += `<line x1="${staveRightX}" y1="${staveTopY}" x2="${staveRightX}" y2="${staveBottomY}" stroke="${lineColor}" stroke-width="1.8"/>`;
+
+  // Treble clef — simplified SVG path scaled to fit
+  // Center of clef "swirl" sits on G4 line (y=50). Path drawn from y≈10 to y≈75.
+  svg += `<g transform="translate(${staveLeftX - 32}, ${staveTopY - 8}) scale(0.052)">
+    <path d="M 376.4 154 c 0 -8 -1.8 -16.6 -5.4 -25.7 -10.2 -25.5 -27.5 -47.4 -52 -65.6 -1.8 -1.5 -2.8 -2.6 -3.2 -3.4 -0.4 -0.8 -0.6 -2.2 -0.6 -4.3 0 -16.2 4 -32 12.1 -47.4 8.1 -15.4 17.1 -29.5 27.1 -42.3 4.2 -5.3 8 -10.4 11.4 -15.4 9.8 -13.6 14.7 -25.7 14.7 -36.3 0 -12.4 -2.4 -23.7 -7.2 -34 -4.8 -10.3 -11.3 -19.1 -19.4 -26.4 -8.1 -7.3 -17.5 -13 -28.2 -17.2 -10.7 -4.2 -21.8 -6.2 -33.4 -6.2 -14.5 0 -27 4 -37.6 12 -10.6 8 -17.9 18 -22.1 30 -4.2 12 -4.7 25.1 -1.5 39.4 3.2 14.3 10.5 27.1 22 38.6 13.4 13.4 22.1 22.1 26 26.1 6 6.7 9.9 13.7 11.6 21.1 1.7 7.4 1.4 14.8 -1 22.1 -5.9 17.4 -16.5 31.6 -31.7 42.6 -15.2 11 -32.4 17.3 -51.5 19 V 35.4 c 12.5 -2.5 23.2 -7.3 32.1 -14.4 8.9 -7.1 16.1 -15.7 21.7 -25.8 5.6 -10.1 8.3 -20.5 8.3 -31.1 0 -11.5 -2.3 -22.4 -6.9 -32.7 -4.6 -10.3 -11 -19.3 -19.1 -27 -16.2 -15.4 -36.6 -23.1 -61 -23.1 -32.6 0 -57 9.9 -73.1 29.6 -16.1 19.7 -24.2 43.7 -24.2 72 0 17.6 4 34 12.1 49.4 8.1 15.4 19.4 28.2 33.8 38.6 23.4 16.7 41.4 28.6 53.9 35.6 v 50.4 c -16.7 -2.1 -33.4 -7.4 -50.1 -16 -16.7 -8.6 -31.6 -19.5 -44.9 -32.8 -13.3 -13.3 -23.9 -28.7 -31.7 -46.2 -7.9 -17.5 -11.8 -36.3 -11.8 -56.5 0 -25.3 5.4 -47.3 16.3 -65.9 10.9 -18.6 25.9 -33.7 45.1 -45.4 19.2 -11.7 41.1 -19.6 65.6 -23.7 v -27.4 c -36 5.6 -64.2 18.9 -84.7 39.9 -20.5 21 -34.8 47.4 -42.7 79.2 -3.6 14.5 -5.4 29.7 -5.4 45.4 0 31.7 8.6 60.7 25.7 87.1 17.1 26.4 39.7 47.7 67.8 64 z" fill="${lineColor}"/>
+  </g>`;
+
+  // Note heads (3 notes spread horizontally)
+  const noteCount = voicing.notes.length;
+  const noteSpacing = (staveRightX - staveLeftX - 30) / (noteCount + 1);
+  voicing.notes.forEach((noteOct, i) => {
+    const y = STAFF_PITCH_Y[noteOct];
+    if (y === undefined) return;
+    const x = staveLeftX + 22 + (i + 1) * noteSpacing;
+
+    // Ledger lines below stave (for C4 — below E4 by 2 steps)
+    if (y > staveBottomY) {
+      // C4 needs ledger at y=70
+      svg += `<line x1="${x - 7}" y1="${y}" x2="${x + 7}" y2="${y}" stroke="${lineColor}" stroke-width="0.9"/>`;
+    }
+    // Ledger lines above stave
+    if (y < staveTopY) {
+      // For A5 (y=10), C6 (y=0): draw ledger lines
+      if (y <= 10) {
+        svg += `<line x1="${x - 7}" y1="10" x2="${x + 7}" y2="10" stroke="${lineColor}" stroke-width="0.9"/>`;
+      }
+      if (y <= 0) {
+        svg += `<line x1="${x - 7}" y1="0" x2="${x + 7}" y2="0" stroke="${lineColor}" stroke-width="0.9"/>`;
+      }
+    }
+
+    // Note head (rotated oval — standard music notation note head)
+    svg += `<ellipse cx="${x}" cy="${y}" rx="5.6" ry="4.2" fill="${dotFill}" stroke="${dotStroke}" stroke-width="1" transform="rotate(-22 ${x} ${y})"/>`;
+    // Order index above note
+    svg += `<text x="${x}" y="${y - 8}" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="7" font-weight="700" fill="${labelColor}">${i + 1}</text>`;
+  });
+
+  // Note labels below the stave
+  voicing.notes.forEach((noteOct, i) => {
+    const x = staveLeftX + 22 + (i + 1) * noteSpacing;
+    svg += `<text x="${x}" y="${h - 5}" text-anchor="middle" font-family="'Fraunces', serif" font-size="10" font-style="italic" fill="${labelColor}">${voicing.notesPt[i]}</text>`;
+  });
+
+  svg += '</svg>';
+  return svg;
+}
+
+// ============================================================
 // Range: C5 a B6. Voicings (originalmente C4-B5) tocados transpostos
 // 1 oitava acima — registro natural da flauta doce.
 // T (polegar) + 7 furos. Valor 1=fechado, 0=aberto, 0.5=meio-furo (polegar).
@@ -416,5 +505,5 @@ const RECORDER_MISSING_NOTES = []; // all voicings fit C5-B6 transposed range
 
 // Export-friendly (no module system, just attach to window)
 if (typeof window !== 'undefined') {
-  window.EguchiCheat = { VOICINGS, pianoSVG, guitarSVG, trumpetSVG, recorderSVG, RECORDER_MISSING_NOTES };
+  window.EguchiCheat = { VOICINGS, pianoSVG, guitarSVG, trumpetSVG, recorderSVG, staffSVG, RECORDER_MISSING_NOTES };
 }

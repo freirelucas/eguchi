@@ -1093,7 +1093,7 @@
     </p>
     <div id="progCurriculumList"></div>
     <div style="margin-top:14px;padding:12px;background:rgba(112,144,176,0.06);border-left:2px solid var(--accent-cool);border-radius:4px;font-family:'Fraunces',serif;font-size:11px;color:var(--text-dim);line-height:1.5;">
-      <strong style="color:var(--text);">Sobre o sistema cromático:</strong> após destravar as 8 cores Eguchi (níveis 1-8), o app abre <strong>4 cores cromáticas adicionais</strong> nos níveis 9-12 — Coral (D), Lilás (A), Turquesa (E), Areia (E♭). Isso completa todos os 12 pitches como raízes maiores. As 20 progressões deste currículo estão todas em Dó maior; futuras progressões poderão explorar dominantes secundárias e empréstimos modais. Progressão <strong>#4</strong> usa Dm7→Dm (sem 7ª no set); <strong>#17</strong> usa Bdim→G7 (mesma função dominante).
+      <strong style="color:var(--text);">Sobre o sistema cromático:</strong> após destravar as 8 cores Eguchi (níveis 1-8), o app abre <strong>4 cores cromáticas adicionais</strong> nos níveis 9-12 — Coral (D), Lilás (A), Limão (E), Âmbar (E♭) — alinhadas com o hue-wheel Newton/Boomwhackers (laranja, magenta, chartreuse, dourado). Pganssle/cim usa 5 cromáticas (inclui B♭); aqui ficamos com 4 porque B♭ já é Azul nas 8 originais. As 20 progressões deste currículo estão todas em Dó maior; <strong>#4</strong> usa Dm7→Dm; <strong>#17</strong> usa Bdim→G7.
     </div>
   </div>
 </div>
@@ -1424,12 +1424,12 @@
     <h3>Extensão cromática (níveis 9-12 deste app)</h3>
     <p>Após destravar as 8 cores Eguchi diatônicas, o app abre <strong>4 cores cromáticas adicionais</strong> — graus maiores fora do diatônico que aparecem com altíssima frequência em pop, rock, jazz e gospel:</p>
     <ul>
-      <li><strong>Coral (D maior)</strong> — II grau Mixolídio, presente em modal rock e folk</li>
-      <li><strong>Lilás (A maior)</strong> — V/ii (dominante secundária de Dm), comum em jazz e baladas</li>
-      <li><strong>Turquesa (E maior)</strong> — V/vi (dominante secundária de Am), onipresente em pop emocional</li>
-      <li><strong>Areia (E♭ maior)</strong> — ♭III emprestado do paralelo menor, característico Beatles/soundtrack</li>
+      <li><strong>Coral (D maior)</strong> — II grau Mixolídio, presente em modal rock e folk. Laranja vibrante (Newton ~60°).</li>
+      <li><strong>Lilás (A maior)</strong> — V/ii (dominante secundária de Dm), comum em jazz e baladas. Magenta-roxo (Newton ~270°).</li>
+      <li><strong>Limão (E maior)</strong> — V/vi (dominante secundária de Am), onipresente em pop emocional. Chartreuse (Newton ~80-120°).</li>
+      <li><strong>Âmbar (E♭ maior)</strong> — ♭III emprestado do paralelo menor, característico Beatles/soundtrack. Dourado (Newton ~50°).</li>
     </ul>
-    <p>Isso completa <strong>12 dos 12 pitches cromáticos como raízes</strong>, cobrindo a grande maioria das progressões reais sem precisar transpor de tonalidade. Não é Eguchi original — é extensão pragmática pra adultos que tocam música ocidental. Pra cromático absoluto-completo em todas as tonalidades, o sistema de referência é Boomwhackers (12 cores arco-íris, uma por pitch class, sem qualidade de acorde).</p>
+    <p>Isso completa <strong>12 dos 12 pitches cromáticos como raízes</strong>, cobrindo a grande maioria das progressões reais sem precisar transpor de tonalidade. Não é Eguchi original — é extensão pragmática pra adultos que tocam música ocidental. As 4 cores cromáticas seguem o <strong>hue-wheel Newton/Boomwhackers</strong> (alinhamento aproximado: D=60° laranja, E♭=50° dourado, E=120° verde-limão, A=270° magenta), saturadas pra ficar visualmente distintas das 8 diatônicas Eguchi-tradicionais. Referência open-source paralela: <a href="https://pganssle.github.io/cim/" target="_blank" style="color:var(--accent);">pganssle/cim</a> implementa o mesmo método com 5 cromáticas (inclui B♭).</p>
 
     <h3>Conjunto original Eguchi (9 acordes "tecla branca")</h3>
     <p>Eguchi começa com <strong>9 voicings de Dó/Fá/Sol maior</strong> (apenas teclas brancas do piano):</p>
@@ -1684,51 +1684,51 @@ const CHORDS = [
   // ============================================
   {
     id: 'coral', name: 'Coral', kanji: 'D', kanjiReading: 'ni',
-    hex: '#e8784a', text: '#1a1614',
+    hex: '#e88a33', text: '#1a1614',
     chord: 'Ré Maior', chordSym: 'D', notes: ['Ré', 'Fá♯', 'Lá'],
     freqs: [293.66, 369.99, 440.00],
     intervals: ['fundamental', 'terça maior', 'quinta justa'],
     function: 'II maior (Mixolídio) — relativo brilhante, sem modulação',
     feel: 'Ensolarado, mais "amplo" que o Vermelho. Surge sem modular pra Sol maior — característico de pop modal e folk-rock (Beatles, REM). Não é diatônico de Dó mas pousa naturalmente.',
-    whyColor: 'Coral é o laranja-rosado entre o Vermelho da tônica e o Amarelo da subdominante — uma cor intermediária pra um acorde que existe na fronteira do diatônico.',
+    whyColor: 'Laranja vibrante (~60° no hue-wheel Newton/Boomwhackers) — entre Vermelho da tônica e Amarelo da subdominante. Marca um pitch que está fora do diatônico mas adjacente perceptualmente.',
     example: 'Beatles — "Eight Days a Week" (Mixolídio explícito), REM — "Losing My Religion" abertura',
     mnemonic: 'Sol mais quente passando do meio-dia — quase laranja, ainda dourado.',
   },
   {
     id: 'lilas', name: 'Lilás', kanji: 'A', kanjiReading: 'i',
-    hex: '#b07ac8', text: '#fff',
+    hex: '#b045b8', text: '#fff',
     chord: 'Lá Maior', chordSym: 'A', notes: ['Lá', 'Dó♯', 'Mi'],
     freqs: [440.00, 554.37, 659.25],
     intervals: ['fundamental', 'terça maior', 'quinta justa'],
     function: 'V/ii (dominante secundária pra Ré menor)',
     feel: 'Lustroso, ligeiramente artificial — anuncia algo. Cria expectativa de resolução em Ré menor. Quase sempre passa antes do Verde, raramente fica.',
-    whyColor: 'Lilás é o Roxo aclarado — mesmo eixo cromático, menos peso. Sinaliza parentesco com o vi (Roxo) sem ser ele mesmo.',
+    whyColor: 'Magenta-roxo vibrante (~270° no hue-wheel Newton) — mesma família cromática do Roxo (Lá menor), mais saturada. Marca o paralelo maior do vi grau.',
     example: 'Beatles — "I Saw Her Standing There" usa A pra ir pra Dm em alguns pontos',
     mnemonic: 'Lilás da primavera — abre o caminho pra o roxo profundo do outono.',
   },
   {
-    id: 'turquesa', name: 'Turquesa', kanji: 'E', kanjiReading: 'ho',
-    hex: '#4ac4b8', text: '#1a1614',
+    id: 'limao', name: 'Limão', kanji: 'E', kanjiReading: 'ho',
+    hex: '#a8c437', text: '#1a1614',
     chord: 'Mi Maior', chordSym: 'E', notes: ['Mi', 'Sol♯', 'Si'],
     freqs: [329.63, 415.30, 493.88],
     intervals: ['fundamental', 'terça maior', 'quinta justa'],
     function: 'V/vi (dominante secundária pra Lá menor)',
     feel: 'Brilhante, ascendente. Resolve quase invariavelmente em Lá menor (Roxo). É a "porta lateral" pro vi grau — onipresente em baladas folk e pop emocional.',
-    whyColor: 'Turquesa abre do Verde do Mi menor diatônico — mesma raiz, qualidade diferente. Indica que algo se transformou: a terça subiu.',
+    whyColor: 'Verde-limão / chartreuse (~80-120° no hue-wheel Newton) — transição entre Amarelo (Fá) e Verde (Ré menor) sem ser nenhum dos dois. A terça aguda (Sol♯) puxa o acorde pra cima.',
     example: 'Beatles — "Something" (Bm-E7 modula), grande parte do pop com Am como repouso emocional usa E antes',
-    mnemonic: 'Lago verde mudando pra azul-céu — superfície mexeu mas a profundidade é a mesma.',
+    mnemonic: 'Folha nova ao sol — ainda amarela, já virando verde.',
   },
   {
-    id: 'areia', name: 'Areia', kanji: 'E♭', kanjiReading: 'henho',
-    hex: '#c8b078', text: '#1a1614',
+    id: 'ambar', name: 'Âmbar', kanji: 'E♭', kanjiReading: 'henho',
+    hex: '#d4a833', text: '#1a1614',
     chord: 'Mi♭ Maior', chordSym: 'E♭', notes: ['Mi♭', 'Sol', 'Si♭'],
     freqs: [311.13, 392.00, 466.16],
     intervals: ['fundamental', 'terça maior', 'quinta justa'],
     function: '♭III maior (emprestado do paralelo menor)',
     feel: 'Quente, melancólico, contemplativo. Empresta peso emocional do Dó menor sem mudar de tonalidade. Mediante achatada — móvel rara e marcante.',
-    whyColor: 'Areia é o Amarelo "lavado", neutralizado — terra clara sem o brilho. Sinaliza algo emprestado, modal, fora do azul-amarelo diatônico.',
+    whyColor: 'Âmbar / dourado saturado (~50° no hue-wheel Newton) — fica entre Coral (D) e Amarelo (F), mais quente que ambos. Empréstimo modal do paralelo menor pinta-se em ouro escuro.',
     example: 'Beatles — "Let It Be" tem E♭ no contexto bIII. Muito usado em soundtracks épicos.',
-    mnemonic: 'Pôr-do-sol filtrado pela poeira — não é mais ouro, ainda não é noite.',
+    mnemonic: 'Pôr-do-sol queimando lento — ouro envelhecido, prestes a virar noite.',
   },
 ];
 
