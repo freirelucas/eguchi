@@ -653,6 +653,97 @@
     color: var(--text-dim);
     margin-top: 3px;
   }
+  .drawer-item-primary {
+    background: linear-gradient(135deg, rgba(212,101,74,0.10), rgba(232,160,74,0.04));
+  }
+  .drawer-item-primary span { color: var(--accent); }
+  .drawer-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 2px 7px;
+    border-radius: 999px;
+    vertical-align: 2px;
+    margin-left: 6px;
+    font-weight: 700;
+  }
+
+  /* STREAK / CHALLENGE */
+  .focus-hint {
+    padding: 6px 18px;
+    background: rgba(232,160,74,0.08);
+    border-bottom: 1px solid rgba(232,160,74,0.18);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-warm);
+    letter-spacing: 0.06em;
+    text-align: center;
+  }
+  #focusHint .streak-pips {
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin: 0 4px;
+  }
+  #focusHint.challenge {
+    background: rgba(212,101,74,0.18);
+    border-bottom-color: rgba(212,101,74,0.4);
+    color: var(--accent);
+    animation: challengePulse 1.4s ease-in-out infinite;
+  }
+  @keyframes challengePulse {
+    0%, 100% { background: rgba(212,101,74,0.14); }
+    50% { background: rgba(212,101,74,0.26); }
+  }
+  .feedback.challenge { color: var(--accent); }
+  .feedback.challenge .challenge-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .color-btn.challenge-unlock {
+    box-shadow: 0 0 0 2px var(--accent), 0 0 12px rgba(212,101,74,0.5);
+    animation: challengeUnlockPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes challengeUnlockPulse {
+    0%, 100% { box-shadow: 0 0 0 2px var(--accent), 0 0 8px rgba(212,101,74,0.4); }
+    50% { box-shadow: 0 0 0 3px var(--accent), 0 0 18px rgba(212,101,74,0.75); }
+  }
+
+  /* MOBILE COMPACT (≤480px) */
+  @media (max-width: 480px) {
+    .menu-pad { padding: 5vh 18px 4vh; }
+    .reco-card-hero { padding: 16px 18px 18px; border-radius: 10px; }
+    .reco-card-hero .reco-title { font-size: 22px; }
+    .reco-card-hero .reco-sub { font-size: 13px; margin-top: 8px; }
+    .reco-card-hero .reco-cta { margin-top: 12px; font-size: 10px; }
+    .menu-mid { gap: 20px; margin: 16px 0; }
+    .mini-stat { gap: 2px; }
+    .mini-value { font-size: 15px; }
+    .more-btn { padding: 8px 18px; font-size: 10px; }
+    .brand-title { font-size: 36px; }
+    .brand-kanji { font-size: 10px; }
+
+    .play-area { min-height: 200px; gap: 14px; padding: 8px 14px; }
+    .play-btn { width: 108px; height: 108px; font-size: 14px; }
+    .color-grid { gap: 5px; padding: 0 14px 12px; }
+    .color-btn .name { font-size: 10px; }
+    .color-btn .kanji-small { font-size: 15px; }
+    .focus-hint { padding: 5px 14px; font-size: 9px; }
+
+    .drawer-item { padding: 12px 18px; }
+    .drawer-item span { font-size: 16px; }
+    .drawer-item small { font-size: 11px; }
+    .drawer-label { padding: 0 18px 6px; font-size: 9px; }
+  }
 
   /* CURRÍCULO */
   .curriculum-row {
@@ -1196,8 +1287,11 @@
   <div class="screen-pad drawer-pad">
     <div class="drawer-section">
       <div class="drawer-label">Modos de treino</div>
-      <button class="drawer-item" onclick="startFreeSession()"><span>Treino livre</span><small>todas as 8 cores</small></button>
-      <button class="drawer-item" onclick="startTrainSession()"><span>Treino Eguchi</span><small>progressão clássica</small></button>
+      <button class="drawer-item drawer-item-primary" onclick="startTrainSession()">
+        <span>Treino Eguchi <em class="drawer-tag">principal</em></span>
+        <small>desbloqueia cor a cor · 5 em sequência → desafio</small>
+      </button>
+      <button class="drawer-item" onclick="startFreeSession()"><span>Treino livre</span><small>todas as cores já liberadas</small></button>
       <button class="drawer-item" onclick="goTo('progressionsCurriculum')"><span>Currículo · 20 progressões</span><small>pop · jazz · gospel · folk</small></button>
       <button class="drawer-item" onclick="startProgressionSession()"><span>Sequência aleatória</span><small>2-4 acordes randômicos</small></button>
       <button class="drawer-item" onclick="startBaseline()"><span>Baseline</span><small>medir ponto de partida</small></button>
@@ -1237,7 +1331,7 @@
     <span class="topbar-meta"><span id="trainCount">0</span> / <span id="trainTotal">30</span></span>
   </div>
   <div class="train-progress-bar"><div class="train-progress-fill" id="trainBar"></div></div>
-  <div id="focusHint" style="display:none;padding:6px 18px;background:rgba(232,160,74,0.08);border-bottom:1px solid rgba(232,160,74,0.18);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent-warm);letter-spacing:0.06em;text-align:center;"></div>
+  <div id="focusHint" class="focus-hint" style="display:none;"></div>
 
   <div class="play-area">
     <button class="play-btn" id="playBtn" onclick="playCurrentChord()">▶</button>
@@ -1953,6 +2047,10 @@ const BASELINE_LENGTH = 50;
 const PROBE_LENGTH = 10;
 const PROBE_INTERVAL_SESSIONS = 5;
 
+// Streak-based unlock (replaces Bayesian gating for new colors)
+const STREAK_TO_CHALLENGE = 5;   // N consecutive correct → 3-chord challenge
+const CHALLENGE_LENGTH = 3;      // chords in unlock challenge
+
 const DEFAULT_SETTINGS = {
   instrument: 'piano',
   variation: 'off',
@@ -1978,6 +2076,12 @@ let lastChordIdx = null;
 let acceptingInput = false;
 let sessionMode = 'train'; // 'train', 'baseline', 'probe', 'free', 'progression'
 let trialReplays = 0;
+
+// Streak-based unlock state (train mode only)
+let currentStreak = 0;
+let inChallenge = false;
+let challengeQueue = [];   // [chordIdx, chordIdx, chordIdx]
+let challengeStep = 0;     // 0, 1, 2
 let toneInstruments = null;
 let toneReady = false;
 let progressionSeq = [];      // [chordIdx, ...]
@@ -2578,6 +2682,10 @@ function startTrainSession() {
     lastChordIdx = null;
     currentChordIdx = null;
     acceptingInput = false;
+    currentStreak = 0;
+    inChallenge = false;
+    challengeQueue = [];
+    challengeStep = 0;
     goTo('train');
     document.getElementById('trainTitle').innerHTML = 'treino';
     document.getElementById('trainTotal').textContent = state.settings.sessionLength;
@@ -2659,24 +2767,23 @@ function updateTrainHeader() {
                 state.settings.sessionLength;
   const pct = Math.min(100, (sessionCount / total) * 100);
   document.getElementById('trainBar').style.width = pct + '%';
-  // Show focus-color establishment hint in Eguchi train mode
+  // Streak / challenge banner in Eguchi train mode
   const hint = document.getElementById('focusHint');
   if (!hint) return;
-  if (sessionMode === 'train' && state.levelUnlocked < CHORDS.length) {
-    const c = checkUnlockCriteria();
-    const focus = CHORDS[state.levelUnlocked - 1];
-    if (c.focusEstablished) {
-      hint.style.display = 'block';
-      hint.textContent = `${focus.name} estabelecida · próxima cor desbloqueando...`;
-    } else if (c.focusTrials > 0) {
-      hint.style.display = 'block';
-      hint.textContent = `${focus.name}: ${Math.round(c.focusAcc * 100)}% (${c.focusTrials}/${ESTABLISH_RECENT_TRIALS} trials) — alvo ≥${Math.round(ESTABLISH_TARGET_ACC * 100)}% pra liberar próxima`;
-    } else {
-      hint.style.display = 'block';
-      hint.textContent = `Foco: ${focus.name} — toque ${ESTABLISH_RECENT_TRIALS} trials desta cor pra avaliar`;
-    }
-  } else {
+  hint.classList.remove('challenge');
+  if (sessionMode !== 'train' || state.levelUnlocked >= CHORDS.length) {
     hint.style.display = 'none';
+    return;
+  }
+  const nextColor = CHORDS[state.levelUnlocked];
+  if (inChallenge) {
+    hint.classList.add('challenge');
+    hint.style.display = 'block';
+    hint.innerHTML = `<strong>DESAFIO ${challengeStep + 1}/${CHALLENGE_LENGTH}</strong> · destrava <span style="color:${nextColor.hex};">${nextColor.name}</span>`;
+  } else {
+    hint.style.display = 'block';
+    const pips = '●'.repeat(currentStreak) + '○'.repeat(Math.max(0, STREAK_TO_CHALLENGE - currentStreak));
+    hint.innerHTML = `streak <span class="streak-pips">${pips}</span> ${currentStreak}/${STREAK_TO_CHALLENGE} → desafio destrava <span style="color:${nextColor.hex};">${nextColor.name}</span>`;
   }
 }
 
@@ -2887,22 +2994,39 @@ function handleAnswer(idx) {
   sessionCount += 1;
   lastChordIdx = currentChordIdx;
   currentChordIdx = null;
+
+  // Streak tracking (train mode only, outside of challenge)
+  if (sessionMode === 'train' && !inChallenge) {
+    if (correct) currentStreak += 1;
+    else currentStreak = 0;
+  }
   updateTrainHeader();
 
-  // Mid-session banner every 10 trials (train/free only)
-  if ((sessionMode === 'train' || sessionMode === 'free') && sessionCount > 0 && sessionCount % 10 === 0) {
+  // Mid-session banner every 10 trials (train/free only, not during challenge)
+  if (!inChallenge && (sessionMode === 'train' || sessionMode === 'free') && sessionCount > 0 && sessionCount % 10 === 0) {
     showSessionBanner();
   }
 
-  // Unlock check (only train mode) — opens full lesson card with the new color
+  // Challenge state machine (train mode)
   if (sessionMode === 'train') {
-    const unlocked = tryUnlockNextLevel();
-    if (unlocked) {
-      const newIdx = state.levelUnlocked - 1;
-      setTimeout(() => {
-        showLessonCard(newIdx, 'train', true);
-      }, 900);
-      return; // skip auto-next-round; lesson card's close handler will resume
+    if (inChallenge) {
+      // Advance or fail the challenge
+      if (correct) {
+        challengeStep += 1;
+        if (challengeStep >= CHALLENGE_LENGTH) {
+          setTimeout(passChallenge, 1100);
+        } else {
+          setTimeout(playChallengeStep, 1200);
+        }
+      } else {
+        setTimeout(failChallenge, 1800);
+      }
+      return; // challenge owns the flow
+    }
+    // Trigger challenge when streak reached and there's a color to unlock
+    if (currentStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
+      setTimeout(triggerChallenge, 1100);
+      return;
     }
   }
 
@@ -2918,6 +3042,118 @@ function handleAnswer(idx) {
                   sessionMode === 'probe' ? 1000 :
                   correct ? 900 : (state.settings.playCorrectOnError === 'on' ? 2400 : 1800);
     setTimeout(newRound, delay);
+  }
+}
+
+// ============================================
+// STREAK CHALLENGE (3 colors in sequence → unlock)
+// ============================================
+function triggerChallenge() {
+  if (state.levelUnlocked >= CHORDS.length) return;
+  const newIdx = state.levelUnlocked;
+  const unlocked = state.levelUnlocked;
+  // Pick 2 random already-unlocked colors (without replacement)
+  const others = [];
+  for (let i = 0; i < unlocked; i++) others.push(i);
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  const pick2 = others.slice(0, 2);
+  // Build queue with new color + 2 others, shuffle order
+  const queue = [newIdx, ...pick2];
+  for (let i = queue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [queue[i], queue[j]] = [queue[j], queue[i]];
+  }
+  challengeQueue = queue;
+  challengeStep = 0;
+  inChallenge = true;
+  // Temporarily enable the new color button
+  const grid = document.getElementById('colorGrid');
+  if (grid) {
+    const btn = grid.querySelector(`.color-btn[data-idx="${newIdx}"]`);
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.add('challenge-unlock');
+    }
+  }
+  // Banner / hint update
+  updateTrainHeader();
+  const fb = document.getElementById('feedback');
+  if (fb) {
+    fb.classList.remove('correct', 'wrong');
+    fb.classList.add('show', 'challenge');
+    fb.innerHTML = `<span class="challenge-title">DESAFIO</span><small>3 acordes em sequência · acerte os 3 e destrava <strong style="color:${CHORDS[newIdx].hex};">${CHORDS[newIdx].name}</strong></small>`;
+  }
+  setTimeout(playChallengeStep, 1800);
+}
+
+function playChallengeStep() {
+  acceptingInput = false;
+  currentChordIdx = challengeQueue[challengeStep];
+  currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
+  currentInstrument = state.settings.instrument;
+  // Clear any lingering flash
+  document.querySelectorAll('#colorGrid .color-btn').forEach(b => b.classList.remove('pulse-reveal', 'flash-correct', 'flash-wrong'));
+  const fb = document.getElementById('feedback');
+  if (fb) {
+    fb.classList.remove('correct', 'wrong');
+    fb.classList.add('show', 'challenge');
+    fb.innerHTML = `<span class="challenge-title">DESAFIO ${challengeStep + 1}/${CHALLENGE_LENGTH}</span><small>ouça e escolha</small>`;
+  }
+  updateTrainHeader();
+  playCurrentChord();
+}
+
+function passChallenge() {
+  state.levelUnlocked += 1;
+  state.lastUnlockDate = new Date().toISOString();
+  saveState();
+  const newIdx = state.levelUnlocked - 1;
+  inChallenge = false;
+  challengeQueue = [];
+  challengeStep = 0;
+  currentStreak = 0;
+  // Big celebration
+  flashColor(CHORDS[newIdx].hex);
+  const fb = document.getElementById('feedback');
+  if (fb) {
+    fb.classList.remove('challenge', 'wrong');
+    fb.classList.add('show', 'correct');
+    fb.innerHTML = `<strong>DESBLOQUEADA</strong> <span style="color:${CHORDS[newIdx].hex};font-weight:500;">${CHORDS[newIdx].name}</span>`;
+  }
+  updateTrainHeader();
+  setTimeout(() => showLessonCard(newIdx, 'train', true), 1200);
+}
+
+function failChallenge() {
+  // Disable the new color button again
+  const newIdx = state.levelUnlocked;
+  const grid = document.getElementById('colorGrid');
+  if (grid && newIdx < CHORDS.length) {
+    const btn = grid.querySelector(`.color-btn[data-idx="${newIdx}"]`);
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.remove('challenge-unlock');
+    }
+  }
+  inChallenge = false;
+  challengeQueue = [];
+  challengeStep = 0;
+  currentStreak = 0;
+  const fb = document.getElementById('feedback');
+  if (fb) {
+    fb.classList.remove('correct', 'challenge');
+    fb.classList.add('show', 'wrong');
+    fb.innerHTML = `<strong>desafio falhou</strong><small>continue treinando · próxima chance em ${STREAK_TO_CHALLENGE} acertos</small>`;
+  }
+  updateTrainHeader();
+  const sessionLen = state.settings.sessionLength;
+  if (sessionCount >= sessionLen) {
+    setTimeout(endSession, 1600);
+  } else {
+    setTimeout(newRound, 1800);
   }
 }
 
@@ -3724,13 +3960,7 @@ function computeRecommendation() {
   if (!state.baseline) {
     return { label: 'Próximo passo', title: 'Comece pela baseline', sub: '50 trials cegos · ~6 min. Sem isso, não dá pra interpretar progresso.', action: startBaseline };
   }
-  // 3. Unlock criteria met but not yet unlocked (rare since it auto-unlocks, but show as encouragement)
-  if (state.levelUnlocked < CHORDS.length) {
-    const c = checkUnlockCriteria();
-    if (c && c.ready) {
-      return { label: 'Quase lá', title: 'Próxima cor está pronta', sub: 'Treine mais uma sessão pra destravar.', action: startTrainSession };
-    }
-  }
+  // 3. (Bayesian "ready" check removed — unlock is streak-based now)
   // 4. Daily protocol — Sakakibara: 5 sessions/day
   const today = countSessionsToday();
   const target = state.settings.dailySessionTarget || 5;
@@ -3749,9 +3979,11 @@ function computeRecommendation() {
           return { label: 'Volte ao treino', title: `Faz ${days} dias`, sub: 'Uma sessão curta reativa o circuito.', action: startTrainSession };
         }
       }
-      return { label: 'Protocolo · 1ª de 5', title: `Sessão da ${period}`, sub: `${sessionLen} trials · ~3 min · Sakakibara recomenda 5 sessões espalhadas no dia${streakNote}`, action: startTrainSession };
+      const nextNote = state.levelUnlocked < CHORDS.length ? ` · destrava ${CHORDS[state.levelUnlocked].name}` : '';
+      return { label: 'Protocolo · 1ª de 5', title: `Sessão da ${period}`, sub: `${sessionLen} trials · ~3 min${nextNote}${streakNote}`, action: startTrainSession };
     }
-    return { label: `Protocolo · ${next}ª de ${target}`, title: `Sessão da ${period}`, sub: `${sessionLen} trials · ~3 min · ${target - today} ${target - today === 1 ? 'restante' : 'restantes'} hoje`, action: startTrainSession };
+    const nextNote2 = state.levelUnlocked < CHORDS.length ? ` · destrava ${CHORDS[state.levelUnlocked].name}` : '';
+    return { label: `Protocolo · ${next}ª de ${target}`, title: `Sessão da ${period}`, sub: `${sessionLen} trials · ~3 min · ${target - today} ${target - today === 1 ? 'restante' : 'restantes'} hoje${nextNote2}`, action: startTrainSession };
   }
   // 5. Target hit for today → suggest progression or free practice
   if (today >= target) {
