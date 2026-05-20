@@ -32,6 +32,7 @@
   }
   html, body {
     height: 100%;
+    height: 100dvh; /* iOS Safari: avoids overflow when URL bar shows */
     background: var(--bg);
     color: var(--text);
     font-family: 'JetBrains Mono', ui-monospace, monospace;
@@ -80,7 +81,35 @@
   em { color: var(--accent); font-style: italic; }
 
   /* ====== MENU ====== */
-  #menu .screen-pad { justify-content: space-between; min-height: 100%; display: flex; flex-direction: column; padding-top: 32px; }
+  #menu .menu-fit {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 14px 18px 18px;
+    gap: 14px;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .menu-brandbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .menu-brandbar .brand-mini {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .menu-brandbar .brand-mini em { color: var(--accent); font-style: italic; }
+  .menu-brandbar .kanji-mini {
+    font-family: 'Fraunces', serif;
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.3em;
+  }
   .brand { text-align: center; margin-top: 4vh; }
   .brand-title { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(46px, 13vw, 68px); letter-spacing: -0.04em; line-height: 0.95; }
   .brand-title em { color: var(--accent); }
@@ -495,53 +524,30 @@
   .reco-title { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.3; }
   .reco-sub { font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
 
-  /* MENU MINIMALISTA */
-  .menu-pad {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 100%;
-    padding: 8vh 24px 6vh;
-  }
-  .menu-top { text-align: center; }
-  .menu-top .brand { margin-top: 0; }
-  .menu-top .brand-kanji {
-    font-family: 'Fraunces', serif;
-    font-size: 11px;
-    letter-spacing: 0.32em;
-    color: var(--text-mute);
-    margin-top: 6px;
-    text-transform: none;
-  }
-  .menu-mid {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    align-items: stretch;
-    margin: 24px 0;
-  }
+  /* MENU FIT — caber em 1 tela mobile */
   .reco-card-hero {
     background: linear-gradient(135deg, rgba(212,101,74,0.16), rgba(232,160,74,0.08));
     border: 1px solid rgba(212,101,74,0.4);
-    border-radius: 12px;
-    padding: 22px 24px 24px;
+    border-radius: 10px;
+    padding: 12px 14px 14px;
     cursor: pointer;
     transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     text-align: left;
+    flex-shrink: 0;
   }
   .reco-card-hero:active { transform: scale(0.99); }
   .reco-card-hero:hover { border-color: rgba(212,101,74,0.7); box-shadow: 0 4px 24px rgba(212,101,74,0.15); }
   .reco-card-hero .reco-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: 9px;
     color: var(--accent);
-    letter-spacing: 0.2em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
   .reco-card-hero .reco-title {
     font-family: 'Fraunces', serif;
-    font-size: 26px;
+    font-size: 19px;
     line-height: 1.15;
     font-weight: 400;
   }
@@ -549,27 +555,83 @@
   .reco-card-hero .reco-sub {
     font-family: 'Fraunces', serif;
     font-style: italic;
-    font-size: 14px;
+    font-size: 12px;
     color: var(--text-dim);
-    margin-top: 10px;
-    line-height: 1.4;
+    margin-top: 4px;
+    line-height: 1.35;
   }
   .reco-card-hero .reco-cta {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    font-size: 10px;
+    letter-spacing: 0.16em;
     color: var(--accent);
-    margin-top: 16px;
+    margin-top: 8px;
     text-transform: uppercase;
     font-weight: 700;
+  }
+
+  /* HOME BUTTONS */
+  .home-btn {
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    border-radius: 9px;
+    padding: 10px 14px;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .home-btn:hover { background: var(--bg-3); border-color: rgba(232,224,212,0.18); }
+  .home-btn:active { transform: scale(0.98); }
+  .home-btn-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  .home-btn-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .home-btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+  .home-btn-primary .home-btn-title { color: var(--bg); }
+  .home-btn-primary .home-btn-tag { color: rgba(20,16,12,0.7); }
+  .home-btn-primary:hover { filter: brightness(1.06); border-color: var(--accent); background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%); }
+  .home-btn-ghost {
+    background: transparent;
+    flex: 1;
+    align-items: center;
+    text-align: center;
+    padding: 8px 6px;
+  }
+  .home-btn-ghost .home-btn-title { font-size: 14px; }
+  .home-btn-ghost .home-btn-tag { font-size: 8px; }
+  .home-row {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
   }
 
   .mini-stats {
     display: flex;
     justify-content: space-between;
     gap: 8px;
-    padding: 12px 4px 0;
+    padding: 8px 2px 0;
     border-top: 1px solid var(--line);
+    flex-shrink: 0;
+    margin-top: auto;
   }
   .mini-stat {
     flex: 1;
@@ -584,33 +646,13 @@
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--text-mute);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
   .mini-value {
     font-family: 'Fraunces', serif;
-    font-size: 16px;
+    font-size: 14px;
     color: var(--text);
   }
-
-  .menu-bottom { text-align: center; }
-  .more-btn {
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 10px 22px;
-    color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .more-btn:hover { background: var(--bg-2); border-color: rgba(232,224,212,0.22); color: var(--text); }
-  .more-btn .more-dots { font-size: 16px; letter-spacing: 2px; line-height: 1; }
 
   /* DRAWER */
   .drawer-pad { padding: 8px 0 32px; }
@@ -718,19 +760,14 @@
     50% { box-shadow: 0 0 0 3px var(--accent), 0 0 18px rgba(212,101,74,0.75); }
   }
 
-  /* MOBILE COMPACT (≤480px) */
+  /* MOBILE COMPACT (≤480px) — train screen + drawer; menu already fits via .menu-fit */
   @media (max-width: 480px) {
-    .menu-pad { padding: 5vh 18px 4vh; }
-    .reco-card-hero { padding: 16px 18px 18px; border-radius: 10px; }
-    .reco-card-hero .reco-title { font-size: 22px; }
-    .reco-card-hero .reco-sub { font-size: 13px; margin-top: 8px; }
-    .reco-card-hero .reco-cta { margin-top: 12px; font-size: 10px; }
-    .menu-mid { gap: 20px; margin: 16px 0; }
-    .mini-stat { gap: 2px; }
-    .mini-value { font-size: 15px; }
-    .more-btn { padding: 8px 18px; font-size: 10px; }
-    .brand-title { font-size: 36px; }
-    .brand-kanji { font-size: 10px; }
+    #menu .menu-fit { padding: 12px 16px 14px; gap: 10px; }
+    .reco-card-hero { padding: 10px 12px 12px; }
+    .reco-card-hero .reco-title { font-size: 17px; }
+    .reco-card-hero .reco-sub { font-size: 11px; }
+    .home-btn-title { font-size: 15px; }
+    .home-btn-primary { padding: 12px 14px; }
 
     .play-area { min-height: 200px; gap: 14px; padding: 8px 14px; }
     .play-btn { width: 108px; height: 108px; font-size: 14px; }
@@ -743,6 +780,16 @@
     .drawer-item span { font-size: 16px; }
     .drawer-item small { font-size: 11px; }
     .drawer-label { padding: 0 18px 6px; font-size: 9px; }
+  }
+  /* Tiny screens (iPhone SE, ≤360px) */
+  @media (max-width: 360px) {
+    #menu .menu-fit { padding: 10px 14px 12px; gap: 8px; }
+    .reco-card-hero .reco-title { font-size: 16px; }
+    .home-btn-title { font-size: 14px; }
+    .home-btn-primary { padding: 10px 12px; }
+    .home-btn-ghost { padding: 6px 4px; }
+    .home-btn-ghost .home-btn-title { font-size: 13px; }
+    .mini-value { font-size: 13px; }
   }
 
   /* CURRÍCULO */
@@ -1237,39 +1284,48 @@
   </div>
 </div>
 
-<!-- ============ MENU (minimalista) ============ -->
+<!-- ============ MENU (fit · 1 tela mobile) ============ -->
 <div class="screen active" id="menu">
-  <div class="screen-pad menu-pad">
-    <div class="menu-top">
-      <div class="brand">
-        <h1 class="brand-title">eguchi<em>lab.</em></h1>
-        <div class="brand-kanji">江口式実験室</div>
-      </div>
+  <div class="menu-fit">
+    <div class="menu-brandbar">
+      <div class="brand-mini">eguchi<em>·</em></div>
+      <div class="kanji-mini">江口式</div>
     </div>
 
-    <div class="menu-mid">
-      <div id="menuReco" class="reco-card-hero" style="display:none;" onclick="actOnRecommendation()">
-        <div class="reco-label" id="recoLabel">Recomendado agora</div>
-        <div class="reco-title" id="recoTitle">—</div>
-        <div class="reco-sub" id="recoSub"></div>
-        <div class="reco-cta">tocar agora →</div>
-      </div>
-
-      <div class="mini-stats">
-        <div class="mini-stat"><span class="mini-label">nível eguchi</span><span class="mini-value" id="menuLevel">1 / 12</span></div>
-        <div class="mini-stat"><span class="mini-label">streak</span><span class="mini-value" id="menuStreak">—</span></div>
-        <div class="mini-stat"><span class="mini-label">sessões hoje</span><span class="mini-value" id="menuToday">0 / 5</span></div>
-      </div>
-
-      <div id="audioBadge" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);text-align:center;margin-top:8px;letter-spacing:0.04em;"></div>
+    <div id="menuReco" class="reco-card-hero" style="display:none;" onclick="actOnRecommendation()">
+      <div class="reco-label" id="recoLabel">Recomendado agora</div>
+      <div class="reco-title" id="recoTitle">—</div>
+      <div class="reco-sub" id="recoSub"></div>
+      <div class="reco-cta">tocar agora →</div>
     </div>
 
-    <div class="menu-bottom">
-      <button class="more-btn" onclick="goTo('menuDrawer')" aria-label="Mais opções">
-        <span class="more-dots">···</span>
-        <span class="more-label">Mais</span>
+    <button class="home-btn home-btn-primary" onclick="startTrainSession()">
+      <span class="home-btn-title">Treino Eguchi</span>
+      <span class="home-btn-tag">principal · destrava cor por cor</span>
+    </button>
+
+    <div class="home-row">
+      <button class="home-btn home-btn-ghost" onclick="startFreeSession()">
+        <span class="home-btn-title">Livre</span>
+        <span class="home-btn-tag">cores liberadas</span>
+      </button>
+      <button class="home-btn home-btn-ghost" onclick="goTo('progressionsCurriculum')">
+        <span class="home-btn-title">Currículo</span>
+        <span class="home-btn-tag">20 progressões</span>
+      </button>
+      <button class="home-btn home-btn-ghost" onclick="goTo('menuDrawer')">
+        <span class="home-btn-title">···</span>
+        <span class="home-btn-tag">mais</span>
       </button>
     </div>
+
+    <div class="mini-stats">
+      <div class="mini-stat"><span class="mini-label">nível</span><span class="mini-value" id="menuLevel">1/12</span></div>
+      <div class="mini-stat"><span class="mini-label">streak</span><span class="mini-value" id="menuStreak">—</span></div>
+      <div class="mini-stat"><span class="mini-label">hoje</span><span class="mini-value" id="menuToday">0/5</span></div>
+    </div>
+
+    <div id="audioBadge" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);text-align:center;letter-spacing:0.04em;"></div>
   </div>
   <!-- Hidden legacy elements (kept for code that still references them) -->
   <span id="menuAccuracy" style="display:none;"></span>
