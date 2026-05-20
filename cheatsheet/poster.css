@@ -14,6 +14,7 @@ body {
 
 .sheet {
   width: 297mm;
+  min-width: 280mm;
   min-height: 420mm;
   background: #faf6ef;
   margin: 24px auto;
@@ -21,6 +22,26 @@ body {
   box-shadow: 0 8px 40px rgba(0,0,0,0.2);
   overflow: hidden;
   padding: 14mm 14mm 18mm;
+}
+
+#familiesWrap .loading-placeholder {
+  padding: 30mm 10mm;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10pt;
+  color: #6e6253;
+  letter-spacing: 0.1em;
+}
+noscript .ns-warning {
+  display: block;
+  background: rgba(200,51,42,0.1);
+  border-left: 3px solid #c8332a;
+  padding: 10px 14px;
+  color: #c8332a;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  margin: 12px auto;
+  max-width: 600px;
 }
 
 @media print {

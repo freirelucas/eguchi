@@ -495,6 +495,165 @@
   .reco-title { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.3; }
   .reco-sub { font-family: 'Fraunces', serif; font-style: italic; font-size: 12px; color: var(--text-dim); margin-top: 4px; line-height: 1.4; }
 
+  /* MENU MINIMALISTA */
+  .menu-pad {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    padding: 8vh 24px 6vh;
+  }
+  .menu-top { text-align: center; }
+  .menu-top .brand { margin-top: 0; }
+  .menu-top .brand-kanji {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    color: var(--text-mute);
+    margin-top: 6px;
+    text-transform: none;
+  }
+  .menu-mid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: stretch;
+    margin: 24px 0;
+  }
+  .reco-card-hero {
+    background: linear-gradient(135deg, rgba(212,101,74,0.16), rgba(232,160,74,0.08));
+    border: 1px solid rgba(212,101,74,0.4);
+    border-radius: 12px;
+    padding: 22px 24px 24px;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    text-align: left;
+  }
+  .reco-card-hero:active { transform: scale(0.99); }
+  .reco-card-hero:hover { border-color: rgba(212,101,74,0.7); box-shadow: 0 4px 24px rgba(212,101,74,0.15); }
+  .reco-card-hero .reco-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .reco-card-hero .reco-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    line-height: 1.15;
+    font-weight: 400;
+  }
+  .reco-card-hero .reco-title em { font-style: italic; color: var(--accent); }
+  .reco-card-hero .reco-sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+  .reco-card-hero .reco-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin-top: 16px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .mini-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 4px 0;
+    border-top: 1px solid var(--line);
+  }
+  .mini-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .mini-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin-bottom: 4px;
+  }
+  .mini-value {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  .menu-bottom { text-align: center; }
+  .more-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 10px 22px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .more-btn:hover { background: var(--bg-2); border-color: rgba(232,224,212,0.22); color: var(--text); }
+  .more-btn .more-dots { font-size: 16px; letter-spacing: 2px; line-height: 1; }
+
+  /* DRAWER */
+  .drawer-pad { padding: 8px 0 32px; }
+  .drawer-section { margin-bottom: 22px; }
+  .drawer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 0 22px 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .drawer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 14px 22px;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    transition: background 0.12s, padding-left 0.12s;
+  }
+  .drawer-item:hover { background: var(--bg-2); padding-left: 26px; }
+  .drawer-item:active { background: var(--bg-3); }
+  .drawer-item span {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.2;
+  }
+  .drawer-item small {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 3px;
+  }
+
   /* CURRÍCULO */
   .curriculum-row {
     display: flex; align-items: center; gap: 14px;
@@ -987,76 +1146,85 @@
   </div>
 </div>
 
-<!-- ============ MENU ============ -->
+<!-- ============ MENU (minimalista) ============ -->
 <div class="screen active" id="menu">
-  <div class="screen-pad">
-    <div>
+  <div class="screen-pad menu-pad">
+    <div class="menu-top">
       <div class="brand">
         <h1 class="brand-title">eguchi<em>lab.</em></h1>
-        <div class="brand-sub">N=1 · Treino & Mensuração</div>
         <div class="brand-kanji">江口式実験室</div>
-      </div>
-
-      <div class="menu-summary">
-        <div id="menuReco" class="reco-card" style="display:none;" onclick="actOnRecommendation()">
-          <div class="reco-label" id="recoLabel">Recomendado agora</div>
-          <div class="reco-title" id="recoTitle">—</div>
-          <div class="reco-sub" id="recoSub"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-row">
-            <span class="label">Sessões hoje</span>
-            <span class="panel-value" id="menuToday">0 / 5</span>
-          </div>
-          <div class="panel-row">
-            <span class="label">Nível Eguchi</span>
-            <span class="panel-value" id="menuLevel">1 / 12</span>
-          </div>
-          <div class="panel-row">
-            <span class="label">Streak</span>
-            <span class="panel-value" id="menuStreak">—</span>
-          </div>
-          <div class="panel-row">
-            <span class="label">Acurácia geral</span>
-            <span class="panel-value" id="menuAccuracy">—</span>
-          </div>
-          <div class="panel-row">
-            <span class="label">Sessões totais</span>
-            <span class="panel-value" id="menuSessions">0</span>
-          </div>
-          <div class="panel-row">
-            <span class="label">Baseline</span>
-            <span class="panel-value" id="menuBaseline">não feito</span>
-          </div>
-        </div>
-        <div id="audioBadge" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);text-align:center;margin-top:8px;letter-spacing:0.04em;"></div>
       </div>
     </div>
 
-    <div>
-      <div class="btn-row">
-        <button class="btn btn-primary btn-block" onclick="startFreeSession()">Treino livre<small>todas as 8 cores · prática direta</small></button>
-        <button class="btn btn-block" onclick="startTrainSession()">Treino Eguchi<small>progressão clássica · desbloqueio gradual</small></button>
-        <button class="btn btn-block" onclick="goTo('progressionsCurriculum')">Currículo · 20 progressões<small>pop, jazz, gospel, folk · destrava em ordem</small></button>
-        <button class="btn btn-ghost btn-block" onclick="startProgressionSession()">Sequência aleatória<small>2–4 acordes randomizados</small></button>
-        <div class="menu-grid">
-          <button class="btn" onclick="goTo('curriculum')">Currículo<small>mapa das 8 cores</small></button>
-          <button class="btn" onclick="goTo('explore')">Explorar<small>cada cor em detalhe</small></button>
-        </div>
-        <div class="menu-grid">
-          <button class="btn" onclick="startBaseline()">Baseline<small>medir partida</small></button>
-          <button class="btn" onclick="goTo('stats')">Estatísticas<small>matriz, RT, curva</small></button>
-        </div>
-        <div class="menu-grid">
-          <button class="btn" onclick="goTo('log')">Diário<small>sono, café, mood</small></button>
-          <button class="btn" onclick="goTo('settings')">Ajustes<small>instrumento, ref, etc.</small></button>
-        </div>
-        <div class="menu-grid">
-          <button class="btn btn-ghost" onclick="goTo('science')">Método</button>
-          <button class="btn btn-ghost" onclick="goTo('parents')">Para os pais</button>
-        </div>
-        <a href="cheatsheet/" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-mute);letter-spacing:0.12em;text-decoration:none;text-transform:uppercase;">cheat sheets · piano · violão · trompete · gaita →</a>
+    <div class="menu-mid">
+      <div id="menuReco" class="reco-card-hero" style="display:none;" onclick="actOnRecommendation()">
+        <div class="reco-label" id="recoLabel">Recomendado agora</div>
+        <div class="reco-title" id="recoTitle">—</div>
+        <div class="reco-sub" id="recoSub"></div>
+        <div class="reco-cta">tocar agora →</div>
       </div>
+
+      <div class="mini-stats">
+        <div class="mini-stat"><span class="mini-label">nível eguchi</span><span class="mini-value" id="menuLevel">1 / 12</span></div>
+        <div class="mini-stat"><span class="mini-label">streak</span><span class="mini-value" id="menuStreak">—</span></div>
+        <div class="mini-stat"><span class="mini-label">sessões hoje</span><span class="mini-value" id="menuToday">0 / 5</span></div>
+      </div>
+
+      <div id="audioBadge" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);text-align:center;margin-top:8px;letter-spacing:0.04em;"></div>
+    </div>
+
+    <div class="menu-bottom">
+      <button class="more-btn" onclick="goTo('menuDrawer')" aria-label="Mais opções">
+        <span class="more-dots">···</span>
+        <span class="more-label">Mais</span>
+      </button>
+    </div>
+  </div>
+  <!-- Hidden legacy elements (kept for code that still references them) -->
+  <span id="menuAccuracy" style="display:none;"></span>
+  <span id="menuSessions" style="display:none;"></span>
+  <span id="menuBaseline" style="display:none;"></span>
+</div>
+
+<!-- ============ MENU DRAWER (lista categorizada) ============ -->
+<div class="screen" id="menuDrawer">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goTo('menu')">← Voltar</button>
+    <span class="topbar-title">tudo</span>
+    <span class="topbar-meta"></span>
+  </div>
+  <div class="screen-pad drawer-pad">
+    <div class="drawer-section">
+      <div class="drawer-label">Modos de treino</div>
+      <button class="drawer-item" onclick="startFreeSession()"><span>Treino livre</span><small>todas as 8 cores</small></button>
+      <button class="drawer-item" onclick="startTrainSession()"><span>Treino Eguchi</span><small>progressão clássica</small></button>
+      <button class="drawer-item" onclick="goTo('progressionsCurriculum')"><span>Currículo · 20 progressões</span><small>pop · jazz · gospel · folk</small></button>
+      <button class="drawer-item" onclick="startProgressionSession()"><span>Sequência aleatória</span><small>2-4 acordes randômicos</small></button>
+      <button class="drawer-item" onclick="startBaseline()"><span>Baseline</span><small>medir ponto de partida</small></button>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-label">Explorar</div>
+      <button class="drawer-item" onclick="goTo('curriculum')"><span>Currículo das cores</span><small>mapa das 8 cores</small></button>
+      <button class="drawer-item" onclick="goTo('explore')"><span>Cada cor em detalhe</span><small>função, mnemônico, exemplo</small></button>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-label">Medir</div>
+      <button class="drawer-item" onclick="goTo('stats')"><span>Estatísticas</span><small>matriz, RT, curva</small></button>
+      <button class="drawer-item" onclick="goTo('log')"><span>Diário</span><small>sono, café, mood</small></button>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-label">Entender</div>
+      <button class="drawer-item" onclick="goTo('science')"><span>Método</span><small>fundamentação científica</small></button>
+      <button class="drawer-item" onclick="goTo('parents')"><span>Para os pais</span><small>protocolo Sakakibara</small></button>
+      <a class="drawer-item" href="cheatsheet/" target="_blank" rel="noopener"><span>Cheat sheets impressos ↗</span><small>piano · violão · trompete · flauta</small></a>
+    </div>
+
+    <div class="drawer-section">
+      <div class="drawer-label">Ajustes</div>
+      <button class="drawer-item" onclick="goTo('settings')"><span>Ajustes do app</span><small>instrumento, tônica ref, etc.</small></button>
     </div>
   </div>
 </div>
