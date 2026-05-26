@@ -526,10 +526,13 @@
 
   /* MENU FIT — caber em 1 tela mobile */
   .reco-card-hero {
+    display: flex;
+    align-items: center;
+    gap: 13px;
     background: linear-gradient(135deg, rgba(212,101,74,0.16), rgba(232,160,74,0.08));
     border: 1px solid rgba(212,101,74,0.4);
     border-radius: 10px;
-    padding: 12px 14px 14px;
+    padding: 11px 13px;
     cursor: pointer;
     transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     text-align: left;
@@ -537,37 +540,39 @@
   }
   .reco-card-hero:active { transform: scale(0.99); }
   .reco-card-hero:hover { border-color: rgba(212,101,74,0.7); box-shadow: 0 4px 24px rgba(212,101,74,0.15); }
+  .reco-card-hero .reco-play {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 15px;
+    padding-left: 2px;
+  }
+  .reco-card-hero .reco-text { flex: 1; min-width: 0; }
   .reco-card-hero .reco-label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9px;
     color: var(--accent);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
   .reco-card-hero .reco-title {
     font-family: 'Fraunces', serif;
-    font-size: 19px;
+    font-size: 16px;
     line-height: 1.15;
-    font-weight: 400;
+    font-weight: 500;
   }
   .reco-card-hero .reco-title em { font-style: italic; color: var(--accent); }
   .reco-card-hero .reco-sub {
     font-family: 'Fraunces', serif;
     font-style: italic;
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--text-dim);
-    margin-top: 4px;
-    line-height: 1.35;
-  }
-  .reco-card-hero .reco-cta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    color: var(--accent);
-    margin-top: 8px;
-    text-transform: uppercase;
-    font-weight: 700;
+    margin-top: 2px;
+    line-height: 1.3;
   }
 
   /* HOME BUTTONS */
@@ -1275,10 +1280,12 @@
     </div>
 
     <div id="menuReco" class="reco-card-hero" style="display:none;" onclick="actOnRecommendation()">
-      <div class="reco-label" id="recoLabel">Recomendado agora</div>
-      <div class="reco-title" id="recoTitle">—</div>
-      <div class="reco-sub" id="recoSub"></div>
-      <div class="reco-cta">tocar agora →</div>
+      <div class="reco-play">▶</div>
+      <div class="reco-text">
+        <div class="reco-label" id="recoLabel">Recomendado agora</div>
+        <div class="reco-title" id="recoTitle">—</div>
+        <div class="reco-sub" id="recoSub"></div>
+      </div>
     </div>
 
     <button class="home-btn home-btn-primary" onclick="startTrainSession()">
@@ -2144,6 +2151,9 @@ function loadState() {
         parsed.onboardingDone = (parsed.history && parsed.history.length > 0) || (parsed.baseline !== null);
       }
       if (!parsed.unlockSeen) parsed.unlockSeen = [];
+      // Start set is 3 colors (need ≥2 distinct to actually discriminate, and
+      // the 3-chord unlock challenge requires 3). Migrate legacy 1-2 levels up.
+      if (!parsed.levelUnlocked || parsed.levelUnlocked < 3) parsed.levelUnlocked = 3;
       if (!parsed.progressionCurriculum) parsed.progressionCurriculum = { unlocked: 1, established: [], results: {} };
       if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
@@ -2152,7 +2162,7 @@ function loadState() {
   } catch (e) { console.warn('localStorage read failed', e); }
   return {
     version: 2,
-    levelUnlocked: 1,
+    levelUnlocked: 3,
     history: [],
     baseline: null,
     probes: [],
@@ -2805,7 +2815,7 @@ function updateTrainHeader() {
   if (inChallenge) {
     hint.classList.add('challenge');
     hint.style.display = 'block';
-    hint.innerHTML = `<strong>DESAFIO ${challengeStep + 1}/${CHALLENGE_LENGTH}</strong> · destrava <span style="color:${nextColor.hex};">${nextColor.name}</span>`;
+    hint.innerHTML = `<strong>DESAFIO ${challengeStep + 1}/${challengeQueue.length || CHALLENGE_LENGTH}</strong> · destrava <span style="color:${nextColor.hex};">${nextColor.name}</span>`;
   } else {
     hint.style.display = 'block';
     const pips = '●'.repeat(currentStreak) + '○'.repeat(Math.max(0, STREAK_TO_CHALLENGE - currentStreak));
@@ -3039,7 +3049,7 @@ function handleAnswer(idx) {
       // Advance or fail the challenge
       if (correct) {
         challengeStep += 1;
-        if (challengeStep >= CHALLENGE_LENGTH) {
+        if (challengeStep >= challengeQueue.length) {
           setTimeout(passChallenge, 1100);
         } else {
           setTimeout(playChallengeStep, 1200);
@@ -3078,16 +3088,17 @@ function triggerChallenge() {
   if (state.levelUnlocked >= CHORDS.length) return;
   const newIdx = state.levelUnlocked;
   const unlocked = state.levelUnlocked;
-  // Pick 2 random already-unlocked colors (without replacement)
+  // Pick up to 2 random already-unlocked colors (without replacement)
   const others = [];
   for (let i = 0; i < unlocked; i++) others.push(i);
   for (let i = others.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [others[i], others[j]] = [others[j], others[i]];
   }
-  const pick2 = others.slice(0, 2);
-  // Build queue with new color + 2 others, shuffle order
-  const queue = [newIdx, ...pick2];
+  const pick = others.slice(0, CHALLENGE_LENGTH - 1);
+  // Build queue with new color + others, shuffle order. Only include defined
+  // indices so we never play an undefined chord (white-screen crash guard).
+  const queue = [newIdx, ...pick].filter(i => Number.isInteger(i) && CHORDS[i]);
   for (let i = queue.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [queue[i], queue[j]] = [queue[j], queue[i]];
@@ -3110,15 +3121,22 @@ function triggerChallenge() {
   if (fb) {
     fb.classList.remove('correct', 'wrong');
     fb.classList.add('show', 'challenge');
-    fb.innerHTML = `<span class="challenge-title">DESAFIO</span><small>3 acordes em sequência · acerte os 3 e destrava <strong style="color:${CHORDS[newIdx].hex};">${CHORDS[newIdx].name}</strong></small>`;
+    fb.innerHTML = `<span class="challenge-title">DESAFIO</span><small>${challengeQueue.length} acordes em sequência · acerte todos e destrava <strong style="color:${CHORDS[newIdx].hex};">${CHORDS[newIdx].name}</strong></small>`;
   }
   setTimeout(playChallengeStep, 1800);
 }
 
 function playChallengeStep() {
+  const idx = challengeQueue[challengeStep];
+  // Guard: if the queue is exhausted or holds a bad index, treat as a pass
+  // rather than crashing on CHORDS[undefined].
+  if (!Number.isInteger(idx) || !CHORDS[idx]) {
+    passChallenge();
+    return;
+  }
   acceptingInput = false;
-  currentChordIdx = challengeQueue[challengeStep];
-  currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
+  currentChordIdx = idx;
+  currentVariation = { type: 'root', freqs: CHORDS[idx].freqs };
   currentInstrument = state.settings.instrument;
   // Clear any lingering flash
   document.querySelectorAll('#colorGrid .color-btn').forEach(b => b.classList.remove('pulse-reveal', 'flash-correct', 'flash-wrong'));
@@ -3126,7 +3144,7 @@ function playChallengeStep() {
   if (fb) {
     fb.classList.remove('correct', 'wrong');
     fb.classList.add('show', 'challenge');
-    fb.innerHTML = `<span class="challenge-title">DESAFIO ${challengeStep + 1}/${CHALLENGE_LENGTH}</span><small>ouça e escolha</small>`;
+    fb.innerHTML = `<span class="challenge-title">DESAFIO ${challengeStep + 1}/${challengeQueue.length}</span><small>ouça e escolha</small>`;
   }
   updateTrainHeader();
   playCurrentChord();
@@ -3659,19 +3677,11 @@ function showSessionSummary(mode, count, newMilestones, extras) {
     if (best.idx !== null && worst.idx !== null && best.idx !== worst.idx) {
       html += `<p>Melhor: <strong style="color:${CHORDS[best.idx].hex};">${CHORDS[best.idx].name}</strong> (${Math.round(best.acc*100)}%) · Pior: <strong style="color:${CHORDS[worst.idx].hex};">${CHORDS[worst.idx].name}</strong> (${Math.round(worst.acc*100)}%)</p>`;
     }
-    if (mode === 'train') {
-      const c = checkUnlockCriteria();
-      if (c && typeof c.ready !== 'undefined') {
-        const focusChord = CHORDS[state.levelUnlocked - 1];
-        html += `<h3>Critérios para destravar próxima cor</h3><ul>`;
-        html += `<li>${c.focusEstablished ? '✓' : '○'} <strong>${focusChord.name}</strong> estabelecida — <strong>${Math.round((c.focusAcc || 0) * 100)}%</strong> nos últimos ${c.focusTrials}/${ESTABLISH_RECENT_TRIALS} trials (alvo ≥${Math.round(ESTABLISH_TARGET_ACC*100)}%)</li>`;
-        if (state.levelUnlocked > 1) {
-          html += `<li>${c.minTests ? '✓' : '○'} ${c.minTestsCount}/${MIN_TESTS_FOR_UNLOCK} trials totais no nível</li>`;
-          html += `<li>${c.bayesianPass ? '✓' : '○'} posterior <strong>${Math.round((c.posteriorProb || 0) * 100)}%</strong> ≥ 95%</li>`;
-          html += `<li>${c.avgRtPass ? '✓' : '○'} RT médio <strong>${c.avgRt ? Math.round(c.avgRt) + 'ms' : '—'}</strong> &lt; 2000ms</li>`;
-        }
-        html += `</ul>`;
-      }
+    if (mode === 'train' && state.levelUnlocked < CHORDS.length) {
+      const nextColor = CHORDS[state.levelUnlocked];
+      html += `<h3>Próxima cor</h3><p>Acerte <strong>${STREAK_TO_CHALLENGE} em sequência</strong> e passe no desafio de ${CHALLENGE_LENGTH} acordes pra destravar <strong style="color:${nextColor.hex};">${nextColor.name}</strong>.</p>`;
+    } else if (mode === 'train') {
+      html += `<h3>Todas as cores destravadas</h3><p>Você cobriu as ${CHORDS.length} cores. Continue treinando pra firmar a discriminação.</p>`;
     }
   }
   if (newMilestones && newMilestones.length > 0) {
