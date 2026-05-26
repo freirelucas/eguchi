@@ -1,7 +1,7 @@
 // Eguchi Lab — Service Worker
 // Cache-first strategy for app shell; cache-on-fetch for fonts, Tone.js, and Salamander samples
 
-const CACHE_VERSION = 'eguchi-lab-v14';
+const CACHE_VERSION = 'eguchi-lab-v15';
 const APP_SHELL = [
   './',
   './index.html',

@@ -593,31 +593,27 @@
     font-weight: 500;
     line-height: 1.1;
   }
-  .home-btn-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.14em;
-    color: var(--text-mute);
-    text-transform: uppercase;
-    margin-top: 3px;
-  }
   .home-btn-primary {
     background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
     border-color: var(--accent);
     color: var(--bg);
+    align-items: center;
+    padding: 15px 14px;
   }
-  .home-btn-primary .home-btn-title { color: var(--bg); }
-  .home-btn-primary .home-btn-tag { color: rgba(20,16,12,0.7); }
+  .home-btn-primary .home-btn-title { color: var(--bg); font-size: 18px; }
   .home-btn-primary:hover { filter: brightness(1.06); border-color: var(--accent); background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%); }
   .home-btn-ghost {
     background: transparent;
     flex: 1;
     align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 8px 6px;
+    padding: 10px 6px;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--text-dim);
   }
-  .home-btn-ghost .home-btn-title { font-size: 14px; }
-  .home-btn-ghost .home-btn-tag { font-size: 8px; }
+  .home-btn-ghost:hover { color: var(--text); }
   .home-row {
     display: flex;
     gap: 8px;
@@ -626,32 +622,19 @@
 
   .mini-stats {
     display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 8px 2px 0;
+    justify-content: center;
+    gap: 14px;
+    padding: 10px 2px 0;
     border-top: 1px solid var(--line);
     flex-shrink: 0;
     margin-top: auto;
   }
   .mini-stat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  .mini-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.08em;
     color: var(--text-mute);
-    margin-bottom: 2px;
-  }
-  .mini-value {
-    font-family: 'Fraunces', serif;
-    font-size: 14px;
-    color: var(--text);
+    text-transform: lowercase;
   }
 
   /* DRAWER */
@@ -787,9 +770,8 @@
     .reco-card-hero .reco-title { font-size: 16px; }
     .home-btn-title { font-size: 14px; }
     .home-btn-primary { padding: 10px 12px; }
-    .home-btn-ghost { padding: 6px 4px; }
-    .home-btn-ghost .home-btn-title { font-size: 13px; }
-    .mini-value { font-size: 13px; }
+    .home-btn-ghost { padding: 8px 4px; font-size: 13px; }
+    .mini-stat { font-size: 9px; }
   }
 
   /* CURRÍCULO */
@@ -1143,7 +1125,7 @@
         O método Eguchi associa cada acorde a uma cor. Aqui, ele é um experimento de um sujeito só — você.
       </p>
       <p style="font-family:'Fraunces',serif;font-style:italic;font-size:13.5px;color:var(--text-mute);margin-top:14px;line-height:1.5;">
-        Mediremos antes. Treinaremos com rigor. Exportaremos os dados.
+        Uma cor por vez. Com rigor. Os dados ficam seus.
       </p>
     </div>
     <div>
@@ -1162,9 +1144,9 @@
         Protocolo Sakakibara, <em style="color:var(--accent);font-style:italic;">5 vezes ao dia.</em>
       </h2>
       <div class="onb-steps">
-        <div class="onb-step"><span class="onb-step-n">01</span><div><div class="onb-step-t">Baseline cego</div><div class="onb-step-d">50 trials sem feedback — antes de qualquer treino. Sem isso não dá pra interpretar progresso.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">01</span><div><div class="onb-step-t">Comece direto</div><div class="onb-step-d">Sem teste cego antes. O app infere seu ponto de partida a partir das suas primeiras jogadas.</div></div></div>
         <div class="onb-step"><span class="onb-step-n">02</span><div><div class="onb-step-t">5 sessões por dia</div><div class="onb-step-d">2-3 minutos cada, ~20-25 trials. Distribuídas no dia (manhã, almoço, tarde, noite). Frequência &gt; duração — esse é o achado de Sakakibara 2014.</div></div></div>
-        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Próxima cor: ≥2 semanas + 100%</div><div class="onb-step-d">No protocolo original, só introduz cor nova quando a anterior está com 100% de acerto, por dias seguidos. App adapta com critério bayesiano equivalente.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Próxima cor: 5 em sequência</div><div class="onb-step-d">Acerte 5 seguidas e enfrente um desafio de 3 acordes. Passou, a próxima cor destrava na hora.</div></div></div>
         <div class="onb-step"><span class="onb-step-n">04</span><div><div class="onb-step-t">Diário de covariáveis</div><div class="onb-step-d">Sono, café, álcool, mood. Variáveis confundidoras viram dados — fundamental pra um N=1 rigoroso.</div></div></div>
       </div>
     </div>
@@ -1222,7 +1204,7 @@
     </div>
     <div>
       <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div></div>
-      <button class="btn btn-primary btn-block" onclick="goTo('onbBaseline')" style="margin-top:16px;">Quero medir</button>
+      <button class="btn btn-primary btn-block" onclick="goTo('onbBaseline')" style="margin-top:16px;">Continuar</button>
     </div>
   </div>
 </div>
@@ -1230,18 +1212,18 @@
 <div class="screen" id="onbBaseline">
   <div class="screen-pad" style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:100%;">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--accent-cool);text-transform:uppercase;margin-bottom:14px;">baseline · cego</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;">Antes de treinar,<br><em style="color:var(--accent-cool);font-style:italic;">uma medição.</em></h2>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:14px;">pronto</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;">É só <em style="color:var(--accent);font-style:italic;">começar.</em></h2>
       <div style="margin-top:22px;display:flex;flex-direction:column;gap:14px;">
-        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);padding-top:2px;">⏱</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">50 trials.</strong> Cerca de 6 minutos. Você tocará todas as 8 cores misturadas.</div></div>
-        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);padding-top:2px;">○</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Sem feedback.</strong> Não saberá se acertou. É o que torna a medida limpa.</div></div>
-        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);padding-top:2px;">⟲</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Sem ressentimento.</strong> Provavelmente vai acertar perto do acaso (12.5%). É o objetivo.</div></div>
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">◉</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Sem teste prévio.</strong> O app aprende seu ponto de partida sozinho, com suas primeiras jogadas.</div></div>
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">●</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Uma cor por vez.</strong> Acerte 5 em sequência, passe no desafio de 3 acordes e a próxima cor destrava.</div></div>
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">↗</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Progresso visível.</strong> Em "partida" você compara suas primeiras jogadas com o agora.</div></div>
       </div>
     </div>
     <div>
       <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div></div>
-      <button class="btn btn-primary btn-block" onclick="finishOnboardingAndStartBaseline()" style="background:var(--accent-cool);color:var(--bg);margin-top:16px;">Começar baseline</button>
-      <button class="btn btn-ghost btn-block" onclick="finishOnboardingAndGoMenu()" style="margin-top:6px;font-size:11px;">Pular por agora</button>
+      <button class="btn btn-primary btn-block" onclick="finishOnboardingAndStartTrain()" style="margin-top:16px;">Começar a treinar</button>
+      <button class="btn btn-ghost btn-block" onclick="finishOnboardingAndGoMenu()" style="margin-top:6px;font-size:11px;">Ir pro menu</button>
     </div>
   </div>
 </div>
@@ -1301,28 +1283,18 @@
 
     <button class="home-btn home-btn-primary" onclick="startTrainSession()">
       <span class="home-btn-title">Treino Eguchi</span>
-      <span class="home-btn-tag">principal · destrava cor por cor</span>
     </button>
 
     <div class="home-row">
-      <button class="home-btn home-btn-ghost" onclick="startFreeSession()">
-        <span class="home-btn-title">Livre</span>
-        <span class="home-btn-tag">cores liberadas</span>
-      </button>
-      <button class="home-btn home-btn-ghost" onclick="goTo('progressionsCurriculum')">
-        <span class="home-btn-title">Currículo</span>
-        <span class="home-btn-tag">20 progressões</span>
-      </button>
-      <button class="home-btn home-btn-ghost" onclick="goTo('menuDrawer')">
-        <span class="home-btn-title">···</span>
-        <span class="home-btn-tag">mais</span>
-      </button>
+      <button class="home-btn home-btn-ghost" onclick="startFreeSession()">Livre</button>
+      <button class="home-btn home-btn-ghost" onclick="goTo('progressionsCurriculum')">Currículo</button>
+      <button class="home-btn home-btn-ghost" onclick="goTo('menuDrawer')">···</button>
     </div>
 
     <div class="mini-stats">
-      <div class="mini-stat"><span class="mini-label">nível</span><span class="mini-value" id="menuLevel">1/12</span></div>
-      <div class="mini-stat"><span class="mini-label">streak</span><span class="mini-value" id="menuStreak">—</span></div>
-      <div class="mini-stat"><span class="mini-label">hoje</span><span class="mini-value" id="menuToday">0/5</span></div>
+      <span class="mini-stat" id="menuLevel">nível 1/12</span>
+      <span class="mini-stat" id="menuStreak">—</span>
+      <span class="mini-stat" id="menuToday">hoje 0/5</span>
     </div>
 
     <div id="audioBadge" style="display:none;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);text-align:center;letter-spacing:0.04em;"></div>
@@ -1350,7 +1322,6 @@
       <button class="drawer-item" onclick="startFreeSession()"><span>Treino livre</span><small>todas as cores já liberadas</small></button>
       <button class="drawer-item" onclick="goTo('progressionsCurriculum')"><span>Currículo · 20 progressões</span><small>pop · jazz · gospel · folk</small></button>
       <button class="drawer-item" onclick="startProgressionSession()"><span>Sequência aleatória</span><small>2-4 acordes randômicos</small></button>
-      <button class="drawer-item" onclick="startBaseline()"><span>Baseline</span><small>medir ponto de partida</small></button>
     </div>
 
     <div class="drawer-section">
@@ -1512,7 +1483,7 @@
 
     <div class="seg" style="margin-bottom: 18px;">
       <button class="seg-btn active" id="segTrain" onclick="setStatsView('train')">treino</button>
-      <button class="seg-btn" id="segBaseline" onclick="setStatsView('baseline')">baseline</button>
+      <button class="seg-btn" id="segBaseline" onclick="setStatsView('baseline')">partida</button>
       <button class="seg-btn" id="segProbe" onclick="setStatsView('probe')">probe</button>
     </div>
 
@@ -1768,8 +1739,8 @@
       <strong>Caveat para adultos.</strong> Wong et al. (2025), o estudo mais recente, treinou 12 músicos adultos por 8 semanas (média de 21,4h, 15.327 trials). Os melhores atingiram &gt;90% em 12 notas com RT médio de ~2s, com 2 participantes alcançando performance comparável a quem nasceu com AP. Mas a literatura é clara: o que adultos desenvolvem é <em>absolute labeling</em> — rotular alturas com erro pequeno, dependente de timbre e contexto. É treinável, é mensurável, mas não é AP verdadeiro como nas crianças.
     </div>
 
-    <h3>Baseline (modo adulto)</h3>
-    <p>Antes de treinar, faça 50 trials cegos com as 8 cores. Sem feedback. Os resultados ficam separados e dão seu ponto de partida. Sem baseline, qualquer "melhora" depois pode ser regressão à média ou efeito de familiarização com a interface.</p>
+    <h3>Ponto de partida inferido</h3>
+    <p>Em vez de um teste cego separado, o app usa suas primeiras ~50 jogadas reais como linha de base. A aba "partida" nas estatísticas compara esse início com seu desempenho atual. Atenção: como há feedback desde o começo, parte da "melhora" inicial inclui familiarização com a interface — leia a primeira janela como teto otimista, não como acaso puro.</p>
 
     <h3>Probe</h3>
     <p>A cada 5 sessões (configurável), o app insere um probe set: 10 acordes com <em>variações inéditas</em> de oitava, inversão e timbre. Sem feedback. Se você acerta no treino mas erra no probe, está memorizando amostras específicas, não generalizando.</p>
@@ -1865,7 +1836,7 @@
       <li><strong>Acompanhe pessoalmente.</strong> Crianças desta idade não conseguem operar sozinhas. Você toca o play, ela aponta a cor.</li>
       <li><strong>5 vezes ao dia, todos os dias.</strong> O streak no menu te ajuda a manter.</li>
       <li><strong>Use o diário</strong> pra registrar humor da criança, qualidade do sono, eventos do dia. Vai te ajudar a interpretar os ruins.</li>
-      <li><strong>Baseline antes</strong>, mesmo com criança. Sem ponto de partida, qualquer "melhora" é interpretação livre.</li>
+      <li><strong>Ponto de partida automático.</strong> O app guarda suas primeiras jogadas como linha de base — dá pra ver o progresso sem um teste chato antes de começar.</li>
     </ul>
 
     <div class="caveat">
@@ -2693,14 +2664,14 @@ function goTo(screen) {
 }
 
 function renderMenu() {
-  document.getElementById('menuLevel').textContent = `${state.levelUnlocked} / ${CHORDS.length}`;
+  document.getElementById('menuLevel').textContent = `nível ${state.levelUnlocked}/${CHORDS.length}`;
   document.getElementById('menuSessions').textContent = `${state.totalSessions} · ${state.freeSessions || 0} livres`;
   const today = countSessionsToday();
   const target = state.settings.dailySessionTarget || 5;
   const todayEl = document.getElementById('menuToday');
   if (todayEl) {
-    todayEl.textContent = `${today} / ${target}`;
-    todayEl.style.color = today >= target ? 'var(--green)' : (today >= 1 ? 'var(--accent-warm)' : 'var(--text-dim)');
+    todayEl.textContent = `hoje ${today}/${target}`;
+    todayEl.style.color = today >= target ? 'var(--green)' : (today >= 1 ? 'var(--accent-warm)' : 'var(--text-mute)');
   }
   const playHistory = state.history.filter(h => h.mode === 'train' || h.mode === 'free');
   if (playHistory.length > 0) {
@@ -2711,8 +2682,7 @@ function renderMenu() {
   }
   const streak = calculateStreak();
   const streakEl = document.getElementById('menuStreak');
-  if (streakEl) streakEl.textContent = streak === 0 ? '—' : (streak === 1 ? '1 dia' : streak + ' dias');
-  document.getElementById('menuBaseline').textContent = state.baseline ? new Date(state.baseline.date).toLocaleDateString('pt-BR') : 'não feito';
+  if (streakEl) streakEl.textContent = streak === 0 ? 'streak —' : (streak === 1 ? 'streak 1d' : `streak ${streak}d`);
   updateRecommendation();
 }
 
@@ -3777,7 +3747,7 @@ const MILESTONE_DEFS = [
   { id: 'sessions-10', label: '10 sessões', test: (s) => (s.totalSessions + s.freeSessions) >= 10 },
   { id: 'streak-3', label: 'Streak de 3 dias', test: (s) => calculateStreak() >= 3 },
   { id: 'streak-7', label: 'Streak de 7 dias', test: (s) => calculateStreak() >= 7 },
-  { id: 'baseline-done', label: 'Baseline registrado', test: (s) => s.baseline && s.baseline.results && s.baseline.results.length > 0 },
+  { id: 'first-session', label: 'Primeira sessão', test: (s) => s.totalSessions >= 1 },
   { id: 'unlock-2', label: 'Segunda cor desbloqueada', test: (s) => s.levelUnlocked >= 2 },
   { id: 'unlock-eguchi', label: 'Diatônico completo (8 cores Eguchi)', test: (s) => s.levelUnlocked >= 8 },
   { id: 'chromatic-1', label: 'Primeira cor cromática (D maior · Coral)', test: (s) => s.levelUnlocked >= 9 },
@@ -3805,10 +3775,10 @@ function skipOnboarding() {
   goTo('menu');
 }
 
-function finishOnboardingAndStartBaseline() {
+function finishOnboardingAndStartTrain() {
   state.onboardingDone = true;
   saveState();
-  startBaseline();
+  startTrainSession();
 }
 
 function finishOnboardingAndGoMenu() {
@@ -4012,9 +3982,10 @@ function computeRecommendation() {
   if (!state.onboardingDone) {
     return { label: 'Comece aqui', title: 'Faça o onboarding', sub: '5 telas · 2 min', action: () => goTo('onbWelcome') };
   }
-  // 2. No baseline → suggest baseline
-  if (!state.baseline) {
-    return { label: 'Próximo passo', title: 'Comece pela baseline', sub: '50 trials cegos · ~6 min. Sem isso, não dá pra interpretar progresso.', action: startBaseline };
+  // 2. First-ever session → welcome straight into training (no baseline gate;
+  //    the app infers the starting point from these first trials)
+  if (state.history.filter(h => h.mode === 'train' || h.mode === 'free').length === 0) {
+    return { label: 'Comece aqui', title: 'Primeira sessão', sub: 'O app aprende seu ponto de partida sozinho. É só começar.', action: startTrainSession };
   }
   // 3. (Bayesian "ready" check removed — unlock is streak-based now)
   // 4. Daily protocol — Sakakibara: 5 sessions/day
@@ -4159,13 +4130,24 @@ function setStatsView(view) {
   statsView = view;
   document.querySelectorAll('#segTrain, #segBaseline, #segProbe').forEach(b => b.classList.remove('active'));
   document.getElementById('seg' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
-  document.getElementById('statsModeLabel').textContent = view;
+  document.getElementById('statsModeLabel').textContent = view === 'baseline' ? 'partida' : view;
   renderStats();
+}
+
+function getInferredStart() {
+  // The app infers the starting point from the first trials the user does —
+  // no separate blind baseline session required.
+  const play = state.history.filter(h => h.mode === 'train' || h.mode === 'free');
+  if (play.length < 8) return null;
+  const firstN = play.slice(0, Math.min(50, play.length));
+  const correct = firstN.filter(h => h.correct).length;
+  return { results: firstN, pct: Math.round(correct / firstN.length * 100), n: firstN.length };
 }
 
 function getStatsData() {
   if (statsView === 'baseline') {
-    return state.baseline ? state.baseline.results : [];
+    const inf = getInferredStart();
+    return inf ? inf.results : [];
   }
   if (statsView === 'probe') {
     return state.probes.flatMap(p => p.results);
@@ -4603,7 +4585,7 @@ function hideModal() {
 }
 
 function confirmReset() {
-  showModal('Apagar tudo?', 'Todo progresso, baseline, probes e diário serão removidos. Esta ação não pode ser desfeita.', [
+  showModal('Apagar tudo?', 'Todo progresso, histórico, probes e diário serão removidos. Esta ação não pode ser desfeita.', [
     { label: 'Cancelar', action: hideModal },
     { label: 'Apagar', primary: true, action: () => {
       localStorage.removeItem(STORAGE_KEY);
