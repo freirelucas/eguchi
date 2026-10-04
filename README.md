@@ -119,6 +119,21 @@ JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcoo
 3. **Currículo** → tela com mapa das 8 cores e status (bloqueada / em treino / aprendendo / dominada). Tap em qualquer cor abre lesson card.
 4. **Desbloqueio** → quando uma cor nova destrava, abre lesson card cheia: cor + kanji + função tonal + como soa + por que essa cor + mnemônico + exemplo + play button.
 
+## Modo criança (6 a 12 anos)
+
+Na primeira visita o app pergunta **"Quem vai jogar?"** — Criança ou Adulto. O modo criança também pode ser ligado no menu `···` → **Modo criança**. Quando ligado, o app já abre direto nele.
+
+- **Tema claro e colorido**, fonte arredondada, botões grandes e uma mascote (Lumi, a corujinha 🦉).
+- **Partidas curtas de 10 sons** (~2 min) — combina com as 5 sessões curtas por dia do protocolo Sakakibara. A "missão de hoje" mostra 5 notinhas que viram ⭐.
+- **Objetivo sempre visível**: "Acerte 5 seguidas para ganhar o 🌳 Verde", com 5 estrelas que vão acendendo.
+- **Cada cor tem um emoji** (🍎 Vermelho, ☁️ Branco, 🌻 Amarelo, 🌳 Verde, 🌙 Preto, 🍇 Roxo, 🌊 Azul, 🍫 Marrom…) e uma frase simples sobre como o som "se sente".
+- **Acertou**: confete, "+1 ⭐" e elogio. **Errou**: sem punição — mostra a cor certa e toca o som dela de novo.
+- **Cor nova**: depois de 5 seguidas, a cor nova é apresentada (a criança ouve o som dela antes), e vem um desafio de 3 sons. Passou: tela "COR NOVA!" e figurinha na **coleção de cores**.
+- **Fim da partida**: 1 a 3 estrelas pelo acerto e o próximo prêmio.
+- **Área dos adultos**: segurar o botão por 1,5 s (evita saída sem querer).
+
+As jogadas entram no mesmo histórico do treino Eguchi (`mode: 'train'`, com `kids: true`), então estatísticas, streak e exportação continuam funcionando para os pais. Sons de recompensa foram evitados de propósito: só se ouvem os acordes, para não poluir a memória auditiva.
+
 ## Modos de treino
 
 - **Treino livre** — todas as 8 cores desbloqueadas. Prática direta, sem gating Eguchi. Trials salvos com `mode: 'free'`.
