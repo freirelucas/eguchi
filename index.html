@@ -13,7 +13,7 @@
 <title>Eguchi Lab · 江口式実験室</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@400;500;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/tone@14.7.77/build/Tone.js" defer></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -1116,9 +1116,262 @@
   }
   .badge-baseline { background: rgba(112,144,176,0.18); color: var(--accent-cool); }
   .badge-probe { background: rgba(232,160,74,0.15); color: var(--accent-warm); }
+
+  /* ====================================================
+     MODO CRIANÇA (6-12 anos) — claro, colorido, objetivo
+     ==================================================== */
+  .kid {
+    --k-bg: #fff8ec;
+    --k-card: #ffffff;
+    --k-ink: #2b2240;
+    --k-dim: #6b6182;
+    --k-pri: #ff6b4a;
+    --k-pri-d: #d9472a;
+    --k-ok: #2fb36b;
+    --k-star: #ffc233;
+    --k-line: #f0e2c8;
+    background: var(--k-bg);
+    color: var(--k-ink);
+    font-family: 'Fredoka', 'Baloo 2', system-ui, sans-serif;
+    font-size: 16px;
+  }
+  .kid .k-pad { padding: 16px 16px 24px; display: flex; flex-direction: column; gap: 14px; min-height: 100%; }
+  .kid .k-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .kid .k-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--k-card); border: 2px solid var(--k-line); border-radius: 999px;
+    padding: 6px 12px; font-weight: 600; font-size: 15px; color: var(--k-ink);
+  }
+  .kid .k-chip-btn { cursor: pointer; font-family: inherit; }
+  .kid .k-mascot-row { display: flex; align-items: center; gap: 12px; }
+  .kid .k-mascot { font-size: 64px; line-height: 1; filter: drop-shadow(0 4px 0 rgba(0,0,0,0.08)); }
+  .kid .k-mascot.bounce { animation: kBounce 0.6s ease; }
+  .kid .k-bubble {
+    position: relative; flex: 1;
+    background: var(--k-card); border: 2px solid var(--k-line); border-radius: 18px;
+    padding: 10px 14px; font-size: 17px; font-weight: 500; line-height: 1.3;
+  }
+  .kid .k-bubble::before {
+    content: ''; position: absolute; left: -9px; top: 22px;
+    border: 8px solid transparent; border-right-color: var(--k-line); border-left: 0;
+  }
+  .kid h1.k-title { font-size: 34px; font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
+  .kid h2.k-title { font-size: 26px; font-weight: 700; line-height: 1.1; }
+  .kid .k-sub { color: var(--k-dim); font-size: 15px; line-height: 1.35; }
+  .kid .k-card {
+    background: var(--k-card); border: 2px solid var(--k-line); border-radius: 20px;
+    padding: 14px; box-shadow: 0 4px 0 var(--k-line);
+  }
+  .kid .k-card-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+  .kid .k-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; border: 0; border-radius: 20px; cursor: pointer;
+    font-family: inherit; font-weight: 700; font-size: 22px; padding: 16px;
+    background: var(--k-pri); color: #fff; box-shadow: 0 6px 0 var(--k-pri-d);
+    transition: transform 0.08s, box-shadow 0.08s;
+  }
+  .kid .k-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--k-pri-d); }
+  .kid .k-btn-big { font-size: 30px; padding: 22px; border-radius: 26px; }
+  .kid .k-btn-soft { background: var(--k-card); color: var(--k-ink); border: 2px solid var(--k-line); box-shadow: 0 5px 0 var(--k-line); font-size: 18px; }
+  .kid .k-btn-soft:active { box-shadow: 0 1px 0 var(--k-line); }
+  .kid .k-row { display: flex; gap: 10px; }
+  .kid .k-row > * { flex: 1; }
+  .kid .k-dots { display: flex; gap: 8px; justify-content: center; font-size: 26px; }
+  .kid .k-dots .off { opacity: 0.25; filter: grayscale(1); }
+  .kid .k-album { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .kid .k-sticker {
+    aspect-ratio: 1; border-radius: 16px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px; border: 0; cursor: pointer;
+    font-family: inherit; font-size: 11px; font-weight: 600;
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,0.15);
+  }
+  .kid .k-sticker .e { font-size: 28px; line-height: 1; }
+  .kid .k-sticker.locked { background: #ece4d4 !important; color: #b3a78f !important; box-shadow: none; border: 2px dashed #d8ccb4; cursor: default; }
+  .kid .k-sticker.next { border: 3px dashed var(--k-pri); background: #fff !important; color: var(--k-pri) !important; animation: kWiggle 2.4s ease-in-out infinite; }
+  .kid .k-footer { margin-top: auto; text-align: center; }
+  .kid .k-link { background: none; border: 0; color: var(--k-dim); font-family: inherit; font-size: 13px; text-decoration: underline; padding: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+
+  /* --- game --- */
+  .kid .k-progress { flex: 1; height: 16px; background: #efe5d2; border-radius: 999px; overflow: hidden; }
+  .kid .k-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #ffb340, #ff6b4a); border-radius: 999px; transition: width 0.35s ease; }
+  .kid .k-mission {
+    background: var(--k-card); border: 2px solid var(--k-line); border-radius: 18px;
+    padding: 10px 12px; text-align: center; font-weight: 600; font-size: 16px;
+  }
+  .kid .k-mission.challenge { border-color: var(--k-star); background: #fff4d1; animation: kPulse 1.2s ease-in-out infinite; }
+  .kid .k-mission .k-stars { font-size: 24px; letter-spacing: 4px; margin-top: 4px; }
+  .kid .k-mission .k-stars .off { opacity: 0.2; filter: grayscale(1); }
+  .kid .k-speaker {
+    width: 150px; height: 150px; border-radius: 50%; border: 0; cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, #ffffff, #ffe7b8 70%);
+    box-shadow: 0 8px 0 #f0c98a, 0 0 0 8px #fff;
+    font-size: 64px; display: flex; align-items: center; justify-content: center;
+    align-self: center; transition: transform 0.1s;
+  }
+  .kid .k-speaker:active { transform: translateY(4px) scale(0.98); }
+  .kid .k-speaker.playing { animation: kPop 0.5s ease; }
+  .kid .k-say { min-height: 58px; text-align: center; font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .kid .k-say small { display: block; font-size: 15px; font-weight: 500; color: var(--k-dim); margin-top: 2px; }
+  .kid .k-say.ok { color: var(--k-ok); }
+  .kid .k-say.oops { color: var(--k-pri-d); }
+  .kid .k-choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kid .k-choice {
+    border: 0; border-radius: 22px; cursor: pointer; font-family: inherit;
+    padding: 10px 4px; min-height: 108px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px; font-weight: 700; font-size: 14px;
+    box-shadow: inset 0 -6px 0 rgba(0,0,0,0.18), 0 3px 0 rgba(0,0,0,0.08);
+    transition: transform 0.08s;
+  }
+  .kid .k-choice .e { font-size: 36px; line-height: 1; }
+  .kid .k-choice:active { transform: scale(0.95); }
+  .kid .k-choice:disabled { opacity: 0.35; }
+  .kid .k-choice.right { animation: kJump 0.5s ease; outline: 5px solid var(--k-ok); outline-offset: 2px; }
+  .kid .k-choice.wrong { animation: kShake 0.4s ease; }
+  .kid .k-choice.reveal { animation: kPulse 0.6s ease-in-out 3; outline: 5px solid var(--k-star); outline-offset: 2px; }
+  .kid .k-choice.newbie { outline: 4px dashed var(--k-star); outline-offset: 2px; }
+
+  /* --- end + new color --- */
+  .kid .k-bigstars { font-size: 56px; text-align: center; letter-spacing: 6px; }
+  .kid .k-bigstars span { display: inline-block; animation: kStarIn 0.5s ease backwards; }
+  .kid .k-bigstars span:nth-child(2) { animation-delay: 0.25s; }
+  .kid .k-bigstars span:nth-child(3) { animation-delay: 0.5s; }
+  .kid .k-bigstars .off { opacity: 0.2; filter: grayscale(1); }
+  .kid .k-newcolor {
+    width: 170px; height: 170px; border-radius: 40px; align-self: center;
+    display: flex; align-items: center; justify-content: center; font-size: 88px;
+    box-shadow: inset 0 -10px 0 rgba(0,0,0,0.15), 0 10px 30px rgba(0,0,0,0.12);
+    animation: kStarIn 0.6s ease;
+  }
+  .kid .k-center { text-align: center; }
+
+  /* --- who plays --- */
+  .kid .k-who { display: flex; flex-direction: column; gap: 14px; }
+  .kid .k-who-btn {
+    display: flex; align-items: center; gap: 14px; text-align: left; width: 100%;
+    background: var(--k-card); border: 3px solid var(--k-line); border-radius: 22px;
+    padding: 16px; font-family: inherit; cursor: pointer; box-shadow: 0 5px 0 var(--k-line); color: var(--k-ink);
+  }
+  .kid .k-who-btn .e { font-size: 44px; }
+  .kid .k-who-btn b { display: block; font-size: 22px; }
+  .kid .k-who-btn span { color: var(--k-dim); font-size: 14px; }
+  .kid .k-who-btn.pri { border-color: var(--k-pri); }
+
+  /* confetti */
+  .k-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 60; overflow: hidden; }
+  .k-confetti i {
+    position: absolute; top: 45%; left: 50%; width: 10px; height: 14px; border-radius: 3px;
+    animation: kConfetti 1s ease-out forwards;
+  }
+  .k-float {
+    position: fixed; left: 50%; top: 40%; transform: translateX(-50%);
+    font-family: 'Fredoka', system-ui, sans-serif; font-weight: 700; font-size: 34px; color: #ffb000;
+    text-shadow: 0 2px 0 #fff; pointer-events: none; z-index: 61; animation: kFloat 0.9s ease-out forwards;
+  }
+
+  @keyframes kBounce { 0%,100% { transform: translateY(0); } 40% { transform: translateY(-14px) rotate(-6deg); } 70% { transform: translateY(0) rotate(4deg); } }
+  @keyframes kWiggle { 0%,90%,100% { transform: rotate(0); } 93% { transform: rotate(-6deg); } 96% { transform: rotate(6deg); } }
+  @keyframes kPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+  @keyframes kPop { 0% { transform: scale(1); } 40% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  @keyframes kJump { 0%,100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-10px) scale(1.08); } }
+  @keyframes kShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  @keyframes kStarIn { 0% { transform: scale(0) rotate(-30deg); opacity: 0; } 70% { transform: scale(1.2) rotate(8deg); opacity: 1; } 100% { transform: scale(1) rotate(0); } }
+  @keyframes kConfetti { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
+  @keyframes kFloat { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.6); } 30% { opacity: 1; transform: translate(-50%, -10px) scale(1.1); } 100% { opacity: 0; transform: translate(-50%, -60px) scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .kid *, .k-confetti i, .k-float { animation: none !important; transition: none !important; }
+  }
+  body.kid-mode, html.kid-mode { background: #fff8ec; }
 </style>
 </head>
 <body>
+
+<!-- ============ MODO CRIANÇA ============ -->
+<div class="screen kid" id="whoPlays">
+  <div class="k-pad" style="justify-content:center;">
+    <div class="k-center" style="font-size:72px;">🦉🎵</div>
+    <h1 class="k-title k-center">Quem vai jogar?</h1>
+    <p class="k-sub k-center">Escolha uma vez. Dá pra trocar depois.</p>
+    <div class="k-who">
+      <button class="k-who-btn pri" onclick="chooseKidMode()">
+        <span class="e">🧒</span>
+        <div><b>Criança</b><span>6 a 12 anos · jogo das cores e sons</span></div>
+      </button>
+      <button class="k-who-btn" onclick="chooseAdultMode()">
+        <span class="e">🧑</span>
+        <div><b>Adulto</b><span>treino completo com estatísticas</span></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="screen kid" id="kidHome">
+  <div class="k-pad">
+    <div class="k-top">
+      <span class="k-chip">⭐ <span id="kidStars">0</span></span>
+      <span class="k-chip">🔥 <span id="kidStreak">0</span> dia(s)</span>
+    </div>
+    <div class="k-mascot-row">
+      <div class="k-mascot" id="kidHomeMascot">🦉</div>
+      <div class="k-bubble" id="kidHello">Oi! Eu sou a Lumi. Vamos descobrir as cores dos sons?</div>
+    </div>
+    <button class="k-btn k-btn-big" onclick="startKidGame()">▶ JOGAR</button>
+    <div class="k-card">
+      <div class="k-card-title">🎯 Missão de hoje: 5 jogos curtinhos</div>
+      <div class="k-dots" id="kidToday"></div>
+      <div class="k-sub k-center" id="kidTodayText" style="margin-top:6px;"></div>
+    </div>
+    <div class="k-card">
+      <div class="k-card-title">🎨 Minha coleção de cores <span id="kidAlbumCount" style="color:var(--k-dim);font-weight:500;"></span></div>
+      <div class="k-album" id="kidAlbum"></div>
+      <div class="k-sub" style="margin-top:8px;">Toque numa cor para ouvir o som dela.</div>
+    </div>
+    <div class="k-footer">
+      <button class="k-link" id="kidGrownupBtn">👤 Área dos adultos (segure)</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen kid" id="kidGame">
+  <div class="k-pad" style="gap:12px;">
+    <div class="k-top">
+      <button class="k-chip k-chip-btn" onclick="quitKidGame()">🏠</button>
+      <div class="k-progress"><div class="k-progress-fill" id="kidBar"></div></div>
+      <span class="k-chip"><span id="kidCount">0</span>/<span id="kidTotal">10</span></span>
+    </div>
+    <div class="k-mission" id="kidMission"></div>
+    <button class="k-speaker" id="kidSpeaker" onclick="kidReplay()" aria-label="Ouvir de novo">🔊</button>
+    <div class="k-say" id="kidSay">Escute e toque na cor!</div>
+    <div class="k-choices" id="kidChoices"></div>
+  </div>
+</div>
+
+<div class="screen kid" id="kidNewColor">
+  <div class="k-pad" style="justify-content:center;">
+    <div class="k-center" style="font-size:20px;font-weight:700;color:var(--k-pri);">🎉 COR NOVA! 🎉</div>
+    <div class="k-newcolor" id="kidNewSwatch"></div>
+    <h1 class="k-title k-center" id="kidNewName"></h1>
+    <p class="k-sub k-center" id="kidNewDesc" style="font-size:18px;"></p>
+    <button class="k-btn k-btn-soft" onclick="kidPlayNewColor()">🔊 Ouvir o som dela</button>
+    <button class="k-btn" onclick="kidCloseNewColor()">Continuar ▶</button>
+  </div>
+</div>
+
+<div class="screen kid" id="kidEnd">
+  <div class="k-pad" style="justify-content:center;">
+    <div class="k-mascot k-center" id="kidEndMascot">🦉</div>
+    <h1 class="k-title k-center" id="kidEndTitle">Muito bem!</h1>
+    <div class="k-bigstars" id="kidEndStars"></div>
+    <p class="k-sub k-center" id="kidEndText" style="font-size:18px;"></p>
+    <div class="k-card">
+      <div class="k-card-title">🎯 Missão de hoje</div>
+      <div class="k-dots" id="kidEndToday"></div>
+    </div>
+    <div class="k-row">
+      <button class="k-btn k-btn-soft" onclick="kidGoHome()">🏠 Casa</button>
+      <button class="k-btn" onclick="startKidGame()">▶ De novo</button>
+    </div>
+  </div>
+</div>
 
 <!-- ============ ONBOARDING ============ -->
 <div class="screen" id="onbWelcome">
@@ -1320,6 +1573,13 @@
     <span class="topbar-meta"></span>
   </div>
   <div class="screen-pad drawer-pad">
+    <div class="drawer-section">
+      <button class="drawer-item drawer-item-primary" onclick="enterKidMode()">
+        <span>🧒 Modo criança <em class="drawer-tag">6-12 anos</em></span>
+        <small>jogo das cores · missões, estrelas e coleção</small>
+      </button>
+    </div>
+
     <div class="drawer-section">
       <div class="drawer-label">Modos de treino</div>
       <button class="drawer-item drawer-item-primary" onclick="startTrainSession()">
@@ -2094,6 +2354,7 @@ const DEFAULT_SETTINGS = {
   playCorrectOnError: 'on',   // 'on' | 'off'
   progressionLength: 3,       // 2 | 3 | 4
   dailySessionTarget: 5,      // Sakakibara: 5 sessions/day
+  kidMode: 'off',             // 'on' abre o app no modo criança (6-12 anos)
 };
 
 // ============================================
@@ -2659,7 +2920,14 @@ function tryUnlockNextLevel() {
 // ============================================
 function goTo(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screen).classList.add('active');
+  const target = document.getElementById(screen);
+  target.classList.add('active');
+  // Modo criança usa tema claro — pinta também a área segura (notch)
+  const isKid = target.classList.contains('kid');
+  document.body.classList.toggle('kid-mode', isKid);
+  document.documentElement.classList.toggle('kid-mode', isKid);
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.setAttribute('content', isKid ? '#fff8ec' : '#15110e');
   window.scrollTo(0, 0);
   if (screen === 'menu') renderMenu();
   if (screen === 'stats') renderStats();
@@ -4616,9 +4884,9 @@ bindSettings();
 renderMenu();
 updateAudioBadge();
 
-// Route first-time visitors through onboarding
+// Route first-time visitors: first ask who is playing (child or adult)
 if (!state.onboardingDone) {
-  goTo('onbWelcome');
+  goTo('whoPlays');
 }
 
 // Pre-construct Tone.js instruments so Salamander samples start downloading
@@ -4640,5 +4908,498 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+<script>
+// ============================================
+// MODO CRIANÇA (6-12 anos)
+// Mesmo método (cor = acorde, destrava cor a cor), em formato de jogo:
+// partidas curtas de 10 sons, missão sempre visível, estrelas e coleção.
+// As jogadas entram no histórico como mode 'train' (kids: true), então
+// estatísticas, streak e "hoje N/5" continuam valendo para os pais.
+// ============================================
+const KID_ROUND_LENGTH = 10;
+const KID_INFO = {
+  red:    { emoji: '🍎', desc: 'É o som de casa: firme e feliz. As músicas adoram terminar nele!' },
+  white:  { emoji: '☁️', desc: 'Brilhante como nuvem no sol. Parece que quer voltar pra casa.' },
+  yellow: { emoji: '🌻', desc: 'Quentinho e gostoso, como um abraço.' },
+  green:  { emoji: '🌳', desc: 'Floresta misteriosa: um som pensativo.' },
+  black:  { emoji: '🌙', desc: 'Noite calma. Um som profundo e tranquilo.' },
+  purple: { emoji: '🍇', desc: 'Um pouquinho triste, como o fim da tarde.' },
+  blue:   { emoji: '🌊', desc: 'Parece que vem de longe, lá do mar.' },
+  brown:  { emoji: '🍫', desc: 'Inquieto! Ele quer ir para outro lugar.' },
+  coral:  { emoji: '🍊', desc: 'Alegre e ensolarado, cheiro de férias.' },
+  lilas:  { emoji: '🌸', desc: 'Brilhante, parece que vai anunciar algo.' },
+  limao:  { emoji: '🍋', desc: 'Azedinho e animado, subindo, subindo!' },
+  ambar:  { emoji: '🍯', desc: 'Dourado e doce, como mel.' },
+};
+const KID_CHEERS = ['Isso!', 'Mandou bem!', 'Uau!', 'Ouvido de ouro!', 'Arrasou!', 'Perfeito!', 'Show!'];
+const KID_OOPS = ['Quase!', 'Foi por pouco!', 'Tudo bem!', 'Quase lá!'];
+
+let kidGen = 0;          // invalida timers de partidas antigas
+let kidCount = 0;
+let kidCorrect = 0;
+let kidAccepting = false;
+let kidStreak = 0;
+let kidInChallenge = false;
+let kidQueue = [];
+let kidStep = 0;
+let kidNewIdx = null;
+
+function kidInfo(idx) { return KID_INFO[CHORDS[idx].id] || { emoji: '🎵', desc: '' }; }
+function kidLabel(idx) { return `${kidInfo(idx).emoji} ${CHORDS[idx].name}`; }
+function kidPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function kidState() {
+  if (!state.kids) state.kids = { stars: 0 };
+  return state.kids;
+}
+function kidLater(fn, ms) {
+  const gen = kidGen;
+  setTimeout(() => { if (gen === kidGen) fn(); }, ms);
+}
+
+// ---------- entrada / saída ----------
+function chooseKidMode() {
+  state.onboardingDone = true;
+  state.settings.kidMode = 'on';
+  saveState();
+  ensureAudioContext();
+  kidGoHome();
+}
+function chooseAdultMode() {
+  state.settings.kidMode = 'off';
+  saveState();
+  goTo('onbWelcome');
+}
+function enterKidMode() {
+  state.settings.kidMode = 'on';
+  saveState();
+  kidGoHome();
+}
+function exitKidMode() {
+  state.settings.kidMode = 'off';
+  saveState();
+  goTo('menu');
+}
+function kidGoHome() {
+  kidGen += 1;
+  goTo('kidHome');
+  renderKidHome();
+}
+
+// ---------- home ----------
+function renderKidDots(el) {
+  const target = state.settings.dailySessionTarget || 5;
+  const done = Math.min(target, countSessionsToday());
+  let html = '';
+  for (let i = 0; i < target; i++) html += `<span class="${i < done ? '' : 'off'}">${i < done ? '⭐' : '🎵'}</span>`;
+  el.innerHTML = html;
+  return { done, target };
+}
+
+function renderKidHome() {
+  const ks = kidState();
+  document.getElementById('kidStars').textContent = ks.stars;
+  document.getElementById('kidStreak').textContent = calculateStreak();
+  const { done, target } = renderKidDots(document.getElementById('kidToday'));
+  document.getElementById('kidTodayText').textContent = done >= target
+    ? 'Missão cumprida hoje! Você é demais! 🏆'
+    : `Faltam ${target - done}. Cada jogo dura uns 2 minutinhos.`;
+
+  const level = state.levelUnlocked;
+  const hour = new Date().getHours();
+  const hi = hour < 12 ? 'Bom dia!' : (hour < 18 ? 'Boa tarde!' : 'Boa noite!');
+  let msg;
+  if (state.history.length === 0) {
+    msg = 'Oi! Eu sou a Lumi 🦉. Cada som tem uma cor. Vamos descobrir?';
+  } else if (level < CHORDS.length) {
+    msg = `${hi} Acerte 5 seguidas e ganhe o ${kidLabel(level)}!`;
+  } else {
+    msg = `${hi} Você já tem todas as cores! Bora treinar o ouvido?`;
+  }
+  document.getElementById('kidHello').textContent = msg;
+  const m = document.getElementById('kidHomeMascot');
+  m.classList.remove('bounce'); void m.offsetWidth; m.classList.add('bounce');
+
+  document.getElementById('kidAlbumCount').textContent = `· ${Math.min(level, CHORDS.length)}/${CHORDS.length}`;
+  const album = document.getElementById('kidAlbum');
+  album.innerHTML = '';
+  CHORDS.forEach((c, idx) => {
+    const b = document.createElement('button');
+    b.className = 'k-sticker';
+    if (idx < level) {
+      b.style.background = c.hex;
+      b.style.color = c.text;
+      b.innerHTML = `<span class="e">${kidInfo(idx).emoji}</span>${c.name}`;
+      b.addEventListener('click', () => { ensureAudioContext(); playChord(c.freqs, state.settings.instrument); });
+    } else if (idx === level) {
+      b.classList.add('next');
+      b.innerHTML = `<span class="e">❓</span>próxima`;
+      b.addEventListener('click', () => showModal('Cor surpresa!', 'Acerte <strong>5 sons seguidos</strong> e vença o desafio para ganhar esta cor.', [{ label: 'Bora!', primary: true, action: hideModal }]));
+    } else {
+      b.classList.add('locked');
+      b.innerHTML = `<span class="e">🔒</span>`;
+    }
+    album.appendChild(b);
+  });
+}
+
+// Botão "área dos adultos": precisa segurar 1,5 s (evita saída acidental)
+(function bindGrownupButton() {
+  const btn = document.getElementById('kidGrownupBtn');
+  if (!btn) return;
+  let timer = null;
+  const start = (e) => {
+    e.preventDefault();
+    btn.textContent = '⏳ segurando…';
+    timer = setTimeout(() => { timer = null; btn.textContent = '👤 Área dos adultos (segure)'; exitKidMode(); }, 1500);
+  };
+  const cancel = () => {
+    if (timer) { clearTimeout(timer); timer = null; }
+    btn.textContent = '👤 Área dos adultos (segure)';
+  };
+  btn.addEventListener('pointerdown', start);
+  btn.addEventListener('pointerup', cancel);
+  btn.addEventListener('pointerleave', cancel);
+  btn.addEventListener('pointercancel', cancel);
+  btn.addEventListener('contextmenu', (e) => e.preventDefault());
+})();
+
+// ---------- jogo ----------
+function startKidGame() {
+  ensureAudioContext();
+  kidState();
+  kidGen += 1;
+  sessionMode = 'train';
+  lastChordIdx = null;
+  currentChordIdx = null;
+  kidCount = 0;
+  kidCorrect = 0;
+  kidStreak = 0;
+  kidInChallenge = false;
+  kidQueue = [];
+  kidStep = 0;
+  kidAccepting = false;
+  goTo('kidGame');
+  document.getElementById('kidTotal').textContent = KID_ROUND_LENGTH;
+  kidSay('Escute e toque na cor certa!', '');
+  renderKidChoices();
+  renderKidMission();
+  updateKidBar();
+  kidLater(kidNewRound, 700);
+}
+
+function quitKidGame() {
+  if (kidCount > 0) {
+    state.totalSessions += 1;
+    saveState();
+  }
+  kidGoHome();
+}
+
+function updateKidBar() {
+  document.getElementById('kidCount').textContent = Math.min(kidCount, KID_ROUND_LENGTH);
+  document.getElementById('kidBar').style.width = Math.min(100, kidCount / KID_ROUND_LENGTH * 100) + '%';
+}
+
+function kidSay(main, small, cls) {
+  const el = document.getElementById('kidSay');
+  el.className = 'k-say' + (cls ? ' ' + cls : '');
+  el.innerHTML = main + (small ? `<small>${small}</small>` : '');
+}
+
+function renderKidMission() {
+  const el = document.getElementById('kidMission');
+  const level = state.levelUnlocked;
+  el.classList.toggle('challenge', kidInChallenge);
+  if (kidInChallenge) {
+    let marks = '';
+    for (let i = 0; i < kidQueue.length; i++) marks += `<span class="${i < kidStep ? '' : 'off'}">🏆</span>`;
+    el.innerHTML = `DESAFIO! Acerte os ${kidQueue.length} e ganhe o ${kidLabel(level)}<div class="k-stars">${marks}</div>`;
+  } else if (level < CHORDS.length) {
+    let marks = '';
+    for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
+    el.innerHTML = `Missão: acerte ${STREAK_TO_CHALLENGE} seguidas para ganhar o ${kidLabel(level)}<div class="k-stars">${marks}</div>`;
+  } else {
+    el.innerHTML = `Você tem todas as cores! Missão: acertar o máximo 🎯`;
+  }
+}
+
+function renderKidChoices() {
+  const grid = document.getElementById('kidChoices');
+  grid.innerHTML = '';
+  const shown = kidInChallenge ? state.levelUnlocked + 1 : state.levelUnlocked;
+  const n = Math.min(shown, CHORDS.length);
+  grid.style.gridTemplateColumns = `repeat(${n === 4 ? 2 : (n >= 10 ? 4 : 3)}, 1fr)`;
+  for (let idx = 0; idx < n; idx++) {
+    const c = CHORDS[idx];
+    const b = document.createElement('button');
+    b.className = 'k-choice';
+    b.dataset.idx = idx;
+    b.style.background = c.hex;
+    b.style.color = c.text;
+    if (kidInChallenge && idx === state.levelUnlocked) b.classList.add('newbie');
+    b.innerHTML = `<span class="e">${kidInfo(idx).emoji}</span>${c.name}`;
+    b.addEventListener('click', () => kidAnswer(idx));
+    grid.appendChild(b);
+  }
+}
+
+function kidButton(idx) {
+  return document.querySelector(`#kidChoices .k-choice[data-idx="${idx}"]`);
+}
+
+function kidPlay() {
+  const sp = document.getElementById('kidSpeaker');
+  sp.classList.remove('playing'); void sp.offsetWidth; sp.classList.add('playing');
+  playChord(currentVariation.freqs, currentInstrument);
+  chordPlayedAt = performance.now();
+  kidAccepting = true;
+}
+
+function kidNewRound() {
+  trialReplays = 0;
+  document.querySelectorAll('#kidChoices .k-choice').forEach(b => b.classList.remove('right', 'wrong', 'reveal'));
+  currentChordIdx = pickNextChord();
+  currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
+  currentInstrument = state.settings.instrument;
+  kidSay('Qual é a cor deste som?', 'Toque no 🔊 para ouvir de novo');
+  kidPlay();
+}
+
+function kidReplay() {
+  if (currentChordIdx === null || !currentVariation) return;
+  trialReplays += 1;
+  const sp = document.getElementById('kidSpeaker');
+  sp.classList.remove('playing'); void sp.offsetWidth; sp.classList.add('playing');
+  playChord(currentVariation.freqs, currentInstrument);
+}
+
+function kidAnswer(idx) {
+  if (!kidAccepting || currentChordIdx === null) return;
+  kidAccepting = false;
+  const rt = performance.now() - chordPlayedAt;
+  const rightIdx = currentChordIdx;
+  const correct = idx === rightIdx;
+
+  state.history.push({
+    ts: new Date().toISOString(),
+    chordIdx: rightIdx,
+    chosenIdx: idx,
+    correct,
+    rtMs: Math.round(rt),
+    level: state.levelUnlocked,
+    instrument: currentInstrument,
+    variation: currentVariation.type,
+    mode: 'train',
+    kids: true,
+    refTonic: null,
+    replays: trialReplays,
+  });
+  if (state.history.length > 2000) state.history = state.history.slice(-2000);
+
+  kidCount += 1;
+  lastChordIdx = rightIdx;
+  currentChordIdx = null;
+  const btn = kidButton(idx);
+
+  if (correct) {
+    kidCorrect += 1;
+    kidState().stars += 1;
+    if (btn) btn.classList.add('right');
+    kidSay(kidPick(KID_CHEERS), `${kidLabel(rightIdx)} ✓`, 'ok');
+    kidConfetti(CHORDS[rightIdx].hex, 22);
+    kidFloat('+1 ⭐');
+    flashColor(CHORDS[rightIdx].hex);
+  } else {
+    if (btn) btn.classList.add('wrong');
+    kidSay(`${kidPick(KID_OOPS)} 💪`, `Esse som era o ${kidLabel(rightIdx)}. Escuta só:`, 'oops');
+    kidLater(() => {
+      const rb = kidButton(rightIdx);
+      if (rb) rb.classList.add('reveal');
+      playChord(currentVariation.freqs, currentInstrument);
+    }, 700);
+  }
+  saveState();
+  updateKidBar();
+
+  if (kidInChallenge) {
+    if (correct) {
+      kidStep += 1;
+      renderKidMission();
+      if (kidStep >= kidQueue.length) kidLater(kidPassChallenge, 1100);
+      else kidLater(kidChallengeStep, 1300);
+    } else {
+      kidLater(kidFailChallenge, 2600);
+    }
+    return;
+  }
+
+  kidStreak = correct ? kidStreak + 1 : 0;
+  renderKidMission();
+
+  if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
+    kidLater(kidTriggerChallenge, 1200);
+    return;
+  }
+  kidContinue(correct ? 1100 : 2700);
+}
+
+function kidContinue(delay) {
+  if (kidCount >= KID_ROUND_LENGTH) kidLater(kidEndGame, delay);
+  else kidLater(kidNewRound, delay);
+}
+
+// ---------- desafio para ganhar cor nova ----------
+function kidTriggerChallenge() {
+  if (state.levelUnlocked >= CHORDS.length) { kidContinue(300); return; }
+  const newIdx = state.levelUnlocked;
+  const others = [];
+  for (let i = 0; i < newIdx; i++) others.push(i);
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]];
+  }
+  const queue = [newIdx, ...others.slice(0, CHALLENGE_LENGTH - 1)];
+  for (let i = queue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [queue[i], queue[j]] = [queue[j], queue[i]];
+  }
+  kidQueue = queue;
+  kidStep = 0;
+  kidInChallenge = true;
+  renderKidChoices();
+  renderKidMission();
+  // Apresenta a cor nova antes do desafio: a criança ouve o som dela primeiro.
+  kidSay(`5 seguidas! 🔥`, `Cor nova chegando: ${kidLabel(newIdx)}. Escute o som dela!`, 'ok');
+  kidConfetti(CHORDS[newIdx].hex, 30);
+  kidLater(() => {
+    const nb = kidButton(newIdx);
+    if (nb) nb.classList.add('reveal');
+    playChord(CHORDS[newIdx].freqs, state.settings.instrument);
+  }, 900);
+  kidLater(() => kidSay('Agora o DESAFIO! 🏆', `Acerte os ${kidQueue.length} sons`), 2900);
+  kidLater(kidChallengeStep, 4200);
+}
+
+function kidChallengeStep() {
+  const idx = kidQueue[kidStep];
+  if (!Number.isInteger(idx) || !CHORDS[idx]) { kidPassChallenge(); return; }
+  document.querySelectorAll('#kidChoices .k-choice').forEach(b => b.classList.remove('right', 'wrong', 'reveal'));
+  trialReplays = 0;
+  currentChordIdx = idx;
+  currentVariation = { type: 'root', freqs: CHORDS[idx].freqs };
+  currentInstrument = state.settings.instrument;
+  kidSay(`Desafio ${kidStep + 1} de ${kidQueue.length}`, 'Qual é a cor?');
+  kidPlay();
+}
+
+function kidPassChallenge() {
+  state.levelUnlocked += 1;
+  state.lastUnlockDate = new Date().toISOString();
+  kidState().stars += 5;
+  saveState();
+  kidNewIdx = state.levelUnlocked - 1;
+  kidInChallenge = false;
+  kidQueue = [];
+  kidStep = 0;
+  kidStreak = 0;
+  kidConfetti(CHORDS[kidNewIdx].hex, 60);
+  kidFloat('+5 ⭐');
+  kidLater(() => showKidNewColor(kidNewIdx), 900);
+}
+
+function kidFailChallenge() {
+  kidInChallenge = false;
+  kidQueue = [];
+  kidStep = 0;
+  kidStreak = 0;
+  renderKidChoices();
+  renderKidMission();
+  kidSay('Ufa, foi quase! 💪', `Faça mais ${STREAK_TO_CHALLENGE} seguidas e tente de novo.`, 'oops');
+  kidContinue(2200);
+}
+
+function showKidNewColor(idx) {
+  const c = CHORDS[idx];
+  const sw = document.getElementById('kidNewSwatch');
+  sw.style.background = c.hex;
+  sw.textContent = kidInfo(idx).emoji;
+  const name = document.getElementById('kidNewName');
+  name.textContent = c.name;
+  name.style.color = c.hex === '#f0e8db' ? 'var(--k-ink)' : c.hex;
+  document.getElementById('kidNewDesc').textContent = kidInfo(idx).desc;
+  goTo('kidNewColor');
+  kidLater(() => playChord(c.freqs, state.settings.instrument), 500);
+}
+
+function kidPlayNewColor() {
+  if (kidNewIdx === null) return;
+  playChord(CHORDS[kidNewIdx].freqs, state.settings.instrument);
+}
+
+function kidCloseNewColor() {
+  goTo('kidGame');
+  renderKidChoices();
+  renderKidMission();
+  kidSay('Agora tem cor nova no jogo!', `Fique de olho no ${kidLabel(kidNewIdx)}`, 'ok');
+  kidContinue(1400);
+}
+
+// ---------- fim da partida ----------
+function kidEndGame() {
+  state.totalSessions += 1;
+  checkMilestones();
+  saveState();
+  const acc = kidCount > 0 ? kidCorrect / kidCount : 0;
+  const stars = acc >= 0.9 ? 3 : (acc >= 0.6 ? 2 : 1);
+  const titles = { 3: 'Incrível! 🤩', 2: 'Muito bem! 😄', 1: 'Bom treino! 🙂' };
+  document.getElementById('kidEndTitle').textContent = titles[stars];
+  document.getElementById('kidEndStars').innerHTML =
+    [1, 2, 3].map(i => `<span class="${i <= stars ? '' : 'off'}">⭐</span>`).join('');
+  let text = `Você acertou <strong>${kidCorrect} de ${kidCount}</strong> sons.`;
+  if (state.levelUnlocked < CHORDS.length) {
+    text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)} — acerte ${STREAK_TO_CHALLENGE} seguidas!`;
+  }
+  document.getElementById('kidEndText').innerHTML = text;
+  renderKidDots(document.getElementById('kidEndToday'));
+  goTo('kidEnd');
+  const m = document.getElementById('kidEndMascot');
+  m.classList.remove('bounce'); void m.offsetWidth; m.classList.add('bounce');
+  if (stars >= 2) kidConfetti('#ffc233', 40);
+}
+
+// ---------- efeitos ----------
+function kidConfetti(mainHex, count) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'k-confetti';
+  const palette = [mainHex, '#ffc233', '#ff6b4a', '#2fb36b', '#4aa3ff', '#b045b8'];
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('i');
+    const ang = Math.random() * Math.PI * 2;
+    const dist = 120 + Math.random() * 220;
+    p.style.background = palette[i % palette.length];
+    p.style.setProperty('--dx', `${Math.cos(ang) * dist}px`);
+    p.style.setProperty('--dy', `${Math.sin(ang) * dist + 120}px`);
+    p.style.setProperty('--rot', `${Math.round(Math.random() * 720 - 360)}deg`);
+    p.style.animationDelay = `${Math.random() * 0.12}s`;
+    wrap.appendChild(p);
+  }
+  document.body.appendChild(wrap);
+  setTimeout(() => wrap.remove(), 1400);
+}
+
+function kidFloat(text) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const el = document.createElement('div');
+  el.className = 'k-float';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+
+// Abre direto no modo criança quando ele está ligado
+if (state.onboardingDone && state.settings.kidMode === 'on') kidGoHome();
+</script>
+
 </body>
 </html>
