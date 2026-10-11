@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eguchi · Cartinhas e bandeiras</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="kids-print.css">
+<style>
+  /* ---------- guia ---------- */
+  .games { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; margin-bottom: 6mm; }
+  .game { border: 2px solid var(--line); border-radius: 5mm; padding: 4mm; }
+  .game .ico { font-size: 22pt; line-height: 1; }
+  .game h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
+  .game p, .game li { font-size: 9.5pt; line-height: 1.35; color: var(--ink); }
+  .game ol { padding-left: 4.5mm; }
+  .howto { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-bottom: 6mm; }
+  .howto .box { background: var(--cream); border-radius: 5mm; padding: 4mm; font-size: 9.5pt; line-height: 1.4; }
+  .howto h3 { font-size: 11.5pt; margin-bottom: 1.5mm; }
+  .order { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2.5mm; }
+  .order .o { border-radius: 3.5mm; padding: 2.5mm 1mm 2mm; text-align: center; font-size: 8.5pt; font-weight: 600; line-height: 1.15; }
+  .order .o .e { font-size: 17pt; display: block; line-height: 1.1; }
+  .order .o small { display: block; font-weight: 500; font-size: 7pt; opacity: 0.85; }
+  .section-t { font-size: 12pt; font-weight: 700; margin: 0 0 2.5mm; }
+  .tip { font-size: 9pt; color: var(--dim); margin-top: 4mm; line-height: 1.4; }
+
+  /* ---------- cartas (63 × 88 mm, 3 × 3 por folha) ---------- */
+  .page.cardpage { padding-top: 6mm; }
+  .page.cardpage .page-head { margin-bottom: 2mm; }
+  .page.cardpage .page-head h2 { font-size: 13pt; }
+  .page.cardpage .foot { bottom: 3.5mm; }
+  .cards { display: grid; grid-template-columns: repeat(3, 63mm); grid-auto-rows: 88mm; gap: 3mm; justify-content: center; }
+  .card {
+    position: relative; border-radius: 4mm; overflow: hidden;
+    border: 0.3mm dashed #b9ae99; display: flex; flex-direction: column;
+  }
+  .card .face { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3mm 3mm 0; text-align: center; }
+  .card .corner { position: absolute; top: 2.5mm; left: 3mm; font-size: 9pt; font-weight: 700; line-height: 1; text-align: center; }
+  .card .corner .ce { font-size: 10pt; display: block; margin-top: 0.8mm; }
+  .card .big { font-size: 34pt; line-height: 1; }
+  .card .nm { font-size: 17pt; font-weight: 700; margin-top: 1.5mm; line-height: 1; }
+  .card .kj { font-size: 9pt; opacity: 0.8; margin-top: 0.8mm; }
+  .card .ch { font-size: 9.5pt; font-weight: 600; margin-top: 1.5mm; }
+  .card .kb { background: #fff; margin: 2mm 3mm 0; border-radius: 2.5mm; padding: 1.5mm 1.5mm 1mm; }
+  .card .nt { background: #fff; color: var(--ink); margin: 0 3mm 3mm; border-radius: 0 0 2.5mm 2.5mm; padding: 0 1.5mm 1.5mm; font-size: 8.5pt; font-weight: 600; text-align: center; }
+  .card.action { background: var(--cream); color: var(--ink); }
+  .card.action .face { justify-content: center; gap: 1.5mm; padding-bottom: 3mm; }
+  .card.action .nm { font-size: 15pt; }
+  .card.action p { font-size: 9pt; line-height: 1.3; color: var(--dim); padding: 0 2mm; }
+  .card.back {
+    background: repeating-linear-gradient(45deg, #ff6b4a 0 6mm, #ffb340 6mm 12mm);
+    align-items: center; justify-content: center;
+  }
+  .card.back .seal { background: #fff; border-radius: 50%; width: 36mm; height: 36mm; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .card.back .seal b { font-size: 26pt; line-height: 1; }
+  .card.back .seal span { font-size: 10pt; font-weight: 700; color: var(--pri); margin-top: 1mm; }
+
+  /* ---------- bandeiras (dobra ao meio, 2 × 90 × 62 mm) ---------- */
+  .flags { display: flex; flex-direction: column; gap: 7mm; align-items: center; }
+  .flag { display: flex; width: 180mm; height: 58mm; position: relative; border: 0.3mm solid #b9ae99; }
+  .flag .half { width: 90mm; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .flag .half .e { font-size: 38pt; line-height: 1; }
+  .flag .half .n { font-size: 22pt; font-weight: 700; margin-top: 2mm; line-height: 1; }
+  .flag .half .c { font-size: 10pt; font-weight: 500; margin-top: 1.5mm; opacity: 0.85; }
+  .flag .fold { position: absolute; left: 90mm; top: -3mm; bottom: -3mm; border-left: 0.5mm dashed var(--ink); }
+  .flag .fold-label { position: absolute; left: 90mm; top: -4.5mm; transform: translateX(-50%); font-size: 7pt; color: var(--dim); background: #fff; padding: 0 1.5mm; white-space: nowrap; }
+  .flag-help { font-size: 9.5pt; color: var(--dim); text-align: center; margin-bottom: 5mm; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="no-print">
+  <strong>Cartinhas e bandeiras das 12 cores</strong> · as mesmas cores, nomes e acordes do app.<br>
+  Imprima em <strong>A4 retrato</strong>, margens "nenhuma", com <strong>"gráficos de segundo plano"</strong> ligado. Papel 180 g ou mais deixa as cartas e bandeiras firmes.
+  <br><button onclick="window.print()">Imprimir / Salvar PDF</button><a href="index.html">← Voltar ao índice</a>
+</div>
+
+<!-- Folha 1: guia -->
+<section class="page" id="guide">
+  <div class="page-head">
+    <h1>Cartinhas e bandeiras<br>das cores <span class="brand">🦉</span></h1>
+    <div class="tag"><span class="brand">eguchi·</span><br>para crianças de 6 a 12 anos</div>
+  </div>
+  <p class="lead">Cada cor é um acorde. São as mesmas 12 cores do app, na mesma ordem: a criança aprende uma cor por vez e só ganha a próxima depois de reconhecer bem as anteriores. Use as cartas e bandeiras longe da tela, com alguém tocando os acordes no piano (veja a folha de piano) ou no app.</p>
+
+  <div class="games">
+    <div class="game">
+      <div class="ico">🚩</div>
+      <h3>Levanta a bandeira</h3>
+      <ol>
+        <li>Cada criança segura as bandeiras das cores que já conhece.</li>
+        <li>O adulto toca um acorde.</li>
+        <li>Quem levantar a bandeira certa primeiro ganha o ponto. Errou? O adulto toca de novo e mostra a cor certa.</li>
+      </ol>
+    </div>
+    <div class="game">
+      <div class="ico">🃏</div>
+      <h3>Adivinha a carta</h3>
+      <ol>
+        <li>Separe só as cartas das cores já aprendidas, viradas para baixo.</li>
+        <li>O adulto pega uma sem mostrar e toca o acorde dela.</li>
+        <li>A criança diz a cor. Acertou, fica com a carta.</li>
+      </ol>
+    </div>
+    <div class="game">
+      <div class="ico">🎹</div>
+      <h3>Agora é você</h3>
+      <ol>
+        <li>A criança tira uma carta.</li>
+        <li>Toca no piano as teclas marcadas (1, 2, 3 = de baixo para cima).</li>
+        <li>Os outros dizem que cor ela tocou.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="howto">
+    <div class="box">
+      <h3>✂️ Montar as cartas (folhas 2 a 4)</h3>
+      Imprima a folha 4 (verso) no outro lado das folhas 2 e 3, ou cole depois. Corte na linha tracejada. As cartas de ação (folha 3) servem para deixar os jogos mais divertidos.
+    </div>
+    <div class="box">
+      <h3>🚩 Montar as bandeiras (folhas 5 a 7)</h3>
+      Recorte cada retângulo, passe cola no verso, coloque um palito de churrasco (sem ponta) na linha tracejada e dobre ao meio. A cor aparece dos dois lados.
+    </div>
+  </div>
+
+  <div class="section-t">A ordem das cores (igual ao app)</div>
+  <div class="order" id="orderGrid"></div>
+  <p class="tip">Regras de ouro: jogos curtos (2 a 3 minutos), até 5 vezes por dia; comece com 3 cores; erro não perde ponto, só mostra a cor certa; elogie a escuta ("você prestou atenção!"), não o talento.</p>
+  <div class="foot"><span>Método Eguchi · Sakakibara (2014)</span><span>freirelucas.github.io/eguchi · folha 1 de 7</span></div>
+</section>
+
+<section class="page cardpage"><div class="page-head"><h2>Cartinhas · cores 1 a 9</h2><div class="tag">corte na linha tracejada</div></div><div class="cards" id="cardsA"></div><div class="foot"><span>teclas: 1, 2, 3 = de baixo para cima</span><span>folha 2 de 7</span></div></section>
+<section class="page cardpage"><div class="page-head"><h2>Cartinhas · cores 10 a 12 + ação</h2><div class="tag">corte na linha tracejada</div></div><div class="cards" id="cardsB"></div><div class="foot"><span>cartas de ação: use nos jogos para variar</span><span>folha 3 de 7</span></div></section>
+<section class="page cardpage"><div class="page-head"><h2>Verso das cartinhas</h2><div class="tag">imprima 2 vezes</div></div><div class="cards" id="cardsBack"></div><div class="foot"><span>imprima no verso das folhas 2 e 3</span><span>folha 4 de 7</span></div></section>
+<section class="page"><div class="page-head"><h2>Bandeiras · cores 1 a 4</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsA"></div><div class="foot"><span>palito na dobra</span><span>folha 5 de 7</span></div></section>
+<section class="page"><div class="page-head"><h2>Bandeiras · cores 5 a 8</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsB"></div><div class="foot"><span>palito na dobra</span><span>folha 6 de 7</span></div></section>
+<section class="page"><div class="page-head"><h2>Bandeiras · cores 9 a 12</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">As 4 cores cromáticas: só depois das 8 primeiras.</p><div class="flags" id="flagsC"></div><div class="foot"><span>palito na dobra</span><span>folha 7 de 7</span></div></section>
+
+<script src="colors.js"></script>
+<script>
+(function () {
+  const { COLORS, keyboardSVG, needsOutline } = window.Eguchi;
+  const paint = (el, c) => {
+    el.style.background = c.hex;
+    el.style.color = c.text;
+    if (needsOutline(c)) el.classList.add('outline');
+  };
+
+  // guia: ordem
+  const order = document.getElementById('orderGrid');
+  COLORS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'o';
+    paint(d, c);
+    d.innerHTML = `<span class="e">${c.emoji}</span>${c.level}. ${c.name}<small>${c.chord}</small>`;
+    order.appendChild(d);
+  });
+
+  // cartas
+  const card = c => {
+    const d = document.createElement('div');
+    d.className = 'card';
+    paint(d, c);
+    d.innerHTML = `
+      <div class="corner">${c.level}<span class="ce">${c.emoji}</span></div>
+      <div class="face">
+        <div class="big">${c.emoji}</div>
+        <div class="nm">${c.name}</div>
+        <div class="kj">${c.kanji}</div>
+        <div class="ch">${c.chord} · ${c.chordSym}</div>
+      </div>
+      <div class="kb">${keyboardSVG(c)}</div>
+      <div class="nt">${c.notesPt.join(' · ')}</div>`;
+    return d;
+  };
+  const ACTIONS = [
+    ['🔁', 'Ouça de novo', 'Peça para tocar o acorde mais uma vez.'],
+    ['🎤', 'Cante!', 'Cante a nota mais aguda do acorde.'],
+    ['🎹', 'Sua vez', 'Toque você o acorde da última carta.'],
+    ['🔄', 'Troca', 'Troque uma carta com outro jogador.'],
+    ['🏆', 'Desafio', 'Acerte 3 cores seguidas e ganhe 2 cartas.'],
+    ['⭐', 'Coringa', 'Vale qualquer cor que você já conhece.'],
+  ];
+  const action = ([e, n, p]) => {
+    const d = document.createElement('div');
+    d.className = 'card action';
+    d.innerHTML = `<div class="face"><div class="big">${e}</div><div class="nm">${n}</div><p>${p}</p></div>`;
+    return d;
+  };
+  const back = () => {
+    const d = document.createElement('div');
+    d.className = 'card back';
+    d.innerHTML = `<div class="seal"><b>🦉🎵</b><span>eguchi·</span></div>`;
+    return d;
+  };
+  const A = document.getElementById('cardsA'), B = document.getElementById('cardsB'), K = document.getElementById('cardsBack');
+  COLORS.slice(0, 9).forEach(c => A.appendChild(card(c)));
+  COLORS.slice(9).forEach(c => B.appendChild(card(c)));
+  ACTIONS.forEach(a => B.appendChild(action(a)));
+  for (let i = 0; i < 9; i++) K.appendChild(back());
+
+  // bandeiras: [verso | frente], palito na dobra central
+  const flag = c => {
+    const d = document.createElement('div');
+    d.className = 'flag';
+    const half = `<div class="half"><div class="e">${c.emoji}</div><div class="n">${c.name}</div><div class="c">${c.chord}</div></div>`;
+    d.innerHTML = half + half + `<div class="fold"></div><div class="fold-label">dobra · palito aqui</div>`;
+    d.querySelectorAll('.half').forEach(h => paint(h, c));
+    return d;
+  };
+  [['flagsA', 0, 4], ['flagsB', 4, 8], ['flagsC', 8, 12]].forEach(([id, a, b]) => {
+    const el = document.getElementById(id);
+    COLORS.slice(a, b).forEach(c => el.appendChild(flag(c)));
+  });
+})();
+</script>
+</body>
+</html>

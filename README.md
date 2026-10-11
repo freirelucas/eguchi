@@ -40,9 +40,14 @@ O método original usa **9 voicings de Dó/Fá/Sol maior** (apenas teclas branca
 ├── icon-*.png              Ícones PWA
 ├── cheatsheet/             Material impresso para prática em instrumento
 │   ├── index.html          Landing
-│   ├── lib.js              SVG generators + 9 voicings autênticas Eguchi
+│   ├── colors.js           Fonte única das 12 cores do app para o impresso (+ teclado SVG)
+│   ├── check-colors.js     Confere se colors.js bate com o app: node cheatsheet/check-colors.js
+│   ├── kids-print.css      Estilo impresso no visual do Modo Criança
+│   ├── handout-cartas-bandeiras.html  A4 · 12 cartinhas + 6 de ação + verso + 12 bandeiras + guia de jogos
+│   ├── a3-piano.html       A3 retrato · piano · as 12 cores do app
+│   ├── a4-piano-bw.html    A4 retrato · piano · 12 cores · P&B
+│   ├── lib.js              SVG generators + 9 voicings clássicas Eguchi (violão, trompete, flauta, mestre)
 │   ├── a4-bw.html          A4 paisagem · 9 voicings × 4 instrumentos · P&B
-│   ├── a3-piano.html       A3 retrato · piano · colorido
 │   ├── a3-violao.html      A3 retrato · violão
 │   ├── a3-trompete.html    A3 retrato · trompete em C
 │   └── a3-gaita.html       A3 retrato · gaita C diatônica
