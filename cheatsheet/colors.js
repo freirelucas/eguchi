@@ -23,16 +23,16 @@ const EGUCHI_COLORS = [
     role: 'pé em Ré · o mais agudo', kid: 'O mais agudo de todos: um broto novinho.' },
   { id: 'orange', level: 6, name: 'Laranja', kanji: '橙', emoji: '🍊', hex: '#e88a33', text: '#1a1614', family: 'Dó maior',
     chord: 'Dó maior', chordSym: 'C/E', notes: ['E4', 'G4', 'C5'], notesPt: ['Mi', 'Sol', 'Dó'], bass: 'Mi',
-    role: 'pé em Mi · segue em frente', kid: 'Parece o Vermelho, mas começa um degrau acima.' },
+    role: 'pé em Mi · segue em frente', kid: 'Parece o Vermelho, mas mais leve: não tem cara de fim.' },
   { id: 'purple', level: 7, name: 'Roxo', kanji: '紫', emoji: '🍇', hex: '#7a3d8a', text: '#fff', family: 'Fá maior',
     chord: 'Fá maior', chordSym: 'F', notes: ['F4', 'A4', 'C5'], notesPt: ['Fá', 'Lá', 'Dó'], bass: 'Fá',
-    role: 'pé em Fá · outra casa', kid: 'Firme como o Vermelho, mas é outra casa.' },
+    role: 'pé em Fá · outra casa', kid: 'Firme e quentinho: uma outra casa.' },
   { id: 'pink', level: 8, name: 'Rosa', kanji: '桃', emoji: '🌸', hex: '#e89aaa', text: '#1a1614', family: 'Sol maior',
     chord: 'Sol maior', chordSym: 'G', notes: ['G4', 'B4', 'D5'], notesPt: ['Sol', 'Si', 'Ré'], bass: 'Sol',
     role: 'pé em Sol · anúncio', kid: 'Anuncia que algo vai acontecer, como a primavera.' },
   { id: 'brown', level: 9, name: 'Marrom', kanji: '茶', emoji: '🍫', hex: '#7a4d2a', text: '#fff', family: 'Dó maior',
     chord: 'Dó maior', chordSym: 'C/G', notes: ['G4', 'C5', 'E5'], notesPt: ['Sol', 'Dó', 'Mi'], bass: 'Sol',
-    role: 'pé em Sol · flutuando', kid: 'Parece o Vermelho, mas fica flutuando, esperando.' },
+    role: 'pé em Sol · flutuando', kid: 'Fica flutuando no ar, esperando alguma coisa.' },
 ];
 
 // Cor anterior mais parecida (mesma regra do app: notas em comum, mesmo pé, altura próxima).
@@ -89,7 +89,7 @@ function keyboardSVG(color, opts = {}) {
       s += `<rect x="${x}" y="0" width="${kw}" height="${kh}" rx="2" fill="#fff" stroke="${stroke}" stroke-width="1"/>`;
       const midi = (oct0 + o + 1) * 12 + step;
       if (marked.has(midi)) s += dot(x + kw / 2, kh - 13, 7.5, marked.get(midi));
-      if (step === 0) s += `<text x="${x + kw / 2}" y="${kh - 30}" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="7" fill="#9a90ad">Dó${oct0 + o}</text>`;
+      if (step === 0) s += `<text x="${x + kw / 2}" y="${kh - 30}" text-anchor="middle" font-family="Fredoka, sans-serif" font-size="8.5" font-weight="600" fill="#6b6182">Dó${oct0 + o}</text>`;
     });
     Object.entries(BLACK_AFTER).forEach(([semi, wi]) => {
       const x = (o * 7 + wi) * kw + kw - bkw / 2;
