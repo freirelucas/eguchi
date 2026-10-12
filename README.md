@@ -153,6 +153,7 @@ Na primeira visita o app pergunta **"Quem vai jogar?"** — Criança ou Adulto. 
 - **Acertou**: confete, "+1 ⭐" e elogio. **Errou**: sem punição — mostra a cor certa e toca o som dela de novo.
 - **Cor nova**: depois de 5 seguidas, a cor nova é apresentada (a criança ouve o som dela antes), e vem um desafio de 3 sons. Passou: tela "COR NOVA!" e figurinha na **coleção de cores**.
 - **Fim da partida**: 1 a 3 estrelas pelo acerto e o próximo prêmio.
+- **Siga a sequência** 🔁 (estilo Genius / "Siga-me" do Pense Bem): as cores liberadas ficam num círculo; a sequência ganha um som por rodada e a criança repete. "💡 com luz" ou "👂 só som". Recorde salvo; não conta para liberar cor.
 - **Área dos adultos**: segurar o botão por 1,5 s (evita saída sem querer).
 
 As jogadas entram no mesmo histórico do treino Eguchi (`mode: 'train'`, com `kids: true`), então estatísticas, streak e exportação continuam funcionando para os pais. Sons de recompensa foram evitados de propósito: só se ouvem os acordes, para não poluir a memória auditiva.
