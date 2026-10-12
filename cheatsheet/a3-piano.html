@@ -2,46 +2,87 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Eguchi · A3 Piano</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="poster.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eguchi · Piano · as 9 cores · A3</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="kids-print.css">
+<style>
+  @page { size: A3 portrait; margin: 0; }
+  .no-print { max-width: 297mm; }
+  .page.a3 .page-head h1 { font-size: 40pt; }
+  .page.a3 .lead { font-size: 13pt; max-width: 240mm; }
+  .sec { font-size: 16pt; font-weight: 700; margin: 6mm 0 3mm; display: flex; align-items: baseline; gap: 4mm; }
+  .sec small { font-size: 10.5pt; font-weight: 500; color: var(--dim); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+  .blk { border: 2px solid var(--line); border-radius: 6mm; overflow: hidden; display: flex; flex-direction: column; }
+  .blk .hd { padding: 4mm 4mm 3.5mm; display: grid; grid-template-columns: auto 1fr; column-gap: 3mm; align-items: center; }
+  .blk .hd .e { font-size: 30pt; line-height: 1; grid-row: span 2; }
+  .blk .hd .n { font-size: 16pt; font-weight: 700; line-height: 1; white-space: nowrap; }
+  .blk .hd .c { font-size: 9.5pt; font-weight: 600; opacity: 0.9; margin-top: 1mm; white-space: nowrap; }
+  .blk .bd { padding: 4mm 4mm 5mm; display: flex; flex-direction: column; gap: 3mm; flex: 1; }
+  .blk .nt { font-size: 10.5pt; font-weight: 600; text-align: center; }
+  .blk .nt b { display: inline-block; min-width: 5mm; height: 5mm; line-height: 5mm; border-radius: 50%; font-size: 8pt; text-align: center; margin-right: 0.8mm; vertical-align: 1px; }
+  .blk .rl { font-size: 10.5pt; color: var(--dim); text-align: center; }
+  .blk .kd { font-size: 11.5pt; line-height: 1.3; text-align: center; margin-top: auto; }
+  .lv { position: absolute; }
+  .page.a3 { display: flex; flex-direction: column; }
+  .grid { flex: 1; }
+  .practice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin: 8mm 0 10mm; }
+  .practice .box { background: var(--cream); border-radius: 5mm; padding: 5mm; font-size: 11.5pt; line-height: 1.4; }
+  .practice h3 { font-size: 13pt; margin-bottom: 1.5mm; }
+  .practice ul { padding-left: 4.5mm; }
+</style>
 </head>
 <body>
 <div class="no-print">
-  <strong>Eguchi A3 retrato · Piano</strong> · pôster pedagógico colorido pra parede
-  <p>Ctrl+P → A3 <strong>retrato/portrait</strong> → Salvar como PDF. Marque "Background graphics / Cores e imagens de fundo".</p>
-  <button onclick="window.print()">Imprimir / Salvar PDF</button>
-  <a href="index.html">← Voltar ao índice</a>
+  <strong>Piano · as 9 cores do método Eguchi · A3 retrato colorido</strong> — mesmas cores, nomes e acordes do app e das cartinhas.<br>
+  Ctrl+P → tamanho <strong>A3</strong>, retrato, margens "nenhuma", com <strong>"gráficos de segundo plano"</strong> ligado.
+  <br><button onclick="window.print()">Imprimir / Salvar PDF</button><a href="index.html">← Voltar ao índice</a>
 </div>
 
-<div class="sheet" id="sheet">
-  <div class="poster-header">
-    <div class="left">
-      <div class="brand">eguchi<em>·</em></div>
-      <div class="kanji-sub">江口式</div>
-    </div>
-    <div class="right">
-      <div>9 voicings · 3 famílias</div>
-      <div class="inst" id="instrumentName">piano</div>
-      <div id="instrumentSub">Teclado · acorde simultâneo</div>
-    </div>
+<section class="page a3">
+  <div class="page-head">
+    <h1>Piano · as 9 cores <span class="brand">🦉🎹</span></h1>
+    <div class="tag"><span class="brand">eguchi·</span><br>mesmas cores do app e das cartinhas</div>
+  </div>
+  <p class="lead">Método Eguchi: Dó, Fá e Sol maior, cada um em 3 posições — cada posição é uma cor. Toque as teclas marcadas <strong>juntas</strong>; o número 1 é a nota mais grave, o <strong>pé</strong>, que é a pista para separar cores do mesmo acorde. Siga a ordem: uma cor nova a cada 2 semanas.</p>
+
+  <div class="sec">Na ordem de aprender <small>Sakakibara (2014) · comece pelo Vermelho, depois o Amarelo</small></div>
+  <div class="grid" id="gridMain"></div>
+
+  <div class="practice">
+    <div class="box"><h3>🖐️ Como tocar</h3><ul><li>Mão direita, dedos 1, 3 e 5 (polegar, médio, mindinho).</li><li>As três teclas ao mesmo tempo, sem pressa.</li><li>Deixe soar 2 segundos antes de perguntar a cor.</li></ul></div>
+    <div class="box"><h3>👂 Como treinar</h3><ul><li>Toque sem mostrar a mão; a criança diz a cor ou levanta a bandeira.</li><li>Errou? Toque de novo a certa e diga o nome.</li><li>Jogos de 2 a 3 minutos, até 5 vezes por dia.</li></ul></div>
+    <div class="box"><h3>🎯 Cor nova</h3><ul><li>Só depois de 2 semanas e 100% nas antigas.</li><li>Toque a nova várias vezes, alternando com a que "parece" (no quadro).</li><li>Toque só o pé das duas; depois misture com todas.</li></ul></div>
   </div>
 
-  <div class="epigraph">
-    <strong>Treine distinguir AS TRÊS cores dentro de uma família ANTES de avançar pra próxima.</strong> A nota mais grave é a chave perceptual — o cérebro pré-6-anos aprende a "ouvir esse pé" antes da harmonia inteira (Sakakibara, 2014).
-  </div>
+  <div class="foot"><span>Método Eguchi (1991) · Sakakibara (2014), <em>Psychology of Music</em></span><span>freirelucas.github.io/eguchi · A3 piano</span></div>
+</section>
 
-  <noscript><span class="ns-warning">⚠ JavaScript desabilitado — esta página precisa de JS pra renderizar os voicings.</span></noscript>
-  <div id="familiesWrap"><div class="loading-placeholder">carregando 9 voicings · piano…</div></div>
-
-  <div class="poster-footer">
-    <div class="citation">Eguchi M. (1991) <em>Shin-zettai onkan program</em> · Sakakibara A. (2014) <em>Psychology of Music</em> 42(1):86-111 — n=24 crianças, 22 adquiriram AP em 2-4 anos</div>
-    <div class="right">freirelucas.github.io/eguchi · <span id="posterFooterRight">A3 retrato · piano</span></div>
-  </div>
-</div>
-
-<script src="lib.js"></script>
-<script src="poster.js"></script>
-<script>buildPoster('piano');</script>
+<script src="colors.js"></script>
+<script>
+(function () {
+  const { COLORS, keyboardSVG, needsOutline, looksLike } = window.Eguchi;
+  const block = c => {
+    const d = document.createElement('div');
+    d.className = 'blk';
+    const dot = i => `<b style="background:${c.hex};color:${c.text};${needsOutline(c) ? 'box-shadow:inset 0 0 0 1px #2b2240;' : ''}">${i}</b>`;
+    d.innerHTML = `
+      <div class="hd" style="background:${c.hex};color:${c.text};${needsOutline(c) ? 'border-bottom:2px solid var(--line);' : ''}">
+        <div class="e">${c.emoji}</div>
+        <div class="n">${c.level}. ${c.name}</div>
+        <div class="c">${c.chord} · ${c.chordSym} · ${c.kanji}</div>
+      </div>
+      <div class="bd">
+        ${keyboardSVG(c)}
+        <div class="nt">${c.notesPt.map((n, i) => dot(i + 1) + n).join(' ')}</div>
+        <div class="rl">${c.role}${looksLike(c) ? ` · parece ${looksLike(c).emoji} ${looksLike(c).name}` : ''}</div>
+        <div class="kd">${c.kid}</div>
+      </div>`;
+    return d;
+  };
+  COLORS.forEach(c => document.getElementById('gridMain').appendChild(block(c)));
+})();
+</script>
 </body>
 </html>

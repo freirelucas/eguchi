@@ -21,14 +21,27 @@ Validado empiricamente em **22 de 24 crianças de 2-6 anos** (Sakakibara, 2014):
 
 App reflete esse protocolo: default de 25 trials/sessão, tracker "Sessões hoje: N/5" no menu, recomendação contextual baseada na hora do dia. Pra adultos, critério bayesiano equivalente (P(p&gt;85%) &gt; 95% + RT &lt; 2s, ref. Wong et al., 2025).
 
-## Mapeamento Eguchi original vs. esta implementação
+## As 9 cores (iguais ao método original)
 
-O método original usa **9 voicings de Dó/Fá/Sol maior** (apenas teclas brancas), depois introduz "tecla preta":
-- Vermelho C-E-G · Laranja E-G-C · Marrom G-C-E (Dó maior em 3 inversões)
-- Roxo F-A-C · Amarelo C-F-A · Preto A-C-F (Fá maior em 3 inversões)
-- Rosa G-B-D · Azul B-D-G · Verde D-G-B (Sol maior em 3 inversões)
+O app, as cartinhas, as bandeiras e todos os pôsteres usam o conjunto original de Eguchi: **Dó, Fá e Sol maior, cada um em 3 posições** (só teclas brancas). Cada posição é uma cor; a nota mais grave ("o pé") é a pista que separa cores do mesmo acorde. Ordem de introdução de Sakakibara (2014):
 
-**Esta implementação diverge**: usa 8 acordes distintos (I, V, IV, ii, iii, vi, ♭VII, V7 de Dó maior) pra dar vocabulário harmônico mais útil em contexto não-pedagógico. Pra seguir Sakakibara estritamente com crianças, busque o material original do Ichionkai.
+| # | Cor | Acorde | Notas (de baixo para cima) | Pé |
+|---|-----|--------|----------------------------|----|
+| 1 | Vermelho 赤 | Dó maior (C) | Dó4 Mi4 Sol4 | Dó |
+| 2 | Amarelo 黄 | Fá maior (F/C) | Dó5 Fá5 Lá5 | Dó |
+| 3 | Azul 青 | Sol maior (G/B) | Si4 Ré5 Sol5 | Si |
+| 4 | Preto 黒 | Fá maior (F/A) | Lá4 Dó5 Fá5 | Lá |
+| 5 | Verde 緑 | Sol maior (G/D) | Ré5 Sol5 Si5 | Ré |
+| 6 | Laranja 橙 | Dó maior (C/E) | Mi4 Sol4 Dó5 | Mi |
+| 7 | Roxo 紫 | Fá maior (F) | Fá4 Lá4 Dó5 | Fá |
+| 8 | Rosa 桃 | Sol maior (G) | Sol4 Si4 Ré5 | Sol |
+| 9 | Marrom 茶 | Dó maior (C/G) | Sol4 Dó5 Mi5 | Sol |
+
+- **Ritmo fiel (padrão):** cada cor nova só chega depois de 14 dias na anterior e do desafio sem erro (Ajustes → Ritmo de novas cores; "acelerado" ignora os dias).
+- **Sem inversões aleatórias:** no método, inversão é outra cor; a opção de variação só muda a oitava.
+- **Depois das 9:** o método acrescenta 5 acordes de tecla preta e depois notas isoladas. A sequência exata não está em fonte aberta, então o app para nas 9.
+- **Coerência garantida:** `node cheatsheet/check-colors.js` falha se app, `cheatsheet/colors.js` e `cheatsheet/lib.js` divergirem.
+- **Migração:** quem usava a versão antiga (12 cores com outros acordes) recomeça na fase 1; o histórico antigo fica em `archiveV2` e sai no Exportar JSON.
 
 ## Estrutura do repositório
 
@@ -40,9 +53,14 @@ O método original usa **9 voicings de Dó/Fá/Sol maior** (apenas teclas branca
 ├── icon-*.png              Ícones PWA
 ├── cheatsheet/             Material impresso para prática em instrumento
 │   ├── index.html          Landing
-│   ├── lib.js              SVG generators + 9 voicings autênticas Eguchi
+│   ├── colors.js           Fonte única das 9 cores Eguchi para o impresso (+ teclado SVG)
+│   ├── check-colors.js     Confere app × colors.js × lib.js: node cheatsheet/check-colors.js
+│   ├── kids-print.css      Estilo impresso no visual do Modo Criança
+│   ├── handout-cartas-bandeiras.html  A4 · 9 cartinhas + 6 de ação + verso + 9 bandeiras + guia de jogos
+│   ├── a3-piano.html       A3 retrato · piano · as 9 cores
+│   ├── a4-piano-bw.html    A4 retrato · piano · 9 cores · P&B
+│   ├── lib.js              SVG generators + textos das 9 voicings (violão, trompete, flauta, mestre)
 │   ├── a4-bw.html          A4 paisagem · 9 voicings × 4 instrumentos · P&B
-│   ├── a3-piano.html       A3 retrato · piano · colorido
 │   ├── a3-violao.html      A3 retrato · violão
 │   ├── a3-trompete.html    A3 retrato · trompete em C
 │   └── a3-gaita.html       A3 retrato · gaita C diatônica
@@ -69,7 +87,7 @@ O canvas de design fica acessível em `/<nome-do-repo>/design/`.
 
 1. Abrir a URL do Pages no Chrome (Android) ou Safari (iOS)
 2. Menu → **Adicionar à tela inicial**
-3. Vai aparecer como app com ícone das 8 cores
+3. Vai aparecer como app com ícone colorido
 4. Funciona offline depois disso
 
 ## Atualizações
@@ -99,15 +117,15 @@ df = pd.read_csv('eguchi-lab-YYYY-MM-DD.csv', parse_dates=['ts'])
 # Colunas:
 # ts            timestamp ISO
 # mode          'train', 'baseline', ou 'probe'
-# chordIdx      0-7 (índice na sequência Eguchi)
-# chordName     'Vermelho', 'Branco', etc.
+# chordIdx      0-8 (índice na sequência Eguchi)
+# chordName     'Vermelho', 'Amarelo', etc.
 # chosenIdx     resposta dada
 # chosenName    nome da cor escolhida
 # correct       0 ou 1
 # rtMs          tempo de resposta em milissegundos
 # level         nível desbloqueado no momento do teste
 # instrument    'piano', 'sine', 'organ', 'strings', 'guitar'
-# variation     'root', 'inv1', 'inv2', 'oct-1', 'oct+1'
+# variation     'root', 'oct-1', 'oct+1'
 ```
 
 JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcool, mood, notas).
@@ -116,7 +134,7 @@ JSON exportado tem estrutura completa incluindo `dailyLogs` (sono, café, álcoo
 
 1. **Primeira visita** → onboarding de 5 telas (Welcome → Goal → Calibrate → Colors → Baseline). Termina forçando baseline (ou pular).
 2. **Visitas seguintes** → menu com card de **recomendação "agora"** calculado do estado: "comece pela baseline", "treine sua sessão de hoje", "próxima cor está pronta", "faz N dias — sessão curta?", etc.
-3. **Currículo** → tela com mapa das 8 cores e status (bloqueada / em treino / aprendendo / dominada). Tap em qualquer cor abre lesson card.
+3. **Currículo** → tela com mapa das 9 cores e status (bloqueada / em treino / aprendendo / dominada). Tap em qualquer cor abre lesson card.
 4. **Desbloqueio** → quando uma cor nova destrava, abre lesson card cheia: cor + kanji + função tonal + como soa + por que essa cor + mnemônico + exemplo + play button.
 
 ## Modo criança (6 a 12 anos)
@@ -125,19 +143,25 @@ Na primeira visita o app pergunta **"Quem vai jogar?"** — Criança ou Adulto. 
 
 - **Tema claro e colorido**, fonte arredondada, botões grandes e uma mascote (Lumi, a corujinha 🦉).
 - **Partidas curtas de 10 sons** (~2 min) — combina com as 5 sessões curtas por dia do protocolo Sakakibara. A "missão de hoje" mostra 5 notinhas que viram ⭐.
-- **Objetivo sempre visível**: "Acerte 5 seguidas para ganhar o 🌳 Verde", com 5 estrelas que vão acendendo.
-- **Cada cor tem um emoji** (🍎 Vermelho, ☁️ Branco, 🌻 Amarelo, 🌳 Verde, 🌙 Preto, 🍇 Roxo, 🌊 Azul, 🍫 Marrom…) e uma frase simples sobre como o som "se sente".
+- **Cada fase começa com a apresentação**: antes de cada partida, a Lumi toca todas as cores da fase, uma por vez, com a bandeira acendendo; a mais nova toca por último. Botão ⚖️ compara a cor nova com a já aprendida mais parecida (A-B-A-B).
+- **Fase 1 é só o Vermelho**: a criança conhece o som de casa; passou, chega o Amarelo.
+- **Treino de diferença**: nas 6 primeiras rodadas depois de uma cor nova, só aparecem dois botões — a nova e a mais parecida.
+- **Pista do pé** 💡: toca só a nota mais grave e depois o acorde.
+- **Depois de errar**: botões para ouvir "o que você escolheu" × "o que era", com a dica de como distinguir; a criança segue quando quiser.
+- **Objetivo sempre visível**: "Acerte 5 seguidas para ganhar o 🌊 Azul", ou, no ritmo fiel, quantos dias faltam para a próxima cor.
+- **Cada cor tem um emoji** (🍎 Vermelho, 🌻 Amarelo, 🌊 Azul, 🌙 Preto, 🌳 Verde, 🍊 Laranja, 🍇 Roxo, 🌸 Rosa, 🍫 Marrom) e uma frase que ajuda a distinguir.
 - **Acertou**: confete, "+1 ⭐" e elogio. **Errou**: sem punição — mostra a cor certa e toca o som dela de novo.
 - **Cor nova**: depois de 5 seguidas, a cor nova é apresentada (a criança ouve o som dela antes), e vem um desafio de 3 sons. Passou: tela "COR NOVA!" e figurinha na **coleção de cores**.
 - **Fim da partida**: 1 a 3 estrelas pelo acerto e o próximo prêmio.
+- **Siga a sequência** 🔁 (estilo Genius / "Siga-me" do Pense Bem): as cores liberadas ficam num círculo; a sequência ganha um som por rodada e a criança repete. "💡 com luz" ou "👂 só som". Recorde salvo; não conta para liberar cor.
 - **Área dos adultos**: segurar o botão por 1,5 s (evita saída sem querer).
 
 As jogadas entram no mesmo histórico do treino Eguchi (`mode: 'train'`, com `kids: true`), então estatísticas, streak e exportação continuam funcionando para os pais. Sons de recompensa foram evitados de propósito: só se ouvem os acordes, para não poluir a memória auditiva.
 
 ## Modos de treino
 
-- **Treino livre** — todas as 8 cores desbloqueadas. Prática direta, sem gating Eguchi. Trials salvos com `mode: 'free'`.
-- **Treino Eguchi** — progressão clássica: cor nova só desbloqueia quando P(p>85%|dados) > 95% em 50+ trials e ≥7 dias no nível. Modo canônico do método.
+- **Treino livre** — todas as 9 cores desbloqueadas. Prática direta, sem gating Eguchi. Trials salvos com `mode: 'free'`.
+- **Treino Eguchi** — progressão clássica: 5 acertos seguidos abrem um desafio de 3 sons; passou, chega a próxima cor. No ritmo fiel (padrão), só depois de 14 dias na cor atual. Cartão da cor nova traz "como distinguir" e ⚖️ comparar com a cor mais parecida.
 - **Modo progressão** — 2-4 acordes em sequência. Identifique cada um em ordem. Testa memória de curto prazo + reconhecimento.
 - **Baseline** — 50 trials cegos, sem feedback. Ponto de partida.
 - **Probe** — 10 trials com variações inéditas, sem feedback. Mede generalização.
@@ -160,21 +184,6 @@ As jogadas entram no mesmo histórico do treino Eguchi (`mode: 'train'`, com `ki
 - Fontes: Fraunces (serif) + JetBrains Mono via Google Fonts CDN
 
 **Primeira carga:** ~500KB extras (Tone.js + samples). Depois fica 100% offline.
-
-## Sequência das cores (método Eguchi)
-
-Mapeamento original: Eguchi (1991), *Shin-zettai onkan program*.
-
-| # | Cor | Kanji | Acorde |
-|---|-----|-------|--------|
-| 1 | Vermelho | 赤 | Dó Maior |
-| 2 | Branco   | 白 | Sol Maior |
-| 3 | Amarelo  | 黄 | Fá Maior |
-| 4 | Verde    | 緑 | Ré menor |
-| 5 | Preto    | 黒 | Mi menor |
-| 6 | Roxo     | 紫 | Lá menor |
-| 7 | Azul     | 青 | Si♭ Maior |
-| 8 | Marrom   | 茶 | Sol 7 |
 
 ## Fundamentação científica
 

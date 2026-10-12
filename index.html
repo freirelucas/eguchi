@@ -1178,7 +1178,7 @@
   .kid .k-row > * { flex: 1; }
   .kid .k-dots { display: flex; gap: 8px; justify-content: center; font-size: 26px; }
   .kid .k-dots .off { opacity: 0.25; filter: grayscale(1); }
-  .kid .k-album { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .kid .k-album { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .kid .k-sticker {
     aspect-ratio: 1; border-radius: 16px; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 2px; border: 0; cursor: pointer;
@@ -1229,6 +1229,38 @@
   .kid .k-choice.wrong { animation: kShake 0.4s ease; }
   .kid .k-choice.reveal { animation: kPulse 0.6s ease-in-out 3; outline: 5px solid var(--k-star); outline-offset: 2px; }
   .kid .k-choice.newbie { outline: 4px dashed var(--k-star); outline-offset: 2px; }
+
+  .kid .k-choice.lit { transform: translateY(-8px) scale(1.06); outline: 5px solid var(--k-star); outline-offset: 2px; }
+  .kid .k-choice.tag-new::after { content: 'NOVA'; position: absolute; top: -8px; right: -6px; background: var(--k-pri); color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 999px; }
+  .kid .k-choice { position: relative; transition: transform 0.2s; }
+  .kid .k-compare { background: var(--k-card); border: 2px dashed var(--k-star); border-radius: 18px; padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kid .k-compare .k-cmp { border: 0; border-radius: 14px; padding: 10px 6px; font-family: inherit; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: inset 0 -4px 0 rgba(0,0,0,0.18); }
+  .kid .k-compare .k-cmp small { display: block; font-weight: 500; font-size: 12px; opacity: 0.85; }
+  .kid .k-compare .k-next { grid-column: span 2; }
+  .kid .k-compare p { grid-column: span 2; text-align: center; font-size: 14px; color: var(--k-dim); }
+  #kidHintBtn { align-self: center; }
+
+  /* --- siga a sequência (estilo Genius / Pense Bem) --- */
+  .kid .k-ring { position: relative; width: min(340px, 88vw); aspect-ratio: 1; align-self: center; margin: 4px 0; }
+  .kid .k-ring::before { content: ''; position: absolute; inset: 10%; border-radius: 50%; border: 3px dashed var(--k-line); }
+  .kid .k-pad-btn {
+    position: absolute; width: 23%; aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer;
+    transform: translate(-50%, -50%); font-family: inherit; font-size: 11px; font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+    box-shadow: inset 0 -5px 0 rgba(0,0,0,0.2), 0 3px 0 rgba(0,0,0,0.08); transition: transform 0.12s, filter 0.12s;
+    filter: saturate(0.75) brightness(0.92);
+  }
+  .kid .k-pad-btn .e { font-size: 26px; line-height: 1; }
+  .kid .k-pad-btn.on { transform: translate(-50%, -50%) scale(1.18); filter: none; box-shadow: 0 0 0 6px var(--k-star), 0 0 24px var(--k-star); }
+  .kid .k-pad-btn.dark .e, .kid .k-pad-btn.dark span { visibility: hidden; }
+  .kid .k-pad-btn.miss { box-shadow: 0 0 0 6px var(--k-pri-d); }
+  .kid .k-ring-center {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 34%; aspect-ratio: 1;
+    border-radius: 50%; border: 0; background: var(--k-pri); color: #fff; font-family: inherit; font-size: 34px; font-weight: 700;
+    box-shadow: 0 6px 0 var(--k-pri-d); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1;
+  }
+  .kid .k-ring-center small { font-size: 13px; font-weight: 600; margin-top: 4px; }
+  .kid .k-ring-center:disabled { background: var(--k-card); color: var(--k-ink); box-shadow: 0 6px 0 var(--k-line); cursor: default; }
 
   /* --- end + new color --- */
   .kid .k-bigstars { font-size: 56px; text-align: center; letter-spacing: 6px; }
@@ -1315,6 +1347,7 @@
       <div class="k-bubble" id="kidHello">Oi! Eu sou a Lumi. Vamos descobrir as cores dos sons?</div>
     </div>
     <button class="k-btn k-btn-big" onclick="startKidGame()">▶ JOGAR</button>
+    <button class="k-btn k-btn-soft" onclick="openKidSimon()">🔁 Siga a sequência <span style="font-weight:500;font-size:14px;">· recorde <span id="kidSimonBestHome">0</span></span></button>
     <div class="k-card">
       <div class="k-card-title">🎯 Missão de hoje: 5 jogos curtinhos</div>
       <div class="k-dots" id="kidToday"></div>
@@ -1341,7 +1374,40 @@
     <div class="k-mission" id="kidMission"></div>
     <button class="k-speaker" id="kidSpeaker" onclick="kidReplay()" aria-label="Ouvir de novo">🔊</button>
     <div class="k-say" id="kidSay">Escute e toque na cor!</div>
+    <div class="k-compare" id="kidCompare" style="display:none;"></div>
     <div class="k-choices" id="kidChoices"></div>
+    <button class="k-link" id="kidHintBtn" onclick="kidHint()">💡 Pista: ouvir só a nota de baixo</button>
+  </div>
+</div>
+
+<div class="screen kid" id="kidIntro">
+  <div class="k-pad">
+    <div class="k-top">
+      <span class="k-chip" id="kidIntroPhase">Fase 1</span>
+      <button class="k-chip k-chip-btn" onclick="kidIntroSkip()">Pular ⏭</button>
+    </div>
+    <h2 class="k-title k-center" id="kidIntroTitle">Aquecimento</h2>
+    <p class="k-sub k-center" id="kidIntroSub">Escute cada cor. Toque para ouvir de novo.</p>
+    <div class="k-choices" id="kidIntroTiles"></div>
+    <div class="k-say" id="kidIntroSay"></div>
+    <button class="k-btn k-btn-soft" id="kidIntroCompareBtn" onclick="kidIntroCompare()">⚖️ Comparar a cor nova</button>
+    <button class="k-btn k-btn-big" id="kidIntroGo" onclick="kidBeginGame()">▶ JOGAR</button>
+  </div>
+</div>
+
+<div class="screen kid" id="kidSimon">
+  <div class="k-pad" style="gap:12px;">
+    <div class="k-top">
+      <button class="k-chip k-chip-btn" onclick="kidSimonQuit()">🏠</button>
+      <span class="k-chip">🏆 recorde <span id="kidSimonBest">0</span></span>
+      <button class="k-chip k-chip-btn" id="kidSimonMode" onclick="kidSimonToggleMode()">💡 com luz</button>
+    </div>
+    <h2 class="k-title k-center">Siga a sequência</h2>
+    <p class="k-sub k-center" id="kidSimonSub">Escute a sequência de cores e repita na mesma ordem. A cada rodada entra mais um som!</p>
+    <div class="k-ring" id="kidSimonRing">
+      <button class="k-ring-center" id="kidSimonCenter" onclick="kidSimonStart()">▶<small>começar</small></button>
+    </div>
+    <div class="k-say" id="kidSimonSay"></div>
   </div>
 </div>
 
@@ -1450,10 +1516,10 @@
     <div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.3em;color:var(--text-mute);text-transform:uppercase;">Calibração · 02</div>
       <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;margin-top:10px;margin-bottom:4px;">
-        Oito acordes, <em style="color:var(--accent);font-style:italic;">oito cores.</em>
+        Nove acordes, <em style="color:var(--accent);font-style:italic;">nove cores.</em>
       </h2>
       <p style="font-family:'Fraunces',serif;font-size:13.5px;color:var(--text-dim);line-height:1.5;margin-bottom:18px;">
-        Vermelho é Dó maior — o "lar". Branco é Sol maior — o brilho que quer voltar. Marrom é Sol7 — a tensão que abre portas. Você não precisa decorar agora.
+        Dó, Fá e Sol maior, cada um em 3 posições: cada posição é uma cor. Vermelho é Dó maior com Dó embaixo; Laranja e Marrom são o mesmo Dó com outra nota no baixo. Uma cor por vez — não precisa decorar agora.
       </p>
       <div id="onbColorsGrid" class="onb-colors-grid"></div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-mute);margin-top:12px;letter-spacing:0.04em;">
@@ -1518,7 +1584,7 @@
   </div>
   <div class="screen-pad">
     <p style="font-family:'Fraunces',serif;font-size:13.5px;color:var(--text-dim);line-height:1.5;margin-bottom:18px;">
-      Mapa das 8 cores. Em modo Eguchi, você destrava gradualmente. Em modo livre, todas estão disponíveis — o status reflete sua precisão.
+      Mapa das 9 cores do método Eguchi, na ordem de Sakakibara. Em modo Eguchi, você destrava uma por vez. Em modo livre, todas estão disponíveis — o status reflete sua precisão.
     </p>
     <div id="curriculumList"></div>
   </div>
@@ -1552,7 +1618,7 @@
     </div>
 
     <div class="mini-stats">
-      <span class="mini-stat" id="menuLevel">nível 1/12</span>
+      <span class="mini-stat" id="menuLevel">nível 1/9</span>
       <span class="mini-stat" id="menuStreak">—</span>
       <span class="mini-stat" id="menuToday">hoje 0/5</span>
     </div>
@@ -1587,13 +1653,14 @@
         <small>desbloqueia cor a cor · 5 em sequência → desafio</small>
       </button>
       <button class="drawer-item" onclick="startFreeSession()"><span>Treino livre</span><small>todas as cores já liberadas</small></button>
-      <button class="drawer-item" onclick="goTo('progressionsCurriculum')"><span>Currículo · 20 progressões</span><small>pop · jazz · gospel · folk</small></button>
+      <button class="drawer-item" onclick="goTo('progressionsCurriculum')"><span>Currículo · 12 progressões</span><small>só com as 9 cores Eguchi</small></button>
       <button class="drawer-item" onclick="startProgressionSession()"><span>Sequência aleatória</span><small>2-4 acordes randômicos</small></button>
+      <button class="drawer-item" onclick="openKidSimon()"><span>Siga a sequência</span><small>estilo Genius · a sequência cresce a cada rodada</small></button>
     </div>
 
     <div class="drawer-section">
       <div class="drawer-label">Explorar</div>
-      <button class="drawer-item" onclick="goTo('curriculum')"><span>Currículo das cores</span><small>mapa das 8 cores</small></button>
+      <button class="drawer-item" onclick="goTo('curriculum')"><span>Currículo das cores</span><small>mapa das 9 cores</small></button>
       <button class="drawer-item" onclick="goTo('explore')"><span>Cada cor em detalhe</span><small>função, mnemônico, exemplo</small></button>
     </div>
 
@@ -1641,15 +1708,15 @@
   <div class="topbar">
     <button class="topbar-back" onclick="goTo('menu')">← Menu</button>
     <span class="topbar-title">currículo de progressões</span>
-    <span class="topbar-meta" id="progCurrMeta">0 / 20</span>
+    <span class="topbar-meta" id="progCurrMeta">0 / 12</span>
   </div>
   <div class="screen-pad">
     <p style="font-family:'Fraunces',serif;font-size:13.5px;color:var(--text-dim);line-height:1.5;margin-bottom:14px;">
-      Vinte progressões clássicas do pop, rock, jazz, gospel e folk — em <strong>Dó maior</strong>. Cada uma destravada após estabelecer a anterior (4+ sequências perfeitas em 5).
+      Doze progressões em <strong>Dó maior</strong> feitas só com as 9 cores Eguchi — inclusive as inversões, que mudam a linha do baixo. Cada uma destrava depois de estabelecer a anterior (4+ sequências perfeitas em 5).
     </p>
     <div id="progCurriculumList"></div>
     <div style="margin-top:14px;padding:12px;background:rgba(112,144,176,0.06);border-left:2px solid var(--accent-cool);border-radius:4px;font-family:'Fraunces',serif;font-size:11px;color:var(--text-dim);line-height:1.5;">
-      <strong style="color:var(--text);">Sobre o sistema cromático:</strong> após destravar as 8 cores Eguchi (níveis 1-8), o app abre <strong>4 cores cromáticas adicionais</strong> nos níveis 9-12 — Coral (D), Lilás (A), Limão (E), Âmbar (E♭) — alinhadas com o hue-wheel Newton/Boomwhackers (laranja, magenta, chartreuse, dourado). Pganssle/cim usa 5 cromáticas (inclui B♭); aqui ficamos com 4 porque B♭ já é Azul nas 8 originais. As 20 progressões deste currículo estão todas em Dó maior; <strong>#4</strong> usa Dm7→Dm; <strong>#17</strong> usa Bdim→G7.
+      <strong style="color:var(--text);">Por que só 9 cores:</strong> o app segue o conjunto original de Eguchi (Dó, Fá e Sol maior em 3 posições). Cada posição é uma cor, então progressões com Lá menor, Si♭ ou acordes com sétima ficam de fora até termos a sequência original de acordes de tecla preta.
     </div>
   </div>
 </div>
@@ -1868,6 +1935,17 @@
   </div>
   <div class="screen-pad">
     <div class="setting-row">
+      <span class="label">Ritmo de novas cores</span>
+      <div class="seg" id="paceSeg">
+        <button class="seg-btn" data-pace="fiel">fiel · 14 dias por cor</button>
+        <button class="seg-btn" data-pace="acelerado">acelerado</button>
+      </div>
+      <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
+        Fiel = Sakakibara (2014): cada cor fica pelo menos 2 semanas e só passa com acerto total no desafio. Acelerado = passa assim que dominar.
+      </p>
+    </div>
+
+    <div class="setting-row">
       <span class="label">Instrumento (timbre do treino)</span>
       <div class="seg" id="instrumentSeg">
         <button class="seg-btn" data-instr="piano">piano</button>
@@ -1886,10 +1964,9 @@
       <div class="seg" id="variationSeg">
         <button class="seg-btn" data-var="off">desligado</button>
         <button class="seg-btn" data-var="octave">só oitavas</button>
-        <button class="seg-btn" data-var="full">inversões + oitavas</button>
       </div>
       <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
-        Variações forçam abstração da altura — o aprendizado é mais robusto, mas mais lento.
+        No método Eguchi cada inversão é outra cor, então aqui só existe variação de oitava. Para o método fiel, deixe desligado.
       </p>
     </div>
 
@@ -1977,28 +2054,21 @@
     <h3>Duração total</h3>
     <p>Treino contínuo por <strong>no mínimo 2 anos</strong> antes de considerar AP consolidado. As 22 crianças do estudo Sakakibara levaram em média 2-4 anos pra dominar todas as cores.</p>
 
-    <h3>Extensão cromática (níveis 9-12 deste app)</h3>
-    <p>Após destravar as 8 cores Eguchi diatônicas, o app abre <strong>4 cores cromáticas adicionais</strong> — graus maiores fora do diatônico que aparecem com altíssima frequência em pop, rock, jazz e gospel:</p>
-    <ul>
-      <li><strong>Coral (D maior)</strong> — II grau Mixolídio, presente em modal rock e folk. Laranja vibrante (Newton ~60°).</li>
-      <li><strong>Lilás (A maior)</strong> — V/ii (dominante secundária de Dm), comum em jazz e baladas. Magenta-roxo (Newton ~270°).</li>
-      <li><strong>Limão (E maior)</strong> — V/vi (dominante secundária de Am), onipresente em pop emocional. Chartreuse (Newton ~80-120°).</li>
-      <li><strong>Âmbar (E♭ maior)</strong> — ♭III emprestado do paralelo menor, característico Beatles/soundtrack. Dourado (Newton ~50°).</li>
-    </ul>
-    <p>Isso completa <strong>12 dos 12 pitches cromáticos como raízes</strong>, cobrindo a grande maioria das progressões reais sem precisar transpor de tonalidade. Não é Eguchi original — é extensão pragmática pra adultos que tocam música ocidental. As 4 cores cromáticas seguem o <strong>hue-wheel Newton/Boomwhackers</strong> (alinhamento aproximado: D=60° laranja, E♭=50° dourado, E=120° verde-limão, A=270° magenta), saturadas pra ficar visualmente distintas das 8 diatônicas Eguchi-tradicionais. Referência open-source paralela: <a href="https://pganssle.github.io/cim/" target="_blank" style="color:var(--accent);">pganssle/cim</a> implementa o mesmo método com 5 cromáticas (inclui B♭).</p>
-
-    <h3>Conjunto original Eguchi (9 acordes "tecla branca")</h3>
-    <p>Eguchi começa com <strong>9 voicings de Dó/Fá/Sol maior</strong> (apenas teclas brancas do piano):</p>
-    <ul style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;">
-      <li>Vermelho C-E-G · Laranja E-G-C · Marrom G-C-E (Dó maior em 3 inversões)</li>
-      <li>Roxo F-A-C · Amarelo C-F-A · Preto A-C-F (Fá maior em 3 inversões)</li>
-      <li>Rosa G-B-D · Azul B-D-G · Verde D-G-B (Sol maior em 3 inversões)</li>
-    </ul>
-    <p>Depois do domínio das 9, introduzem-se "acordes tecla preta" (com sustenidos/bemóis). O foco do método é reconhecer <strong>voicings específicos</strong>, não funções harmônicas.</p>
-
-    <div class="caveat">
-      <strong>Esta implementação diverge do mapeamento original.</strong> Pra dar ao app um vocabulário harmônico mais útil pra contextos não-pedagógicos (e maior contraste perceptual entre cores), usamos 8 acordes distintos (I, V, IV, ii, iii, vi, ♭VII, V7 de Dó maior) em vez das 9 voicings originais. Pra crianças seguindo Sakakibara estritamente, o mapeamento original é mais fiel — esta é uma adaptação consciente.
-    </div>
+    <h3>As 9 cores deste app (iguais ao método original)</h3>
+    <p>O app usa o conjunto original de Eguchi: <strong>Dó, Fá e Sol maior, cada um em 3 posições</strong>, só teclas brancas. Cada posição é uma cor, porque o que se treina é o <em>voicing exato</em>, não a função harmônica. A ordem de introdução é a de Sakakibara (2014):</p>
+    <ol style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;">
+      <li>Vermelho · Dó-Mi-Sol (Dó maior, Dó no baixo)</li>
+      <li>Amarelo · Dó-Fá-Lá (Fá maior, Dó no baixo)</li>
+      <li>Azul · Si-Ré-Sol (Sol maior, Si no baixo)</li>
+      <li>Preto · Lá-Dó-Fá (Fá maior, Lá no baixo)</li>
+      <li>Verde · Ré-Sol-Si (Sol maior, Ré no baixo)</li>
+      <li>Laranja · Mi-Sol-Dó (Dó maior, Mi no baixo)</li>
+      <li>Roxo · Fá-Lá-Dó (Fá maior, Fá no baixo)</li>
+      <li>Rosa · Sol-Si-Ré (Sol maior, Sol no baixo)</li>
+      <li>Marrom · Sol-Dó-Mi (Dó maior, Sol no baixo)</li>
+    </ol>
+    <p>Depois das 9, o método acrescenta 5 acordes de tecla preta (sem inversões) e, por fim, notas isoladas. A sequência exata desses 5 não está publicada em fonte aberta, então o app para nas 9 por enquanto.</p>
+    <p><strong>Ritmo fiel:</strong> por padrão, cada cor nova só chega depois de 14 dias na cor anterior <em>e</em> de acertar o desafio sem erro (Ajustes → Ritmo de novas cores).</p>
 
     <h2 style="margin-top:24px;">Como este lab estende o método para uso adulto</h2>
 
@@ -2046,7 +2116,7 @@
 
     <h3>Referências</h3>
     <ul>
-      <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em> (新絶対音感プログラム). Ichionkai Music School, Japão. — Origem do método cromático com 9 voicings.</li>
+      <li><strong>Eguchi, M. (1991).</strong> <em>Shin-zettai onkan program</em> (新絶対音感プログラム). Ichionkai Music School, Japão. — Origem do método: 9 voicings de teclas brancas, uma cor cada.</li>
       <li><strong>Sakakibara, A. (2014).</strong> A longitudinal study of the process of acquiring absolute pitch: A practical report of training with the "chord identification method". <em>Psychology of Music</em>, 42(1), 86-111. — N=24 crianças (2-6 anos), 22/24 adquiriram AP em 2-4 anos com protocolo 5×/dia.</li>
       <li><strong>Sergeant, D. C., &amp; Roche, S. (1973).</strong> Perceptual shifts in the auditory information processing of young children. <em>Psychology of Music</em>, 1(2), 39-48. — Crianças de 3 anos reproduzem melodias na tonalidade absoluta; aos 5-6, perdem isso.</li>
       <li><strong>Wong, P. M., Lui, T. K. Y., et al. (2025).</strong> Learning fast and accurate absolute pitch judgment in adulthood. <em>Psychonomic Bulletin &amp; Review</em>. PMC12325523. — 12 músicos adultos, 8 semanas/21,4h; melhores atingiram &gt;90% em 12 notas com RT ~2s.</li>
@@ -2137,175 +2207,180 @@
 // CHORDS — Método Eguchi com explicações ricas
 // ============================================
 const CHORDS = [
+  // Método Eguchi original: 9 acordes de teclas brancas (Dó, Fá e Sol maior em 3 posições),
+  // na ordem de introdução de Sakakibara (2014). A cor identifica o VOICING exato,
+  // então inversões do mesmo acorde são cores diferentes — a nota mais grave ("o pé") é a pista.
   {
     id: 'red', name: 'Vermelho', kanji: '赤', kanjiReading: 'aka',
-    hex: '#c8332a', text: '#fff',
-    chord: 'Dó Maior', chordSym: 'C', notes: ['Dó', 'Mi', 'Sol'],
+    hex: '#c8332a', text: '#fff', family: 'C', bass: 'Dó',
+    chord: 'Dó maior', chordSym: 'C', notes: ['Dó', 'Mi', 'Sol'], pitches: ['C4', 'E4', 'G4'],
     freqs: [261.63, 329.63, 392.00],
     intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'Tônica (I grau) — o "lar" da tonalidade de Dó',
-    feel: 'Aberto, claro, neutro-luminoso. É o acorde da resolução, do repouso, do "chegamos". Em terapia musical, associado a equilíbrio e estabilidade emocional.',
-    whyColor: 'Vermelho (赤) é a cor mais elementar no léxico cromático japonês — a única que existe como adjetivo verdadeiro (akai). É a cor do sangue, do sol nascente, do primeiro. Coube ao acorde primário por excelência.',
-    example: 'Pachelbel — Canon (mais conhecido), Mozart — "Twinkle Twinkle" (tema)',
+    function: 'Dó maior em posição fundamental — tônica no baixo, o "lar" do sistema',
+    feel: 'Firme, claro, resolvido. Com a tônica embaixo, o ouvido reconhece "casa" na hora. É a primeira cor do método e a âncora de todas as outras.',
+    whyColor: 'Vermelho (赤, aka) é a cor mais elementar do japonês — uma das poucas que existem como adjetivo verdadeiro (akai). Cor do sol nascente: a primeira.',
+    hint: 'Pé em Dó grave. É o mais "pesado e resolvido" de todos.',
+    example: 'O acorde final de quase toda canção em Dó maior.',
     mnemonic: 'O sol vermelho nascendo. Quando ouvir, você está em casa.',
   },
   {
-    id: 'white', name: 'Branco', kanji: '白', kanjiReading: 'shiro',
-    hex: '#f0e8db', text: '#1a1614',
-    chord: 'Sol Maior', chordSym: 'G', notes: ['Sol', 'Si', 'Ré'],
-    freqs: [392.00, 493.88, 587.33],
-    intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'Dominante (V grau de Dó) — tensão dirigida ao lar',
-    feel: 'Brilhante, expansivo, levemente aéreo. Mais agudo que o Vermelho, com sensação de "levantar". Quer resolver de volta ao Vermelho — essa é toda a gramática da música tonal ocidental.',
-    whyColor: 'Branco (白) é luz, clareza, vazio luminoso. Em Eguchi, é o "Vermelho iluminado por cima" — mesmo modo maior, mas em altura mais brilhante. No xintoísmo, branco é a cor da pureza ritual.',
-    example: 'Lennon — "Imagine" (intro alterna G e Cmaj7), Beethoven — Ode à Alegria (tema)',
-    mnemonic: 'Luz branca pedindo para voltar ao sol vermelho.',
-  },
-  {
     id: 'yellow', name: 'Amarelo', kanji: '黄', kanjiReading: 'ki',
-    hex: '#e8b637', text: '#1a1614',
-    chord: 'Fá Maior', chordSym: 'F', notes: ['Fá', 'Lá', 'Dó'],
-    freqs: [349.23, 440.00, 523.25],
-    intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'Subdominante (IV grau de Dó) — contrapeso descendente',
-    feel: 'Cálido, redondo, terno, "para baixo". Menos tenso que o Sol. Tem qualidade de sustento, de chão. Em ladainhas e cantos religiosos, é o acorde do "amém".',
-    whyColor: 'Amarelo (黄) é a cor da terra fértil, do arroz maduro, do dourado quente. Em Eguchi, é o "lado terno" do Dó — não a tensão brilhante (Sol/Branco), mas o conforto (Fá/Amarelo).',
-    example: 'Beatles — "Let It Be" (intro: C-G-Am-F), "Stand by Me" (Bm-A-F#m-D, transposto)',
-    mnemonic: 'Amarelo trigo no fim de tarde — abraço descendente.',
-  },
-  {
-    id: 'green', name: 'Verde', kanji: '緑', kanjiReading: 'midori',
-    hex: '#3a7d44', text: '#fff',
-    chord: 'Ré menor', chordSym: 'Dm', notes: ['Ré', 'Fá', 'Lá'],
-    freqs: [293.66, 349.23, 440.00],
-    intervals: ['fundamental', 'terça menor', 'quinta justa'],
-    function: 'Subdominante menor (ii grau de Dó) — relativa de Fá',
-    feel: 'Sombrio sutil, "natural", introspectivo. É o primeiro acorde menor da série — abre o léxico emocional para a melancolia. Tem qualidade de pergunta, de algo não-resolvido.',
-    whyColor: 'Verde (緑) é a cor da folha, da floresta densa, da sombra orgânica. Em Eguchi, acordes menores recebem tons "de folhagem" — há luz, mas filtrada, atenuada. Midori em japonês cobre verde e azul-esverdeado (ao antigo era ambos).',
-    example: 'Albinoni — Adagio (em sol menor, parente próximo), "Mad World" (Em-G-D-A em Em, mas o caráter é parente)',
-    mnemonic: 'Floresta no fim da tarde — luz que não chega ao chão.',
-  },
-  {
-    id: 'black', name: 'Preto', kanji: '黒', kanjiReading: 'kuro',
-    hex: '#1f1a16', text: '#fff',
-    chord: 'Mi menor', chordSym: 'Em', notes: ['Mi', 'Sol', 'Si'],
-    freqs: [329.63, 392.00, 493.88],
-    intervals: ['fundamental', 'terça menor', 'quinta justa'],
-    function: 'Mediante menor (iii grau de Dó) — relativa de Sol',
-    feel: 'Profundo, contemplativo, mais grave em caráter que o Verde. Carrega tristeza sem desespero — é um menor "digno". É o acorde de muitas canções pensativas no violão (E menor é a primeira posição que se aprende).',
-    whyColor: 'Preto (黒) é densidade, profundidade, mistério contemplativo. No estético japonês, sumi-e (tinta preta) é o que sugere o invisível. Em Eguchi, o preto não é "trevas" — é interioridade.',
-    example: 'Bach — Toccata e Fuga em Ré menor (parente), Oasis — "Wonderwall" (Em7 é a base)',
-    mnemonic: 'Nanquim absorvendo luz — densidade que pensa.',
-  },
-  {
-    id: 'purple', name: 'Roxo', kanji: '紫', kanjiReading: 'murasaki',
-    hex: '#6a4878', text: '#fff',
-    chord: 'Lá menor', chordSym: 'Am', notes: ['Lá', 'Dó', 'Mi'],
-    freqs: [440.00, 523.25, 659.25],
-    intervals: ['fundamental', 'terça menor', 'quinta justa'],
-    function: 'Relativa menor de Dó (vi grau) — o "lado escuro" do mesmo lar',
-    feel: 'Nostálgico, agridoce, melancólico-elegante. Compartilha as notas com Vermelho mas inverte o afeto — é o Dó visto pela sombra. A trilha sonora da saudade no pop ocidental.',
-    whyColor: 'Roxo (紫) é murasaki — historicamente a cor da nobreza japonesa, reservada à corte imperial (a única autorizada a vestir murasaki escuro). Tem dignidade triste, distinção melancólica.',
-    example: 'Led Zeppelin — "Stairway to Heaven" (intro: Am-Am/G#-Am/G-D/F#), "House of the Rising Sun"',
-    mnemonic: 'Crepúsculo — vermelho que aceita escurecer.',
+    hex: '#e8c83a', text: '#1a1614', family: 'F', bass: 'Dó',
+    chord: 'Fá maior', chordSym: 'F/C', notes: ['Dó', 'Fá', 'Lá'], pitches: ['C5', 'F5', 'A5'],
+    freqs: [523.25, 698.46, 880.00],
+    intervals: ['quinta no baixo', 'fundamental', 'terça maior'],
+    function: 'Fá maior com Dó no baixo (2ª inversão) — o subdominante flutuando no agudo',
+    feel: 'Luminoso, alto, aberto. Bem mais agudo que o Vermelho, e não "pousa": parece suspenso no ar.',
+    whyColor: 'Amarelo (黄, ki) é o sol do meio-dia — claridade máxima, sem o peso do vermelho. Segunda cor do método: o contraste mais fácil com o Vermelho.',
+    hint: 'Comparado ao Vermelho: muito mais agudo e "aberto", não soa como casa.',
+    example: 'O "amém" das cadências de igreja (IV–I) em Dó.',
+    mnemonic: 'Sol a pino: luz alta que não desce.',
   },
   {
     id: 'blue', name: 'Azul', kanji: '青', kanjiReading: 'ao',
-    hex: '#3a5c8a', text: '#fff',
-    chord: 'Si♭ Maior', chordSym: 'B♭', notes: ['Si♭', 'Ré', 'Fá'],
-    freqs: [466.16, 587.33, 698.46],
+    hex: '#3a6a9a', text: '#fff', family: 'G', bass: 'Si',
+    chord: 'Sol maior', chordSym: 'G/B', notes: ['Si', 'Ré', 'Sol'], pitches: ['B4', 'D5', 'G5'],
+    freqs: [493.88, 587.33, 783.99],
+    intervals: ['terça no baixo', 'quinta justa', 'fundamental'],
+    function: 'Sol maior com Si no baixo (1ª inversão) — dominante suave, quer voltar ao Vermelho',
+    feel: 'Claro mas inquieto de leve: o Si embaixo "puxa" para o Dó. Tensão lateral, sutil.',
+    whyColor: 'Azul (青, ao) cobre o céu e o mar — vasto, aberto, um pouco distante.',
+    hint: 'Pé em Si: a nota de baixo parece querer subir meio tom até o Dó.',
+    example: 'A passagem Dó → Sol/Si → Dó, típica de baixo que desce e volta.',
+    mnemonic: 'Céu aberto pedindo para voltar para casa.',
+  },
+  {
+    id: 'black', name: 'Preto', kanji: '黒', kanjiReading: 'kuro',
+    hex: '#1a1614', text: '#ede4d0', family: 'F', bass: 'Lá',
+    chord: 'Fá maior', chordSym: 'F/A', notes: ['Lá', 'Dó', 'Fá'], pitches: ['A4', 'C5', 'F5'],
+    freqs: [440.00, 523.25, 698.46],
+    intervals: ['terça no baixo', 'quinta justa', 'fundamental'],
+    function: 'Fá maior com Lá no baixo (1ª inversão) — subdominante denso',
+    feel: 'Denso, pensativo, "fechado". Mesmo acorde do Amarelo, mas mais grave e com o Lá embaixo.',
+    whyColor: 'Preto (黒, kuro) é profundidade, a noite. No sumi-e, o preto sugere o invisível.',
+    hint: 'Mesmas notas do Amarelo, porém mais grave e mais "escuro".',
+    example: 'Linhas de baixo que descem Dó – Si – Lá.',
+    mnemonic: 'Nanquim absorvendo a luz.',
+  },
+  {
+    id: 'green', name: 'Verde', kanji: '緑', kanjiReading: 'midori',
+    hex: '#5a8a3a', text: '#fff', family: 'G', bass: 'Ré',
+    chord: 'Sol maior', chordSym: 'G/D', notes: ['Ré', 'Sol', 'Si'], pitches: ['D5', 'G5', 'B5'],
+    freqs: [587.33, 783.99, 987.77],
+    intervals: ['quinta no baixo', 'fundamental', 'terça maior'],
+    function: 'Sol maior com Ré no baixo (2ª inversão) — dominante no agudo, iminência',
+    feel: 'O mais agudo de todos. Brilhante, leve, "logo antes" de resolver.',
+    whyColor: 'Verde (緑, midori) é o broto novo, recém-aberto — palavra mais jovem que 青.',
+    hint: 'É o mais agudo do conjunto. Mesmo acorde do Azul, só que mais alto.',
+    example: 'Acordes de passagem no agudo do piano.',
+    mnemonic: 'Broto que acabou de abrir.',
+  },
+  {
+    id: 'orange', name: 'Laranja', kanji: '橙', kanjiReading: 'daidai',
+    hex: '#e88a33', text: '#1a1614', family: 'C', bass: 'Mi',
+    chord: 'Dó maior', chordSym: 'C/E', notes: ['Mi', 'Sol', 'Dó'], pitches: ['E4', 'G4', 'C5'],
+    freqs: [329.63, 392.00, 523.25],
+    intervals: ['terça no baixo', 'quinta justa', 'fundamental'],
+    function: 'Dó maior com Mi no baixo (1ª inversão) — a casa vista de um degrau acima',
+    feel: 'Parecido com o Vermelho, mas mais leve e aberto: não termina, segue em frente.',
+    whyColor: 'Laranja (橙, daidai) é a fruta que fica no pé de uma estação para outra — "geração após geração".',
+    hint: 'Mesmas notas do Vermelho, mas o pé é Mi: soa menos "final".',
+    example: 'Dó/Mi aparece no meio de frases, raramente no fim.',
+    mnemonic: 'Casa com a janela aberta.',
+  },
+  {
+    id: 'purple', name: 'Roxo', kanji: '紫', kanjiReading: 'murasaki',
+    hex: '#7a3d8a', text: '#fff', family: 'F', bass: 'Fá',
+    chord: 'Fá maior', chordSym: 'F', notes: ['Fá', 'Lá', 'Dó'], pitches: ['F4', 'A4', 'C5'],
+    freqs: [349.23, 440.00, 523.25],
     intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'Empréstimo modal — vem de Dó menor (♭VII grau)',
-    feel: 'Frio, distante, "outro lugar". É o primeiro acorde do app que não pertence à tonalidade pura de Dó maior — soa "estrangeiro", como se a música tivesse aberto uma janela para outra paisagem. Característico do rock e da MPB que flerta com o modo mixolídio.',
-    whyColor: 'Azul (青) é a cor do mar profundo, do céu noturno, do longe. No japonês antigo, ao cobria desde o verde da grama até o azul oceânico — a cor do indefinido distante. Eguchi escolheu para o acorde que "vem de fora".',
-    example: 'Beatles — "Hey Jude" (a transição "na-na-na" usa B♭), Jobim — "Wave" tem passagens em B♭',
-    mnemonic: 'Janela aberta para o mar — familiar mas vindo de longe.',
+    function: 'Fá maior em posição fundamental — o subdominante firme, "outra casa"',
+    feel: 'Firme e quente como o Vermelho, mas em outro lugar: um lar vizinho.',
+    whyColor: 'Roxo (紫, murasaki) era a cor reservada à corte imperial — nobreza, dignidade.',
+    hint: 'Firme como o Vermelho, mas com o pé em Fá: soa como "outra casa".',
+    example: 'O IV grau de Dó maior em canções folclóricas e hinos.',
+    mnemonic: 'O palácio vizinho.',
+  },
+  {
+    id: 'pink', name: 'Rosa', kanji: '桃', kanjiReading: 'momo',
+    hex: '#e89aaa', text: '#1a1614', family: 'G', bass: 'Sol',
+    chord: 'Sol maior', chordSym: 'G', notes: ['Sol', 'Si', 'Ré'], pitches: ['G4', 'B4', 'D5'],
+    freqs: [392.00, 493.88, 587.33],
+    intervals: ['fundamental', 'terça maior', 'quinta justa'],
+    function: 'Sol maior em posição fundamental — dominante direta, anúncio de volta para casa',
+    feel: 'Claro e expectante: soa como um anúncio, uma promessa de voltar ao Vermelho.',
+    whyColor: 'Rosa (桃, momo) é a flor do pessegueiro — primavera, promessa.',
+    hint: 'Firme como Vermelho e Roxo, mas pede para resolver: pé em Sol.',
+    example: 'O V grau antes do acorde final em quase toda música em Dó.',
+    mnemonic: 'Flor que anuncia a primavera.',
   },
   {
     id: 'brown', name: 'Marrom', kanji: '茶', kanjiReading: 'cha',
-    hex: '#6b4a30', text: '#fff',
-    chord: 'Sol 7', chordSym: 'G7', notes: ['Sol', 'Si', 'Ré', 'Fá'],
-    freqs: [392.00, 493.88, 587.33, 698.46],
-    intervals: ['fundamental', 'terça maior', 'quinta justa', 'sétima menor'],
-    function: 'Dominante com sétima (V7 de Dó) — tensão máxima',
-    feel: 'Inquieto, prometendo, "abre a porta". A sétima menor adicionada cria dissonância tonal direcional — o acorde literalmente <em>quer</em> ir para outro lugar. É o coração do blues, da soul, do jazz. Sem ele, a música tonal seria estática.',
-    whyColor: 'Marrom (茶) é literalmente "chá" — a cor da madeira, da terra molhada, do que está em transformação. Não é o vermelho puro nem o preto absoluto: é o estado intermediário, fértil, instável. Perfeito para o acorde que existe pra ir embora.',
-    example: 'Qualquer blues em Dó (estrutura I-IV-V7), Ray Charles — "Hit the Road Jack" tem G7 abrindo',
-    mnemonic: 'Tronco caído na floresta — ainda não é terra, mas vai ser.',
-  },
-  // ============================================
-  // EXTENSÃO CROMÁTICA (níveis 9-12 · destrava após Eguchi 8)
-  // Adiciona os 4 graus maiores cromáticos mais úteis em Dó:
-  // II (D), V/ii (A), V/vi (E), ♭III (E♭) — borrowed chords & secondary dominants.
-  // ============================================
-  {
-    id: 'coral', name: 'Coral', kanji: 'D', kanjiReading: 'ni',
-    hex: '#e88a33', text: '#1a1614',
-    chord: 'Ré Maior', chordSym: 'D', notes: ['Ré', 'Fá♯', 'Lá'],
-    freqs: [293.66, 369.99, 440.00],
-    intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'II maior (Mixolídio) — relativo brilhante, sem modulação',
-    feel: 'Ensolarado, mais "amplo" que o Vermelho. Surge sem modular pra Sol maior — característico de pop modal e folk-rock (Beatles, REM). Não é diatônico de Dó mas pousa naturalmente.',
-    whyColor: 'Laranja vibrante (~60° no hue-wheel Newton/Boomwhackers) — entre Vermelho da tônica e Amarelo da subdominante. Marca um pitch que está fora do diatônico mas adjacente perceptualmente.',
-    example: 'Beatles — "Eight Days a Week" (Mixolídio explícito), REM — "Losing My Religion" abertura',
-    mnemonic: 'Sol mais quente passando do meio-dia — quase laranja, ainda dourado.',
-  },
-  {
-    id: 'lilas', name: 'Lilás', kanji: 'A', kanjiReading: 'i',
-    hex: '#b045b8', text: '#fff',
-    chord: 'Lá Maior', chordSym: 'A', notes: ['Lá', 'Dó♯', 'Mi'],
-    freqs: [440.00, 554.37, 659.25],
-    intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'V/ii (dominante secundária pra Ré menor)',
-    feel: 'Lustroso, ligeiramente artificial — anuncia algo. Cria expectativa de resolução em Ré menor. Quase sempre passa antes do Verde, raramente fica.',
-    whyColor: 'Magenta-roxo vibrante (~270° no hue-wheel Newton) — mesma família cromática do Roxo (Lá menor), mais saturada. Marca o paralelo maior do vi grau.',
-    example: 'Beatles — "I Saw Her Standing There" usa A pra ir pra Dm em alguns pontos',
-    mnemonic: 'Lilás da primavera — abre o caminho pra o roxo profundo do outono.',
-  },
-  {
-    id: 'limao', name: 'Limão', kanji: 'E', kanjiReading: 'ho',
-    hex: '#a8c437', text: '#1a1614',
-    chord: 'Mi Maior', chordSym: 'E', notes: ['Mi', 'Sol♯', 'Si'],
-    freqs: [329.63, 415.30, 493.88],
-    intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: 'V/vi (dominante secundária pra Lá menor)',
-    feel: 'Brilhante, ascendente. Resolve quase invariavelmente em Lá menor (Roxo). É a "porta lateral" pro vi grau — onipresente em baladas folk e pop emocional.',
-    whyColor: 'Verde-limão / chartreuse (~80-120° no hue-wheel Newton) — transição entre Amarelo (Fá) e Verde (Ré menor) sem ser nenhum dos dois. A terça aguda (Sol♯) puxa o acorde pra cima.',
-    example: 'Beatles — "Something" (Bm-E7 modula), grande parte do pop com Am como repouso emocional usa E antes',
-    mnemonic: 'Folha nova ao sol — ainda amarela, já virando verde.',
-  },
-  {
-    id: 'ambar', name: 'Âmbar', kanji: 'E♭', kanjiReading: 'henho',
-    hex: '#d4a833', text: '#1a1614',
-    chord: 'Mi♭ Maior', chordSym: 'E♭', notes: ['Mi♭', 'Sol', 'Si♭'],
-    freqs: [311.13, 392.00, 466.16],
-    intervals: ['fundamental', 'terça maior', 'quinta justa'],
-    function: '♭III maior (emprestado do paralelo menor)',
-    feel: 'Quente, melancólico, contemplativo. Empresta peso emocional do Dó menor sem mudar de tonalidade. Mediante achatada — móvel rara e marcante.',
-    whyColor: 'Âmbar / dourado saturado (~50° no hue-wheel Newton) — fica entre Coral (D) e Amarelo (F), mais quente que ambos. Empréstimo modal do paralelo menor pinta-se em ouro escuro.',
-    example: 'Beatles — "Let It Be" tem E♭ no contexto bIII. Muito usado em soundtracks épicos.',
-    mnemonic: 'Pôr-do-sol queimando lento — ouro envelhecido, prestes a virar noite.',
+    hex: '#7a4d2a', text: '#fff', family: 'C', bass: 'Sol',
+    chord: 'Dó maior', chordSym: 'C/G', notes: ['Sol', 'Dó', 'Mi'], pitches: ['G4', 'C5', 'E5'],
+    freqs: [392.00, 523.25, 659.25],
+    intervals: ['quinta no baixo', 'fundamental', 'terça maior'],
+    function: 'Dó maior com Sol no baixo (2ª inversão) — a casa em suspenso',
+    feel: 'Mesmas notas do Vermelho, mas sem chão: fica no ar, esperando alguma coisa.',
+    whyColor: 'Marrom (茶, cha) é a cor do chá envelhecido — estética wabi, do transitório.',
+    hint: 'Família do Vermelho, mas com o pé em Sol: "flutua", não descansa.',
+    example: 'O 6/4 cadencial antes do último acorde nas músicas clássicas.',
+    mnemonic: 'Folha de chá esperando a água.',
   },
 ];
 
 // ============================================
 // VARIATIONS
 // ============================================
-// Each chord can be played in different inversions/octaves
+// No método Eguchi cada inversão é uma COR diferente (Vermelho, Laranja e Marrom
+// são o mesmo Dó maior). Por isso não há variação de inversão: só de oitava.
 function generateVariations(freqs) {
   const root = freqs;
-  const variations = [
+  return [
     { type: 'root', freqs: root },
     { type: 'oct-1', freqs: root.map(f => f / 2) },
     { type: 'oct+1', freqs: root.map(f => f * 2) },
   ];
-  // Inversions: rotate notes (lowest → top + octave)
-  if (root.length >= 3) {
-    variations.push({ type: 'inv1', freqs: [...root.slice(1), root[0] * 2] });
-    variations.push({ type: 'inv2', freqs: [...root.slice(2), root[0] * 2, root[1] * 2] });
-  }
-  return variations;
 }
+
+// ============================================
+// MÉTODO: ritmo de cores novas e ajudas de discriminação
+// ============================================
+function daysAtCurrentLevel() {
+  return (Date.now() - new Date(state.lastUnlockDate).getTime()) / 86400000;
+}
+// Fase 1 (Vermelho sozinho) é só apresentação; a partir dela vale o ritmo escolhido.
+function pacePass() {
+  if (state.levelUnlocked <= 1 || state.settings.pace === 'acelerado') return true;
+  return daysAtCurrentLevel() >= EGUCHI_DAYS_PER_COLOR;
+}
+function daysUntilNextColor() {
+  const d = Math.max(1, Math.ceil(EGUCHI_DAYS_PER_COLOR - daysAtCurrentLevel()));
+  return d === 1 ? '1 dia' : `${d} dias`;
+}
+const PITCH_CLASS = { 'Dó': 0, 'Ré': 2, 'Mi': 4, 'Fá': 5, 'Sol': 7, 'Lá': 9, 'Si': 11 };
+// Quão fácil é confundir duas cores: notas em comum, mesmo "pé" e altura parecida,
+// mais as trocas que a pessoa já fez entre elas no histórico.
+function confusability(a, b) {
+  const A = CHORDS[a], B = CHORDS[b];
+  const shared = A.notes.filter(n => B.notes.includes(n)).length;
+  const sameBass = PITCH_CLASS[A.bass] === PITCH_CLASS[B.bass] ? 2 : 0;
+  const mean = c => c.freqs.reduce((x, y) => x + y, 0) / c.freqs.length;
+  const near = Math.abs(Math.log2(mean(A) / mean(B))) < 0.25 ? 1 : 0;
+  const swaps = state.history.filter(h => h.chordIdx === a && h.chosenIdx === b || h.chordIdx === b && h.chosenIdx === a).length;
+  return shared * 2 + sameBass + near + Math.min(6, swaps);
+}
+// Cor já aprendida mais parecida com `idx` — o melhor par para treinar contraste.
+function contrastFor(idx) {
+  let best = null, score = -1;
+  for (let j = 0; j < state.levelUnlocked; j++) {
+    if (j === idx) continue;
+    const s = confusability(idx, j);
+    if (s > score || (s === score && j > best)) { best = j; score = s; }
+  }
+  return best;
+}
+function lowestFreq(idx) { return Math.min(...CHORDS[idx].freqs); }
 
 function pickVariation(chordIdx, varMode) {
   const chord = CHORDS[chordIdx];
@@ -2315,8 +2390,7 @@ function pickVariation(chordIdx, varMode) {
     const opts = all.filter(v => v.type === 'root' || v.type.startsWith('oct'));
     return opts[Math.floor(Math.random() * opts.length)];
   }
-  // full
-  return all[Math.floor(Math.random() * all.length)];
+  return all[0];
 }
 
 // Probe: more aggressive - random variation + different instrument
@@ -2355,7 +2429,12 @@ const DEFAULT_SETTINGS = {
   progressionLength: 3,       // 2 | 3 | 4
   dailySessionTarget: 5,      // Sakakibara: 5 sessions/day
   kidMode: 'off',             // 'on' abre o app no modo criança (6-12 anos)
+  pace: 'fiel',               // 'fiel' = ≥14 dias por cor (Sakakibara) | 'acelerado' = só desempenho
 };
+
+// Sakakibara (2014): cada cor nova fica ≥2 semanas E até 100% de acerto.
+const EGUCHI_DAYS_PER_COLOR = 14;
+const CHORD_SET = 'eguchi9';
 
 // ============================================
 // STATE
@@ -2414,16 +2493,40 @@ function loadState() {
       if (!parsed.unlockSeen) parsed.unlockSeen = [];
       // Start set is 3 colors (need ≥2 distinct to actually discriminate, and
       // the 3-chord unlock challenge requires 3). Migrate legacy 1-2 levels up.
-      if (!parsed.levelUnlocked || parsed.levelUnlocked < 3) parsed.levelUnlocked = 3;
+      if (!parsed.levelUnlocked || parsed.levelUnlocked < 1) parsed.levelUnlocked = 1;
+      // v3: o app passou a usar as 9 cores originais de Eguchi. Os índices de acorde
+      // do histórico antigo apontam para outros acordes, então o histórico antigo é
+      // ARQUIVADO (vai junto no Exportar JSON) e o treino recomeça na fase 1.
+      if (parsed.chordSet !== CHORD_SET) {
+        if (parsed.history.length || parsed.baseline || parsed.probes.length) {
+          parsed.archiveV2 = {
+            archivedAt: new Date().toISOString(),
+            note: 'Conjunto antigo de 12 acordes (C, G, F, Dm, Em, Am, Bb, G7, D, A, E, Eb)',
+            history: parsed.history, baseline: parsed.baseline, probes: parsed.probes,
+            progressions: parsed.progressions, progressionCurriculum: parsed.progressionCurriculum,
+            levelUnlocked: parsed.levelUnlocked,
+          };
+          parsed.migratedNotice = true;
+        }
+        parsed.history = []; parsed.baseline = null; parsed.probes = []; parsed.progressions = [];
+        parsed.progressionCurriculum = { unlocked: 1, established: [], results: {} };
+        parsed.levelUnlocked = 1;
+        parsed.lastUnlockDate = new Date().toISOString();
+        parsed.unlockSeen = [];
+        if (parsed.kids) parsed.kids.contrastLeft = 0;
+        parsed.chordSet = CHORD_SET;
+      }
       if (!parsed.progressionCurriculum) parsed.progressionCurriculum = { unlocked: 1, established: [], results: {} };
       if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
+      if (parsed.settings.variation === 'full') parsed.settings.variation = 'off';
       return parsed;
     }
   } catch (e) { console.warn('localStorage read failed', e); }
   return {
     version: 2,
-    levelUnlocked: 3,
+    levelUnlocked: 1,
+    chordSet: CHORD_SET,
     history: [],
     baseline: null,
     probes: [],
@@ -3135,7 +3238,7 @@ function newRound() {
   document.querySelectorAll('#colorGrid .color-btn').forEach(b => b.classList.remove('pulse-reveal'));
 
   if (sessionMode === 'baseline') {
-    const all = [0, 1, 2, 3, 4, 5, 6, 7];
+    const all = CHORDS.map((_, i) => i);
     const filtered = all.filter(i => i !== lastChordIdx);
     currentChordIdx = filtered[Math.floor(Math.random() * filtered.length)];
     currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
@@ -3329,8 +3432,12 @@ function handleAnswer(idx) {
     }
     // Trigger challenge when streak reached and there's a color to unlock
     if (currentStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
-      setTimeout(triggerChallenge, 1100);
-      return;
+      if (pacePass()) {
+        setTimeout(triggerChallenge, 1100);
+        return;
+      }
+      currentStreak = 0;
+      fb.innerHTML += `<small>Pronto para a próxima cor — o método pede ${EGUCHI_DAYS_PER_COLOR} dias por cor: faltam ${daysUntilNextColor()}.</small>`;
     }
   }
 
@@ -3569,32 +3676,23 @@ function startProgressionSession() {
 let progressionTotalRounds = 0;
 // ============================================
 // CHORD PROGRESSIONS CURRICULUM
-// 20 progressões clássicas (Shaun O'Reilly) mapeadas às nossas 8 cores.
-// CHORDS indexes: 0=Vermelho(C) 1=Branco(G) 2=Amarelo(F) 3=Verde(Dm) 4=Preto(Em)
-//                  5=Roxo(Am) 6=Azul(Bb) 7=Marrom(G7)
-// #4 substitui Dm7→Dm (sem 7ª no set). #17 substitui Bdim→G7 (dominante).
+// Progressões feitas só com as 9 cores Eguchi (Dó, Fá e Sol maior em 3 posições).
+// CHORDS: 0 Vermelho C · 1 Amarelo F/C · 2 Azul G/B · 3 Preto F/A · 4 Verde G/D
+//         5 Laranja C/E · 6 Roxo F · 7 Rosa G · 8 Marrom C/G
 // ============================================
 const PROGRESSIONS = [
-  { n: 1,  nashville: 'I-IV-V-I',         chordsInC: ['C','F','G','C'],     colorIdx: [0,2,1,0],   vibe: 'Folk, alegre, cantarolar' },
-  { n: 2,  nashville: 'I-vi-IV-V',         chordsInC: ['C','Am','F','G'],    colorIdx: [0,5,2,1],   vibe: 'Soft pop, romântico (50s doo-wop)' },
-  { n: 3,  nashville: 'I-V-vi-IV',         chordsInC: ['C','G','Am','F'],    colorIdx: [0,1,5,2],   vibe: 'Pop anthem (a "progressão dos millennials")' },
-  { n: 4,  nashville: 'ii-V-I',            chordsInC: ['Dm','G7','C'],       colorIdx: [3,7,0],     vibe: 'Turnaround jazz', note: 'Dm7→Dm (sem 7ª no nosso set)' },
-  { n: 5,  nashville: 'I-vi-ii-V',         chordsInC: ['C','Am','Dm','G'],   colorIdx: [0,5,3,1],   vibe: 'Old-school baladas, jazz pop' },
-  { n: 6,  nashville: 'I-iii-IV-V',        chordsInC: ['C','Em','F','G'],    colorIdx: [0,4,2,1],   vibe: 'Bright, animado' },
-  { n: 7,  nashville: 'I-IV-vi-V',         chordsInC: ['C','F','Am','G'],    colorIdx: [0,2,5,1],   vibe: 'Pop-rock moderno' },
-  { n: 8,  nashville: 'I-iii-vi-IV',       chordsInC: ['C','Em','Am','F'],   colorIdx: [0,4,5,2],   vibe: 'Sonhador, emocional' },
-  { n: 9,  nashville: 'I-IV-ii-V',         chordsInC: ['C','F','Dm','G'],    colorIdx: [0,2,3,1],   vibe: 'R&B com alma' },
-  { n: 10, nashville: 'vi-IV-I-V',         chordsInC: ['Am','F','C','G'],    colorIdx: [5,2,0,1],   vibe: 'Quente, paz · fingerstyle' },
-  { n: 11, nashville: 'I-♭VII-IV',         chordsInC: ['C','Bb','F'],        colorIdx: [0,6,2],     vibe: 'Gritty, blues sulista' },
-  { n: 12, nashville: 'I-V-vi-iii-IV',     chordsInC: ['C','G','Am','Em','F'], colorIdx: [0,1,5,4,2], vibe: 'Energético, "Canon" anthem' },
-  { n: 13, nashville: 'I-V-IV-I',          chordsInC: ['C','G','F','C'],     colorIdx: [0,1,2,0],   vibe: 'Rock & roll vintage' },
-  { n: 14, nashville: 'vi-I-vi-V',         chordsInC: ['Am','C','Am','G'],   colorIdx: [5,0,5,1],   vibe: 'Triste, reflexivo' },
-  { n: 15, nashville: 'I-vi-V-IV',         chordsInC: ['C','Am','G','F'],    colorIdx: [0,5,1,2],   vibe: 'Trilha épica, jornada' },
-  { n: 16, nashville: 'I-vi-V-IV',         chordsInC: ['C','Am','G','F'],    colorIdx: [0,5,1,2],   vibe: 'Gospel, balada esperançosa' },
-  { n: 17, nashville: 'I-vi-iii-vii°',     chordsInC: ['C','Am','Em','Bdim'], colorIdx: [0,5,4,7],  vibe: 'Cinematográfico, tensão', note: 'Bdim→G7 (mesma função dominante)' },
-  { n: 18, nashville: 'I-IV-♭VII-I',       chordsInC: ['C','F','Bb','C'],    colorIdx: [0,2,6,0],   vibe: 'Singer-songwriter, popular' },
-  { n: 19, nashville: 'I-IV-♭VII-I',       chordsInC: ['C','F','Bb','C'],    colorIdx: [0,2,6,0],   vibe: 'Folk irlandês, contação' },
-  { n: 20, nashville: 'V-IV-I',            chordsInC: ['G','F','C'],         colorIdx: [1,2,0],     vibe: 'Resolução final · loop' },
+  { n: 1,  nashville: 'V-I',            chordsInC: ['G','C'],              colorIdx: [7,0],       vibe: 'Resolução: o anúncio volta para casa' },
+  { n: 2,  nashville: 'IV-I',           chordsInC: ['F','C'],              colorIdx: [6,0],       vibe: 'Plagal, o "amém"' },
+  { n: 3,  nashville: 'I-IV⁶₄-I',       chordsInC: ['C','F/C','C'],        colorIdx: [0,1,0],     vibe: 'Bordão: baixo parado em Dó' },
+  { n: 4,  nashville: 'I-V⁶-I',         chordsInC: ['C','G/B','C'],        colorIdx: [0,2,0],     vibe: 'Vizinha: baixo desce meio tom e volta' },
+  { n: 5,  nashville: 'I-IV-V-I',       chordsInC: ['C','F','G','C'],      colorIdx: [0,6,7,0],   vibe: 'Cadência básica, folk e hinos' },
+  { n: 6,  nashville: 'I-IV⁶-V-I',      chordsInC: ['C','F/A','G','C'],    colorIdx: [0,3,7,0],   vibe: 'Cadência com baixo mais liso' },
+  { n: 7,  nashville: 'I⁶-IV-V-I',      chordsInC: ['C/E','F','G','C'],    colorIdx: [5,6,7,0],   vibe: 'Baixo subindo Mi-Fá-Sol-Dó' },
+  { n: 8,  nashville: 'I⁶₄-V-I',        chordsInC: ['C/G','G','C'],        colorIdx: [8,7,0],     vibe: 'Cadência clássica com 6/4' },
+  { n: 9,  nashville: 'I-V⁶-IV⁶-I⁶₄',   chordsInC: ['C','G/B','F/A','C/G'], colorIdx: [0,2,3,8],  vibe: 'Baixo descendo Dó-Si-Lá-Sol' },
+  { n: 10, nashville: 'I-V⁶₄-I⁶',       chordsInC: ['C','G/D','C/E'],      colorIdx: [0,4,5],     vibe: 'Baixo subindo Dó-Ré-Mi' },
+  { n: 11, nashville: 'I-IV-I⁶₄-V-I',   chordsInC: ['C','F','C/G','G','C'], colorIdx: [0,6,8,7,0], vibe: 'Final de peça clássica' },
+  { n: 12, nashville: 'I-IV-V-IV-I',    chordsInC: ['C','F','G','F','C'],  colorIdx: [0,6,7,6,0], vibe: 'Rock & roll, blues de três acordes' },
 ];
 
 let curriculumIdx = null; // null = random progression; integer = curriculum index (0-based)
@@ -3867,7 +3965,7 @@ function showSessionIntro(mode, onStart) {
   const modeLabels = { train: 'Treino Eguchi', free: 'Treino livre', progression: 'Modo progressão' };
   const subLabels = {
     train: 'Progressão clássica · desbloqueio gradual',
-    free: 'Todas as 8 cores · prática direta',
+    free: `Todas as ${CHORDS.length} cores · prática direta`,
     progression: `${state.settings.progressionLength} acordes em sequência`,
   };
   document.getElementById('introMode').textContent = modeLabels[mode] || 'Treino';
@@ -3878,7 +3976,7 @@ function showSessionIntro(mode, onStart) {
   document.getElementById('introTrials').textContent = trials;
   document.getElementById('introInstr').textContent = state.settings.instrument;
   document.getElementById('introVar').textContent = state.settings.variation === 'off' ? 'desligado'
-    : (state.settings.variation === 'octave' ? 'oitavas' : 'inversões+oitavas');
+    : 'oitavas';
   document.getElementById('introTonic').textContent = state.settings.refTonic === 'off' ? '—'
     : (state.settings.refTonic === 'C' ? 'Dó' : 'Lá');
   const btn = document.getElementById('introStartBtn');
@@ -4027,9 +4125,9 @@ const MILESTONE_DEFS = [
   { id: 'streak-7', label: 'Streak de 7 dias', test: (s) => calculateStreak() >= 7 },
   { id: 'first-session', label: 'Primeira sessão', test: (s) => s.totalSessions >= 1 },
   { id: 'unlock-2', label: 'Segunda cor desbloqueada', test: (s) => s.levelUnlocked >= 2 },
-  { id: 'unlock-eguchi', label: 'Diatônico completo (8 cores Eguchi)', test: (s) => s.levelUnlocked >= 8 },
-  { id: 'chromatic-1', label: 'Primeira cor cromática (D maior · Coral)', test: (s) => s.levelUnlocked >= 9 },
-  { id: 'unlock-all', label: 'Cromático completo (12 cores)', test: (s) => s.levelUnlocked >= 12 },
+  { id: 'unlock-family-c', label: 'Família do Dó completa (Vermelho, Laranja, Marrom)', test: (s) => s.levelUnlocked >= 9 },
+  { id: 'unlock-5', label: 'Metade do caminho (5 cores)', test: (s) => s.levelUnlocked >= 5 },
+  { id: 'unlock-eguchi', label: 'As 9 cores Eguchi', test: (s) => s.levelUnlocked >= 9 },
   { id: 'progression-1', label: 'Primeira progressão', test: (s) => s.progressionSessions >= 1 },
 ];
 
@@ -4139,6 +4237,9 @@ function showLessonCard(chordIdx, returnTo, fromUnlock) {
     <p>${c.feel}</p>
     <h3>Por que essa cor</h3>
     <p>${c.whyColor || ''}</p>
+    <h3>Como distinguir</h3>
+    <p>${c.hint}</p>
+    ${contrastFor(chordIdx) !== null ? `<p><button class="btn btn-ghost" onclick="playCompare(${chordIdx}, ${contrastFor(chordIdx)})">⚖️ Comparar com ${CHORDS[contrastFor(chordIdx)].name}</button></p><p style="font-size:12px;color:var(--text-mute);">${CHORDS[contrastFor(chordIdx)].name} é a cor já aprendida mais parecida. Ouça as duas alternadas e repare na nota mais grave.</p>` : ''}
     <h3>Mnemônico</h3>
     <p><em>${c.mnemonic || ''}</em></p>
     ${c.example ? `<h3>Exemplo</h3><p>${c.example}</p>` : ''}
@@ -4170,6 +4271,15 @@ function showLessonCard(chordIdx, returnTo, fromUnlock) {
     pb.classList.add('lesson-pulse');
     setTimeout(() => pb.classList.remove('lesson-pulse'), 6000);
   }
+}
+
+// Toca A, B, A com o nome de cada uma piscando na tela (comparação lado a lado).
+function playCompare(a, b) {
+  ensureAudioContext();
+  [a, b, a].forEach((idx, i) => setTimeout(() => {
+    playChord(CHORDS[idx].freqs, state.settings.instrument);
+    flashColor(CHORDS[idx].hex);
+  }, i * 1700));
 }
 
 function playLessonChord() {
@@ -4692,6 +4802,9 @@ function saveDailyLog() {
 // SETTINGS
 // ============================================
 function renderSettings() {
+  document.querySelectorAll('#paceSeg .seg-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.pace === state.settings.pace);
+  });
   document.querySelectorAll('#instrumentSeg .seg-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.instr === state.settings.instrument);
   });
@@ -4716,6 +4829,12 @@ function renderSettings() {
 }
 
 function bindSettings() {
+  document.querySelectorAll('#paceSeg .seg-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      state.settings.pace = b.dataset.pace;
+      saveState(); renderSettings();
+    });
+  });
   document.querySelectorAll('#instrumentSeg .seg-btn').forEach(b => {
     b.addEventListener('click', () => {
       state.settings.instrument = b.dataset.instr;
@@ -4918,19 +5037,17 @@ if ('serviceWorker' in navigator) {
 // ============================================
 const KID_ROUND_LENGTH = 10;
 const KID_INFO = {
-  red:    { emoji: '🍎', desc: 'É o som de casa: firme e feliz. As músicas adoram terminar nele!' },
-  white:  { emoji: '☁️', desc: 'Brilhante como nuvem no sol. Parece que quer voltar pra casa.' },
-  yellow: { emoji: '🌻', desc: 'Quentinho e gostoso, como um abraço.' },
-  green:  { emoji: '🌳', desc: 'Floresta misteriosa: um som pensativo.' },
-  black:  { emoji: '🌙', desc: 'Noite calma. Um som profundo e tranquilo.' },
-  purple: { emoji: '🍇', desc: 'Um pouquinho triste, como o fim da tarde.' },
-  blue:   { emoji: '🌊', desc: 'Parece que vem de longe, lá do mar.' },
-  brown:  { emoji: '🍫', desc: 'Inquieto! Ele quer ir para outro lugar.' },
-  coral:  { emoji: '🍊', desc: 'Alegre e ensolarado, cheiro de férias.' },
-  lilas:  { emoji: '🌸', desc: 'Brilhante, parece que vai anunciar algo.' },
-  limao:  { emoji: '🍋', desc: 'Azedinho e animado, subindo, subindo!' },
-  ambar:  { emoji: '🍯', desc: 'Dourado e doce, como mel.' },
+  red:    { emoji: '🍎', desc: 'O som de casa: firme, com o pé bem no chão.' },
+  yellow: { emoji: '🌻', desc: 'Lá no alto e brilhante, como o sol do meio-dia.' },
+  blue:   { emoji: '🌊', desc: 'Alto e calmo como o céu, mas quer voltar pra casa.' },
+  black:  { emoji: '🌙', desc: 'Mais grave e misterioso, como a noite.' },
+  green:  { emoji: '🌳', desc: 'O mais agudo de todos: um broto novinho.' },
+  orange: { emoji: '🍊', desc: 'Parece o Vermelho, mas começa um degrau acima.' },
+  purple: { emoji: '🍇', desc: 'Firme como o Vermelho, mas é outra casa.' },
+  pink:   { emoji: '🌸', desc: 'Anuncia que algo vai acontecer, como a primavera.' },
+  brown:  { emoji: '🍫', desc: 'Parece o Vermelho, mas fica flutuando, esperando.' },
 };
+const KID_CONTRAST_TRIALS = 6;   // primeiras rodadas com a cor nova: só ela × a mais parecida
 const KID_CHEERS = ['Isso!', 'Mandou bem!', 'Uau!', 'Ouvido de ouro!', 'Arrasou!', 'Perfeito!', 'Show!'];
 const KID_OOPS = ['Quase!', 'Foi por pouco!', 'Tudo bem!', 'Quase lá!'];
 
@@ -4998,6 +5115,7 @@ function renderKidDots(el) {
 function renderKidHome() {
   const ks = kidState();
   document.getElementById('kidStars').textContent = ks.stars;
+  document.getElementById('kidSimonBestHome').textContent = ks.simonBest || 0;
   document.getElementById('kidStreak').textContent = calculateStreak();
   const { done, target } = renderKidDots(document.getElementById('kidToday'));
   document.getElementById('kidTodayText').textContent = done >= target
@@ -5009,7 +5127,13 @@ function renderKidHome() {
   const hi = hour < 12 ? 'Bom dia!' : (hour < 18 ? 'Boa tarde!' : 'Boa noite!');
   let msg;
   if (state.history.length === 0) {
-    msg = 'Oi! Eu sou a Lumi 🦉. Cada som tem uma cor. Vamos descobrir?';
+    msg = 'Oi! Eu sou a Lumi 🦉. Cada som tem uma cor. Vamos começar pelo Vermelho?';
+  } else if (level === 1) {
+    msg = `${hi} Vamos ouvir o ${kidLabel(0)} mais um pouco?`;
+  } else if (contrastLeft() > 0) {
+    msg = `${hi} Cor nova: ${kidLabel(kidNewest())}! Vamos aprender a diferença.`;
+  } else if (level < CHORDS.length && !pacePass()) {
+    msg = `${hi} O ${kidLabel(level)} chega em ${daysUntilNextColor()}. Até lá, treine suas ${level} cores!`;
   } else if (level < CHORDS.length) {
     msg = `${hi} Acerte 5 seguidas e ganhe o ${kidLabel(level)}!`;
   } else {
@@ -5063,8 +5187,202 @@ function renderKidHome() {
   btn.addEventListener('contextmenu', (e) => e.preventDefault());
 })();
 
-// ---------- jogo ----------
+// ---------- Siga a sequência (estilo Genius / "Siga-me" do Pense Bem) ----------
+// As cores liberadas ficam num círculo. A cada rodada a sequência ganha um som;
+// a criança repete na mesma ordem. "Só som" apaga as luzes: aí vale o ouvido.
+// Não entra no histórico do treino (é jogo de memória, não conta para liberar cor).
+let simonSeq = [], simonPos = 0, simonListening = false, simonDark = false;
+
+function openKidSimon() {
+  ensureAudioContext();
+  kidGen += 1;
+  simonSeq = []; simonPos = 0; simonListening = false;
+  const ring = document.getElementById('kidSimonRing');
+  ring.querySelectorAll('.k-pad-btn').forEach(b => b.remove());
+  const n = state.levelUnlocked;
+  for (let i = 0; i < n; i++) {
+    const c = CHORDS[i];
+    const ang = -Math.PI / 2 + (2 * Math.PI * i) / Math.max(n, 2);
+    const b = document.createElement('button');
+    b.className = 'k-pad-btn';
+    b.dataset.idx = i;
+    b.style.left = `${50 + 39 * Math.cos(ang)}%`;
+    b.style.top = `${50 + 39 * Math.sin(ang)}%`;
+    b.style.background = c.hex;
+    b.style.color = c.text;
+    b.innerHTML = `<span class="e">${kidInfo(i).emoji}</span><span>${c.name}</span>`;
+    b.addEventListener('click', () => kidSimonTap(i));
+    ring.appendChild(b);
+  }
+  document.getElementById('kidSimonBest').textContent = kidState().simonBest || 0;
+  kidSimonRenderMode();
+  const center = document.getElementById('kidSimonCenter');
+  center.disabled = n < 2;
+  center.innerHTML = '▶<small>começar</small>';
+  document.getElementById('kidSimonSay').innerHTML = n < 2
+    ? `Primeiro ganhe o ${kidLabel(1)} no jogo principal!<small>Com uma cor só não dá para fazer sequência.</small>`
+    : '';
+  goTo('kidSimon');
+}
+
+function kidSimonRenderMode() {
+  document.getElementById('kidSimonMode').textContent = simonDark ? '👂 só som' : '💡 com luz';
+  document.querySelectorAll('#kidSimonRing .k-pad-btn').forEach(b => b.classList.toggle('dark', false));
+}
+function kidSimonToggleMode() {
+  if (simonSeq.length) return; // troca só antes de começar
+  simonDark = !simonDark;
+  kidSimonRenderMode();
+}
+
+function kidSimonLight(idx, ms, showLight) {
+  const b = document.querySelector(`#kidSimonRing .k-pad-btn[data-idx="${idx}"]`);
+  playChord(CHORDS[idx].freqs, state.settings.instrument);
+  if (!b || !showLight) return;
+  b.classList.add('on');
+  setTimeout(() => b.classList.remove('on'), ms);
+}
+
+function kidSimonStart() {
+  if (state.levelUnlocked < 2) return;
+  kidGen += 1;
+  simonSeq = [];
+  kidSimonNextRound();
+}
+
+function kidSimonNextRound() {
+  // Nunca a mesma cor duas vezes seguidas (regra do método).
+  const n = state.levelUnlocked;
+  let next;
+  do { next = Math.floor(Math.random() * n); } while (simonSeq.length && next === simonSeq[simonSeq.length - 1]);
+  simonSeq.push(next);
+  simonPos = 0;
+  simonListening = false;
+  const center = document.getElementById('kidSimonCenter');
+  center.disabled = true;
+  center.innerHTML = `${simonSeq.length}<small>sons</small>`;
+  document.getElementById('kidSimonSay').innerHTML = simonDark ? 'Escute com atenção… 👂' : 'Olhe e escute… 👀👂';
+  const step = 1300;
+  simonSeq.forEach((idx, k) => kidLater(() => kidSimonLight(idx, 900, !simonDark), 700 + k * step));
+  kidLater(() => {
+    simonListening = true;
+    document.getElementById('kidSimonSay').innerHTML = 'Sua vez! Repita na mesma ordem.';
+  }, 700 + simonSeq.length * step);
+}
+
+function kidSimonTap(idx) {
+  if (!simonListening) { kidSimonLight(idx, 400, true); return; } // fora da vez: só toca para ouvir
+  const expected = simonSeq[simonPos];
+  kidSimonLight(idx, 350, true);
+  if (idx !== expected) {
+    simonListening = false;
+    const done = simonSeq.length - 1;
+    const ks = kidState();
+    const record = done > (ks.simonBest || 0);
+    if (record) ks.simonBest = done;
+    saveState();
+    document.getElementById('kidSimonBest').textContent = ks.simonBest || 0;
+    const right = document.querySelector(`#kidSimonRing .k-pad-btn[data-idx="${expected}"]`);
+    kidLater(() => { if (right) { right.classList.add('miss'); kidSimonLight(expected, 900, true); } }, 600);
+    kidLater(() => { if (right) right.classList.remove('miss'); }, 2000);
+    document.getElementById('kidSimonSay').innerHTML = `${record ? 'NOVO RECORDE! 🏆 ' : ''}Você lembrou ${done} ${done === 1 ? 'som' : 'sons'}!<small>O certo era o ${kidLabel(expected)}.</small>`;
+    if (record && done > 0) kidConfetti(CHORDS[expected].hex, 50);
+    simonSeq = [];
+    const center = document.getElementById('kidSimonCenter');
+    center.disabled = false;
+    center.innerHTML = '↻<small>de novo</small>';
+    return;
+  }
+  simonPos += 1;
+  if (simonPos >= simonSeq.length) {
+    simonListening = false;
+    kidState().stars += 1;
+    saveState();
+    kidFloat('+1 ⭐');
+    document.getElementById('kidSimonSay').innerHTML = `${kidPick(KID_CHEERS)} <small>Agora com ${simonSeq.length + 1} sons…</small>`;
+    kidLater(kidSimonNextRound, 1400);
+  }
+}
+
+function kidSimonQuit() {
+  kidGen += 1;
+  simonSeq = [];
+  simonListening = false;
+  kidGoHome();
+}
+
+// ---------- apresentação da fase (antes de cada partida) ----------
+// Como no método: antes de perguntar, o adulto mostra cada bandeira tocando o som dela.
+let kidIntroBusy = false;
+function contrastLeft() { return kidState().contrastLeft || 0; }
+function kidNewest() { return state.levelUnlocked - 1; }
+
 function startKidGame() {
+  ensureAudioContext();
+  kidState();
+  kidGen += 1;
+  const level = state.levelUnlocked;
+  const newest = kidNewest();
+  document.getElementById('kidIntroPhase').textContent = `Fase ${level} de ${CHORDS.length}`;
+  document.getElementById('kidIntroTitle').textContent = level === 1
+    ? `Conheça o ${kidLabel(0)}`
+    : `Suas ${level} cores`;
+  document.getElementById('kidIntroSub').textContent = level === 1
+    ? 'Escute bem. Depois é só tocar nele toda vez que ouvir!'
+    : 'Escute cada cor. A nova toca por último. Toque numa cor para ouvir de novo.';
+  const grid = document.getElementById('kidIntroTiles');
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = `repeat(${level <= 4 ? 2 : 3}, 1fr)`;
+  for (let i = 0; i < level; i++) {
+    const c = CHORDS[i];
+    const b = document.createElement('button');
+    b.className = 'k-choice' + (i === newest && level > 1 && unlockIsFresh() ? ' tag-new' : '');
+    b.dataset.idx = i;
+    b.style.background = c.hex;
+    b.style.color = c.text;
+    b.innerHTML = `<span class="e">${kidInfo(i).emoji}</span>${c.name}`;
+    b.addEventListener('click', () => kidIntroPlay(i));
+    grid.appendChild(b);
+  }
+  document.getElementById('kidIntroCompareBtn').style.display = level > 1 ? '' : 'none';
+  document.getElementById('kidIntroSay').innerHTML = '';
+  goTo('kidIntro');
+  // Sequência: cada cor uma vez; a mais nova de novo no fim.
+  const order = [];
+  for (let i = 0; i < level; i++) order.push(i);
+  if (level > 1) order.push(newest);
+  else order.push(0, 0);
+  kidIntroBusy = true;
+  order.forEach((idx, k) => kidLater(() => {
+    kidIntroPlay(idx, k === order.length - 1 && level > 1 ? 'De novo a mais nova:' : '');
+    if (k === order.length - 1) kidLater(() => { kidIntroBusy = false; }, 1200);
+  }, 600 + k * 1500));
+}
+
+function unlockIsFresh() { return daysAtCurrentLevel() < 3 || contrastLeft() > 0; }
+
+function kidIntroPlay(idx, prefix) {
+  ensureAudioContext();
+  document.querySelectorAll('#kidIntroTiles .k-choice').forEach(b => b.classList.toggle('lit', Number(b.dataset.idx) === idx));
+  playChord(CHORDS[idx].freqs, state.settings.instrument);
+  document.getElementById('kidIntroSay').innerHTML = `${prefix ? prefix + ' ' : ''}${kidLabel(idx)}<small>${kidInfo(idx).desc}</small>`;
+}
+
+// Cor nova × a cor já aprendida mais parecida, alternadas: A, B, A, B.
+function kidIntroCompare() {
+  const a = kidNewest(), b = contrastFor(a);
+  if (b === null) return;
+  kidGen += 1;
+  [a, b, a, b].forEach((idx, k) => kidLater(() => kidIntroPlay(idx, k === 0 ? 'Compare:' : ''), k * 1500));
+  kidLater(() => {
+    document.getElementById('kidIntroSay').innerHTML = `${kidLabel(a)} × ${kidLabel(b)}<small>${CHORDS[a].hint}</small>`;
+  }, 4 * 1500);
+}
+
+function kidIntroSkip() { kidBeginGame(); }
+
+// ---------- jogo ----------
+function kidBeginGame() {
   ensureAudioContext();
   kidState();
   kidGen += 1;
@@ -5114,6 +5432,15 @@ function renderKidMission() {
     let marks = '';
     for (let i = 0; i < kidQueue.length; i++) marks += `<span class="${i < kidStep ? '' : 'off'}">🏆</span>`;
     el.innerHTML = `DESAFIO! Acerte os ${kidQueue.length} e ganhe o ${kidLabel(level)}<div class="k-stars">${marks}</div>`;
+  } else if (level === 1) {
+    el.innerHTML = `Fase 1: toque no ${kidLabel(0)} sempre que ouvir. Na próxima fase chega o ${kidLabel(1)}!`;
+  } else if (contrastLeft() > 0) {
+    const a = kidNewest(), b = contrastFor(a);
+    el.innerHTML = `Treino de diferença: ${kidLabel(a)} ou ${kidLabel(b)}?<div class="k-stars">${'👂'.repeat(contrastLeft())}</div>`;
+  } else if (level < CHORDS.length && !pacePass()) {
+    let marks = '';
+    for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
+    el.innerHTML = `Missão: acerte ${STREAK_TO_CHALLENGE} seguidas. O ${kidLabel(level)} chega em ${daysUntilNextColor()}!<div class="k-stars">${marks}</div>`;
   } else if (level < CHORDS.length) {
     let marks = '';
     for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
@@ -5128,8 +5455,15 @@ function renderKidChoices() {
   grid.innerHTML = '';
   const shown = kidInChallenge ? state.levelUnlocked + 1 : state.levelUnlocked;
   const n = Math.min(shown, CHORDS.length);
-  grid.style.gridTemplateColumns = `repeat(${n === 4 ? 2 : (n >= 10 ? 4 : 3)}, 1fr)`;
-  for (let idx = 0; idx < n; idx++) {
+  let ids = [];
+  for (let i = 0; i < n; i++) ids.push(i);
+  if (!kidInChallenge && contrastLeft() > 0 && state.levelUnlocked > 1) {
+    const a = kidNewest(), b = contrastFor(a);
+    ids = [b, a].sort((x, y) => x - y);
+  }
+  grid.style.gridTemplateColumns = `repeat(${ids.length <= 4 ? Math.min(ids.length, 2) : 3}, 1fr)`;
+  document.getElementById('kidHintBtn').style.display = state.levelUnlocked > 1 ? '' : 'none';
+  for (const idx of ids) {
     const c = CHORDS[idx];
     const b = document.createElement('button');
     b.className = 'k-choice';
@@ -5158,7 +5492,13 @@ function kidPlay() {
 function kidNewRound() {
   trialReplays = 0;
   document.querySelectorAll('#kidChoices .k-choice').forEach(b => b.classList.remove('right', 'wrong', 'reveal'));
-  currentChordIdx = pickNextChord();
+  kidHideCompare();
+  if (contrastLeft() > 0 && state.levelUnlocked > 1) {
+    const a = kidNewest(), b = contrastFor(a);
+    currentChordIdx = Math.random() < 0.5 ? a : b;
+  } else {
+    currentChordIdx = pickNextChord();
+  }
   currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
   currentInstrument = state.settings.instrument;
   kidSay('Qual é a cor deste som?', 'Toque no 🔊 para ouvir de novo');
@@ -5200,6 +5540,8 @@ function kidAnswer(idx) {
   lastChordIdx = rightIdx;
   currentChordIdx = null;
   const btn = kidButton(idx);
+  const wasContrast = !kidInChallenge && contrastLeft() > 0;
+  if (wasContrast) kidState().contrastLeft = contrastLeft() - 1;
 
   if (correct) {
     kidCorrect += 1;
@@ -5217,6 +5559,7 @@ function kidAnswer(idx) {
       if (rb) rb.classList.add('reveal');
       playChord(currentVariation.freqs, currentInstrument);
     }, 700);
+    kidLater(() => kidShowCompare(idx, rightIdx), 1500);
   }
   saveState();
   updateKidBar();
@@ -5228,19 +5571,71 @@ function kidAnswer(idx) {
       if (kidStep >= kidQueue.length) kidLater(kidPassChallenge, 1100);
       else kidLater(kidChallengeStep, 1300);
     } else {
-      kidLater(kidFailChallenge, 2600);
+      kidPendingNext = kidFailChallenge;
     }
     return;
   }
 
   kidStreak = correct ? kidStreak + 1 : 0;
+  if (wasContrast && contrastLeft() === 0) {
+    kidStreak = 0;
+    renderKidChoices();
+    kidSay('Treino de diferença feito! 👂', 'Agora com todas as cores.', 'ok');
+  }
   renderKidMission();
+
+  // Fase 1 (só o Vermelho) não tem desafio: termina a partida e o Amarelo chega.
+  if (state.levelUnlocked === 1) { kidContinue(1100); return; }
+
+  if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length && !pacePass()) {
+    kidStreak = 0;
+    renderKidMission();
+    kidSay('Você está craque! 🌟', `O ${kidLabel(state.levelUnlocked)} chega em ${daysUntilNextColor()}. O método pede 2 semanas por cor.`, 'ok');
+  }
 
   if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
     kidLater(kidTriggerChallenge, 1200);
     return;
   }
-  kidContinue(correct ? 1100 : 2700);
+  if (correct) kidContinue(1100);
+  else kidPendingNext = () => kidContinue(200);
+}
+
+// ---------- ajudas de discriminação ----------
+// Depois de um erro a criança compara, no seu tempo, o que tocou × o certo.
+let kidPendingNext = null;
+function kidShowCompare(chosen, right) {
+  const box = document.getElementById('kidCompare');
+  const btn = (idx, label) => {
+    const c = CHORDS[idx];
+    return `<button class="k-cmp" style="background:${c.hex};color:${c.text};" onclick="kidPlayCmp(${idx})">🔊 ${kidInfo(idx).emoji} ${c.name}<small>${label}</small></button>`;
+  };
+  box.innerHTML = `<p>Ouça a diferença:</p>${btn(chosen, 'você escolheu')}${btn(right, 'era este')}
+    <p>${CHORDS[right].hint}</p>
+    <button class="k-btn k-next" onclick="kidCompareNext()">Seguir ▶</button>`;
+  box.style.display = '';
+}
+function kidPlayCmp(idx) {
+  playChord(CHORDS[idx].freqs, state.settings.instrument);
+  flashColor(CHORDS[idx].hex);
+}
+function kidHideCompare() {
+  const box = document.getElementById('kidCompare');
+  if (box) { box.style.display = 'none'; box.innerHTML = ''; }
+}
+function kidCompareNext() {
+  kidHideCompare();
+  const next = kidPendingNext;
+  kidPendingNext = null;
+  if (next) next();
+}
+// Pista do método: o "pé" (nota mais grave) é o que separa inversões do mesmo acorde.
+function kidHint() {
+  if (currentChordIdx === null || !currentVariation) return;
+  trialReplays += 1;
+  playChord([Math.min(...currentVariation.freqs)], currentInstrument);
+  kidLater(() => playChord(currentVariation.freqs, currentInstrument), 900);
+  kidSay('Escute o pé do acorde 👣', 'Primeiro a nota de baixo, depois o acorde inteiro.');
 }
 
 function kidContinue(delay) {
@@ -5298,6 +5693,7 @@ function kidPassChallenge() {
   kidState().stars += 5;
   saveState();
   kidNewIdx = state.levelUnlocked - 1;
+  kidState().contrastLeft = KID_CONTRAST_TRIALS;
   kidInChallenge = false;
   kidQueue = [];
   kidStep = 0;
@@ -5356,7 +5752,16 @@ function kidEndGame() {
   document.getElementById('kidEndStars').innerHTML =
     [1, 2, 3].map(i => `<span class="${i <= stars ? '' : 'off'}">⭐</span>`).join('');
   let text = `Você acertou <strong>${kidCorrect} de ${kidCount}</strong> sons.`;
-  if (state.levelUnlocked < CHORDS.length) {
+  if (state.levelUnlocked === 1 && acc >= 0.8) {
+    // Fase 1 (Vermelho sozinho) é só para conhecer: passou, chega o Amarelo.
+    state.levelUnlocked = 2;
+    state.lastUnlockDate = new Date().toISOString();
+    kidState().contrastLeft = KID_CONTRAST_TRIALS;
+    saveState();
+    text += `<br>Você já conhece o ${kidLabel(0)}! 🎉<br>Na próxima partida chega o ${kidLabel(1)}.`;
+  } else if (state.levelUnlocked < CHORDS.length && !pacePass()) {
+    text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)}, daqui a ${daysUntilNextColor()}. Até lá, treine as suas cores!`;
+  } else if (state.levelUnlocked < CHORDS.length) {
     text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)} — acerte ${STREAK_TO_CHALLENGE} seguidas!`;
   }
   document.getElementById('kidEndText').innerHTML = text;
@@ -5399,6 +5804,15 @@ function kidFloat(text) {
 
 // Abre direto no modo criança quando ele está ligado
 if (state.onboardingDone && state.settings.kidMode === 'on') kidGoHome();
+
+// Aviso único depois da migração para as 9 cores originais de Eguchi
+if (state.migratedNotice) {
+  state.migratedNotice = false;
+  saveState();
+  showModal('Agora com as 9 cores do método Eguchi',
+    'O app passou a usar exatamente as cores e acordes do método original (Dó, Fá e Sol maior em 3 posições), as mesmas das cartinhas e das folhas de piano. Como as cores antigas significavam outros acordes, o treino recomeça na fase 1. O histórico antigo foi guardado e sai junto em <strong>Estatísticas → Exportar JSON</strong>.',
+    [{ label: 'Entendi', primary: true, action: hideModal }]);
+}
 </script>
 
 </body>
