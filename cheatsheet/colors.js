@@ -1,53 +1,54 @@
 // Eguchi · fonte única das cores para o material impresso
 // ---------------------------------------------------------
-// Mesmas 12 cores, na mesma ordem, do app (index.html → CHORDS + KID_INFO).
-// Nome, cor (hex), acorde e notas TÊM de bater com o app: rode
-//   node cheatsheet/check-colors.js
-// depois de mudar qualquer um dos dois lados.
+// As 9 cores do método Eguchi original (Dó, Fá e Sol maior em 3 posições),
+// na ordem de introdução de Sakakibara (2014) — iguais ao app (index.html →
+// CHORDS + KID_INFO) e ao lib.js dos pôsteres de violão/trompete/flauta.
+// Depois de mudar qualquer lado, rode:  node cheatsheet/check-colors.js
 
 const EGUCHI_COLORS = [
-  // ---- 8 cores Eguchi (níveis 1-8 do app) ----
-  { id: 'red', level: 1, name: 'Vermelho', kanji: '赤', emoji: '🍎', hex: '#c8332a', text: '#fff',
-    chord: 'Dó maior', chordSym: 'C', notes: ['C4', 'E4', 'G4'], notesPt: ['Dó', 'Mi', 'Sol'],
-    role: 'I · o lar', kid: 'É o som de casa: firme e feliz. As músicas adoram terminar nele!' },
-  { id: 'white', level: 2, name: 'Branco', kanji: '白', emoji: '☁️', hex: '#f0e8db', text: '#1a1614',
-    chord: 'Sol maior', chordSym: 'G', notes: ['G4', 'B4', 'D5'], notesPt: ['Sol', 'Si', 'Ré'],
-    role: 'V · quer voltar pra casa', kid: 'Brilhante como nuvem no sol. Parece que quer voltar pra casa.' },
-  { id: 'yellow', level: 3, name: 'Amarelo', kanji: '黄', emoji: '🌻', hex: '#e8b637', text: '#1a1614',
-    chord: 'Fá maior', chordSym: 'F', notes: ['F4', 'A4', 'C5'], notesPt: ['Fá', 'Lá', 'Dó'],
-    role: 'IV · abraço', kid: 'Quentinho e gostoso, como um abraço.' },
-  { id: 'green', level: 4, name: 'Verde', kanji: '緑', emoji: '🌳', hex: '#3a7d44', text: '#fff',
-    chord: 'Ré menor', chordSym: 'Dm', notes: ['D4', 'F4', 'A4'], notesPt: ['Ré', 'Fá', 'Lá'],
-    role: 'ii · pensativo', kid: 'Floresta misteriosa: um som pensativo.' },
-  { id: 'black', level: 5, name: 'Preto', kanji: '黒', emoji: '🌙', hex: '#1f1a16', text: '#fff',
-    chord: 'Mi menor', chordSym: 'Em', notes: ['E4', 'G4', 'B4'], notesPt: ['Mi', 'Sol', 'Si'],
-    role: 'iii · noite calma', kid: 'Noite calma. Um som profundo e tranquilo.' },
-  { id: 'purple', level: 6, name: 'Roxo', kanji: '紫', emoji: '🍇', hex: '#6a4878', text: '#fff',
-    chord: 'Lá menor', chordSym: 'Am', notes: ['A4', 'C5', 'E5'], notesPt: ['Lá', 'Dó', 'Mi'],
-    role: 'vi · saudade', kid: 'Um pouquinho triste, como o fim da tarde.' },
-  { id: 'blue', level: 7, name: 'Azul', kanji: '青', emoji: '🌊', hex: '#3a5c8a', text: '#fff',
-    chord: 'Si♭ maior', chordSym: 'B♭', notes: ['Bb4', 'D5', 'F5'], notesPt: ['Si♭', 'Ré', 'Fá'],
-    role: '♭VII · vem de longe', kid: 'Parece que vem de longe, lá do mar.' },
-  { id: 'brown', level: 8, name: 'Marrom', kanji: '茶', emoji: '🍫', hex: '#6b4a30', text: '#fff',
-    chord: 'Sol 7', chordSym: 'G7', notes: ['G4', 'B4', 'D5', 'F5'], notesPt: ['Sol', 'Si', 'Ré', 'Fá'],
-    role: 'V7 · inquieto', kid: 'Inquieto! Ele quer ir para outro lugar.' },
-  // ---- 4 cores cromáticas (níveis 9-12) ----
-  { id: 'coral', level: 9, name: 'Coral', kanji: 'D', emoji: '🍊', hex: '#e88a33', text: '#1a1614',
-    chord: 'Ré maior', chordSym: 'D', notes: ['D4', 'F#4', 'A4'], notesPt: ['Ré', 'Fá♯', 'Lá'],
-    role: 'II · ensolarado', kid: 'Alegre e ensolarado, cheiro de férias.' },
-  { id: 'lilas', level: 10, name: 'Lilás', kanji: 'A', emoji: '🌸', hex: '#b045b8', text: '#fff',
-    chord: 'Lá maior', chordSym: 'A', notes: ['A4', 'C#5', 'E5'], notesPt: ['Lá', 'Dó♯', 'Mi'],
-    role: 'V/ii · anuncia', kid: 'Brilhante, parece que vai anunciar algo.' },
-  { id: 'limao', level: 11, name: 'Limão', kanji: 'E', emoji: '🍋', hex: '#a8c437', text: '#1a1614',
-    chord: 'Mi maior', chordSym: 'E', notes: ['E4', 'G#4', 'B4'], notesPt: ['Mi', 'Sol♯', 'Si'],
-    role: 'V/vi · subindo', kid: 'Azedinho e animado, subindo, subindo!' },
-  { id: 'ambar', level: 12, name: 'Âmbar', kanji: 'E♭', emoji: '🍯', hex: '#d4a833', text: '#1a1614',
-    chord: 'Mi♭ maior', chordSym: 'E♭', notes: ['Eb4', 'G4', 'Bb4'], notesPt: ['Mi♭', 'Sol', 'Si♭'],
-    role: '♭III · dourado', kid: 'Dourado e doce, como mel.' },
+  { id: 'red', level: 1, name: 'Vermelho', kanji: '赤', emoji: '🍎', hex: '#c8332a', text: '#fff', family: 'Dó maior',
+    chord: 'Dó maior', chordSym: 'C', notes: ['C4', 'E4', 'G4'], notesPt: ['Dó', 'Mi', 'Sol'], bass: 'Dó',
+    role: 'pé em Dó · o lar', kid: 'O som de casa: firme, com o pé bem no chão.' },
+  { id: 'yellow', level: 2, name: 'Amarelo', kanji: '黄', emoji: '🌻', hex: '#e8c83a', text: '#1a1614', family: 'Fá maior',
+    chord: 'Fá maior', chordSym: 'F/C', notes: ['C5', 'F5', 'A5'], notesPt: ['Dó', 'Fá', 'Lá'], bass: 'Dó',
+    role: 'pé em Dó · alto e aberto', kid: 'Lá no alto e brilhante, como o sol do meio-dia.' },
+  { id: 'blue', level: 3, name: 'Azul', kanji: '青', emoji: '🌊', hex: '#3a6a9a', text: '#fff', family: 'Sol maior',
+    chord: 'Sol maior', chordSym: 'G/B', notes: ['B4', 'D5', 'G5'], notesPt: ['Si', 'Ré', 'Sol'], bass: 'Si',
+    role: 'pé em Si · quer voltar', kid: 'Alto e calmo como o céu, mas quer voltar pra casa.' },
+  { id: 'black', level: 4, name: 'Preto', kanji: '黒', emoji: '🌙', hex: '#1a1614', text: '#ede4d0', family: 'Fá maior',
+    chord: 'Fá maior', chordSym: 'F/A', notes: ['A4', 'C5', 'F5'], notesPt: ['Lá', 'Dó', 'Fá'], bass: 'Lá',
+    role: 'pé em Lá · denso', kid: 'Mais grave e misterioso, como a noite.' },
+  { id: 'green', level: 5, name: 'Verde', kanji: '緑', emoji: '🌳', hex: '#5a8a3a', text: '#fff', family: 'Sol maior',
+    chord: 'Sol maior', chordSym: 'G/D', notes: ['D5', 'G5', 'B5'], notesPt: ['Ré', 'Sol', 'Si'], bass: 'Ré',
+    role: 'pé em Ré · o mais agudo', kid: 'O mais agudo de todos: um broto novinho.' },
+  { id: 'orange', level: 6, name: 'Laranja', kanji: '橙', emoji: '🍊', hex: '#e88a33', text: '#1a1614', family: 'Dó maior',
+    chord: 'Dó maior', chordSym: 'C/E', notes: ['E4', 'G4', 'C5'], notesPt: ['Mi', 'Sol', 'Dó'], bass: 'Mi',
+    role: 'pé em Mi · segue em frente', kid: 'Parece o Vermelho, mas começa um degrau acima.' },
+  { id: 'purple', level: 7, name: 'Roxo', kanji: '紫', emoji: '🍇', hex: '#7a3d8a', text: '#fff', family: 'Fá maior',
+    chord: 'Fá maior', chordSym: 'F', notes: ['F4', 'A4', 'C5'], notesPt: ['Fá', 'Lá', 'Dó'], bass: 'Fá',
+    role: 'pé em Fá · outra casa', kid: 'Firme como o Vermelho, mas é outra casa.' },
+  { id: 'pink', level: 8, name: 'Rosa', kanji: '桃', emoji: '🌸', hex: '#e89aaa', text: '#1a1614', family: 'Sol maior',
+    chord: 'Sol maior', chordSym: 'G', notes: ['G4', 'B4', 'D5'], notesPt: ['Sol', 'Si', 'Ré'], bass: 'Sol',
+    role: 'pé em Sol · anúncio', kid: 'Anuncia que algo vai acontecer, como a primavera.' },
+  { id: 'brown', level: 9, name: 'Marrom', kanji: '茶', emoji: '🍫', hex: '#7a4d2a', text: '#fff', family: 'Dó maior',
+    chord: 'Dó maior', chordSym: 'C/G', notes: ['G4', 'C5', 'E5'], notesPt: ['Sol', 'Dó', 'Mi'], bass: 'Sol',
+    role: 'pé em Sol · flutuando', kid: 'Parece o Vermelho, mas fica flutuando, esperando.' },
 ];
 
-// Cor muito clara (Branco) precisa de borda para aparecer no papel.
-function needsOutline(c) { return c.hex.toLowerCase() === '#f0e8db'; }
+// Cor anterior mais parecida (mesma regra do app: notas em comum, mesmo pé, altura próxima).
+// É o par a treinar quando a cor nova chega.
+function looksLike(c) {
+  const mean = x => x.notes.reduce((s, n) => s + noteToMidi(n), 0) / x.notes.length;
+  let best = null, score = -1;
+  EGUCHI_COLORS.filter(o => o.level < c.level).forEach(o => {
+    const s = c.notesPt.filter(n => o.notesPt.includes(n)).length * 2 + (o.bass === c.bass ? 2 : 0) + (Math.abs(mean(o) - mean(c)) < 3 ? 1 : 0);
+    if (s > score || (s === score && o.level > best.level)) { best = o; score = s; }
+  });
+  return best;
+}
+
+// Nenhuma das 9 cores é clara demais para o papel; fica o gancho para cores futuras.
+function needsOutline(c) { return false; }
 
 // ---------------------------------------------------------
 // Teclado (C4–B5) com teclas pretas e notas do acorde marcadas
@@ -100,5 +101,5 @@ function keyboardSVG(color, opts = {}) {
   return s + '</svg>';
 }
 
-if (typeof window !== 'undefined') window.Eguchi = { COLORS: EGUCHI_COLORS, keyboardSVG, needsOutline, noteToMidi };
+if (typeof window !== 'undefined') window.Eguchi = { COLORS: EGUCHI_COLORS, keyboardSVG, needsOutline, noteToMidi, looksLike };
 if (typeof module !== 'undefined') module.exports = { EGUCHI_COLORS, noteToMidi };

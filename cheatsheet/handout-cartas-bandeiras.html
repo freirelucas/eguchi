@@ -14,11 +14,11 @@
   .game h3 { font-size: 12.5pt; margin: 2mm 0 1.5mm; }
   .game p, .game li { font-size: 9.5pt; line-height: 1.35; color: var(--ink); }
   .game ol { padding-left: 4.5mm; }
-  .howto { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-bottom: 6mm; }
+  .howto { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; margin-bottom: 6mm; }
   .howto .box { background: var(--cream); border-radius: 5mm; padding: 4mm; font-size: 9.5pt; line-height: 1.4; }
   .howto h3 { font-size: 11.5pt; margin-bottom: 1.5mm; }
-  .order { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2.5mm; }
-  .order .o { border-radius: 3.5mm; padding: 2.5mm 1mm 2mm; text-align: center; font-size: 8.5pt; font-weight: 600; line-height: 1.15; }
+  .order { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2mm; }
+  .order .o { border-radius: 3.5mm; padding: 2.5mm 0.5mm 2mm; text-align: center; font-size: 7.5pt; font-weight: 600; line-height: 1.15; }
   .order .o .e { font-size: 17pt; display: block; line-height: 1.1; }
   .order .o small { display: block; font-weight: 500; font-size: 7pt; opacity: 0.85; }
   .section-t { font-size: 12pt; font-weight: 700; margin: 0 0 2.5mm; }
@@ -57,9 +57,9 @@
 
   /* ---------- bandeiras (dobra ao meio, 2 × 90 × 62 mm) ---------- */
   .flags { display: flex; flex-direction: column; gap: 7mm; align-items: center; }
-  .flag { display: flex; width: 180mm; height: 58mm; position: relative; border: 0.3mm solid #b9ae99; }
+  .flag { display: flex; width: 180mm; height: 76mm; position: relative; border: 0.3mm solid #b9ae99; }
   .flag .half { width: 90mm; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-  .flag .half .e { font-size: 38pt; line-height: 1; }
+  .flag .half .e { font-size: 46pt; line-height: 1; }
   .flag .half .n { font-size: 22pt; font-weight: 700; margin-top: 2mm; line-height: 1; }
   .flag .half .c { font-size: 10pt; font-weight: 500; margin-top: 1.5mm; opacity: 0.85; }
   .flag .fold { position: absolute; left: 90mm; top: -3mm; bottom: -3mm; border-left: 0.5mm dashed var(--ink); }
@@ -69,7 +69,7 @@
 </head>
 <body>
 <div class="no-print">
-  <strong>Cartinhas e bandeiras das 12 cores</strong> · as mesmas cores, nomes e acordes do app.<br>
+  <strong>Cartinhas e bandeiras das 9 cores do método Eguchi</strong> · as mesmas cores, nomes e acordes do app e das folhas de piano.<br>
   Imprima em <strong>A4 retrato</strong>, margens "nenhuma", com <strong>"gráficos de segundo plano"</strong> ligado. Papel 180 g ou mais deixa as cartas e bandeiras firmes.
   <br><button onclick="window.print()">Imprimir / Salvar PDF</button><a href="index.html">← Voltar ao índice</a>
 </div>
@@ -80,7 +80,7 @@
     <h1>Cartinhas e bandeiras<br>das cores <span class="brand">🦉</span></h1>
     <div class="tag"><span class="brand">eguchi·</span><br>para crianças de 6 a 12 anos</div>
   </div>
-  <p class="lead">Cada cor é um acorde. São as mesmas 12 cores do app, na mesma ordem: a criança aprende uma cor por vez e só ganha a próxima depois de reconhecer bem as anteriores. Use as cartas e bandeiras longe da tela, com alguém tocando os acordes no piano (veja a folha de piano) ou no app.</p>
+  <p class="lead">Cada cor é um acorde do método Eguchi: Dó, Fá e Sol maior, cada um em 3 posições. São as mesmas 9 cores do app, na mesma ordem. Uma cor nova a cada 2 semanas, e só quando a criança acerta todas as anteriores. Use as cartas e bandeiras longe da tela, com alguém tocando no piano (veja a folha de piano) ou no app.</p>
 
   <div class="games">
     <div class="game">
@@ -115,7 +115,11 @@
   <div class="howto">
     <div class="box">
       <h3>✂️ Montar as cartas (folhas 2 a 4)</h3>
-      Imprima a folha 4 (verso) no outro lado das folhas 2 e 3, ou cole depois. Corte na linha tracejada. As cartas de ação (folha 3) servem para deixar os jogos mais divertidos.
+      Imprima a folha 4 (verso) no outro lado das folhas 2 e 3, ou cole depois. Corte na linha tracejada. As cartas de ação (folha 3) deixam os jogos mais divertidos.
+    </div>
+    <div class="box">
+      <h3>👂 Quando chega uma cor nova</h3>
+      1) Toque a nova várias vezes mostrando a bandeira dela. 2) Alterne a nova com a cor já aprendida mais parecida (veja "parece com" nas cartas). 3) Toque só a nota de baixo: é ela que separa cores do mesmo acorde. 4) Nos primeiros jogos, use só essas duas bandeiras.
     </div>
     <div class="box">
       <h3>🚩 Montar as bandeiras (folhas 5 a 7)</h3>
@@ -125,21 +129,21 @@
 
   <div class="section-t">A ordem das cores (igual ao app)</div>
   <div class="order" id="orderGrid"></div>
-  <p class="tip">Regras de ouro: jogos curtos (2 a 3 minutos), até 5 vezes por dia; comece com 3 cores; erro não perde ponto, só mostra a cor certa; elogie a escuta ("você prestou atenção!"), não o talento.</p>
+  <p class="tip">Regras de ouro: jogos curtos (2 a 3 minutos), até 5 vezes por dia; comece só com o Vermelho e depois o Amarelo; nunca toque a mesma cor duas vezes seguidas; erro não perde ponto, só mostra a cor certa; elogie a escuta ("você prestou atenção!"), não o talento.</p>
   <div class="foot"><span>Método Eguchi · Sakakibara (2014)</span><span>freirelucas.github.io/eguchi · folha 1 de 7</span></div>
 </section>
 
-<section class="page cardpage"><div class="page-head"><h2>Cartinhas · cores 1 a 9</h2><div class="tag">corte na linha tracejada</div></div><div class="cards" id="cardsA"></div><div class="foot"><span>teclas: 1, 2, 3 = de baixo para cima</span><span>folha 2 de 7</span></div></section>
-<section class="page cardpage"><div class="page-head"><h2>Cartinhas · cores 10 a 12 + ação</h2><div class="tag">corte na linha tracejada</div></div><div class="cards" id="cardsB"></div><div class="foot"><span>cartas de ação: use nos jogos para variar</span><span>folha 3 de 7</span></div></section>
+<section class="page cardpage"><div class="page-head"><h2>Cartinhas · as 9 cores</h2><div class="tag">corte na linha tracejada</div></div><div class="cards" id="cardsA"></div><div class="foot"><span>teclas: 1, 2, 3 = de baixo para cima · "pé" = a nota mais grave</span><span>folha 2 de 7</span></div></section>
+<section class="page cardpage"><div class="page-head"><h2>Cartas de ação</h2><div class="tag">corte na linha tracejada</div></div><div class="cards" id="cardsB"></div><div class="foot"><span>cartas de ação: use nos jogos para variar</span><span>folha 3 de 7</span></div></section>
 <section class="page cardpage"><div class="page-head"><h2>Verso das cartinhas</h2><div class="tag">imprima 2 vezes</div></div><div class="cards" id="cardsBack"></div><div class="foot"><span>imprima no verso das folhas 2 e 3</span><span>folha 4 de 7</span></div></section>
-<section class="page"><div class="page-head"><h2>Bandeiras · cores 1 a 4</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsA"></div><div class="foot"><span>palito na dobra</span><span>folha 5 de 7</span></div></section>
-<section class="page"><div class="page-head"><h2>Bandeiras · cores 5 a 8</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsB"></div><div class="foot"><span>palito na dobra</span><span>folha 6 de 7</span></div></section>
-<section class="page"><div class="page-head"><h2>Bandeiras · cores 9 a 12</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">As 4 cores cromáticas: só depois das 8 primeiras.</p><div class="flags" id="flagsC"></div><div class="foot"><span>palito na dobra</span><span>folha 7 de 7</span></div></section>
+<section class="page"><div class="page-head"><h2>Bandeiras · cores 1 a 3</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsA"></div><div class="foot"><span>palito na dobra</span><span>folha 5 de 7</span></div></section>
+<section class="page"><div class="page-head"><h2>Bandeiras · cores 4 a 6</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsB"></div><div class="foot"><span>palito na dobra</span><span>folha 6 de 7</span></div></section>
+<section class="page"><div class="page-head"><h2>Bandeiras · cores 7 a 9</h2><div class="tag">dobre na linha tracejada</div></div><p class="flag-help">Recorte, cole o palito na dobra e feche. A mesma cor aparece dos dois lados.</p><div class="flags" id="flagsC"></div><div class="foot"><span>palito na dobra</span><span>folha 7 de 7</span></div></section>
 
 <script src="colors.js"></script>
 <script>
 (function () {
-  const { COLORS, keyboardSVG, needsOutline } = window.Eguchi;
+  const { COLORS, keyboardSVG, needsOutline, looksLike } = window.Eguchi;
   const paint = (el, c) => {
     el.style.background = c.hex;
     el.style.color = c.text;
@@ -152,7 +156,7 @@
     const d = document.createElement('div');
     d.className = 'o';
     paint(d, c);
-    d.innerHTML = `<span class="e">${c.emoji}</span>${c.level}. ${c.name}<small>${c.chord}</small>`;
+    d.innerHTML = `<span class="e">${c.emoji}</span>${c.level}. ${c.name}<small>${c.chordSym}</small>`;
     order.appendChild(d);
   });
 
@@ -168,6 +172,7 @@
         <div class="nm">${c.name}</div>
         <div class="kj">${c.kanji}</div>
         <div class="ch">${c.chord} · ${c.chordSym}</div>
+        <div class="kj">pé em ${c.bass}${looksLike(c) ? ` · parece ${looksLike(c).emoji} ${looksLike(c).name}` : ''}</div>
       </div>
       <div class="kb">${keyboardSVG(c)}</div>
       <div class="nt">${c.notesPt.join(' · ')}</div>`;
@@ -194,8 +199,7 @@
     return d;
   };
   const A = document.getElementById('cardsA'), B = document.getElementById('cardsB'), K = document.getElementById('cardsBack');
-  COLORS.slice(0, 9).forEach(c => A.appendChild(card(c)));
-  COLORS.slice(9).forEach(c => B.appendChild(card(c)));
+  COLORS.forEach(c => A.appendChild(card(c)));
   ACTIONS.forEach(a => B.appendChild(action(a)));
   for (let i = 0; i < 9; i++) K.appendChild(back());
 
@@ -208,7 +212,7 @@
     d.querySelectorAll('.half').forEach(h => paint(h, c));
     return d;
   };
-  [['flagsA', 0, 4], ['flagsB', 4, 8], ['flagsC', 8, 12]].forEach(([id, a, b]) => {
+  [['flagsA', 0, 3], ['flagsB', 3, 6], ['flagsC', 6, 9]].forEach(([id, a, b]) => {
     const el = document.getElementById(id);
     COLORS.slice(a, b).forEach(c => el.appendChild(flag(c)));
   });
