@@ -1340,6 +1340,7 @@
   <div class="k-pad">
     <div class="k-top">
       <span class="k-chip">⭐ <span id="kidStars">0</span></span>
+      <span class="k-chip">🏅 <span id="kidMedals">0</span></span>
       <span class="k-chip">🔥 <span id="kidStreak">0</span> dia(s)</span>
     </div>
     <div class="k-mascot-row">
@@ -1376,7 +1377,7 @@
     <div class="k-say" id="kidSay">Escute e toque na cor!</div>
     <div class="k-compare" id="kidCompare" style="display:none;"></div>
     <div class="k-choices" id="kidChoices"></div>
-    <button class="k-link" id="kidHintBtn" onclick="kidHint()">💡 Pista: ouvir só a nota de baixo</button>
+    <button class="k-btn k-btn-soft" id="kidHintBtn" onclick="kidHint()" style="font-size:16px;padding:10px;">👣 Ouvir o pé (a nota mais grossa)</button>
   </div>
 </div>
 
@@ -2049,7 +2050,7 @@
     <p><strong>5 sessões curtas por dia, de 2 a 3 minutos cada</strong>, distribuídas ao longo do dia (manhã, almoço, tarde, antes do jantar, antes de dormir). Cada sessão tem 20-25 trials. Sessões longas não funcionam — atenção sustentada da criança é o recurso escasso. Em estudo, frequência diária importou mais que duração.</p>
 
     <h3>Introdução de novas cores</h3>
-    <p><strong>Uma cor por vez, com ≥2 semanas entre introduções.</strong> Critério rigoroso: a criança só ganha a próxima cor quando identifica todas as anteriores com <strong>100% de acurácia</strong> em sessões consecutivas. Ordem randomizada — nunca tocar duas vezes seguidas a mesma cor, pra impedir que a criança use a anterior como referência.</p>
+    <p><strong>Uma cor por vez, com ≥2 semanas entre introduções.</strong> Critério rigoroso: a criança só ganha a próxima cor quando identifica todas as anteriores com <strong>100% de acurácia</strong> em sessões consecutivas. Ordem randomizada — nunca tocar duas vezes seguidas a mesma cor, pra impedir que a criança use a anterior como referência. (Com só 2 ou 3 cores isso viraria alternância previsível, então o app permite repetir de vez em quando, no máximo 2 vezes seguidas.)</p>
 
     <h3>Duração total</h3>
     <p>Treino contínuo por <strong>no mínimo 2 anos</strong> antes de considerar AP consolidado. As 22 crianças do estudo Sakakibara levaram em média 2-4 anos pra dominar todas as cores.</p>
@@ -2146,7 +2147,7 @@
       <li><strong>5 sessões curtas por dia</strong>, 2 a 3 minutos cada (~20-25 trials)</li>
       <li><strong>Distribuídas no dia</strong> — manhã, almoço, tarde, antes do jantar, antes de dormir</li>
       <li><strong>Frequência &gt; duração.</strong> Sessões longas não funcionam — atenção sustentada é o recurso escasso. 5×3min ≫ 1×15min</li>
-      <li><strong>Ordem randomizada</strong> — nunca tocar duas vezes seguidas a mesma cor, pra impedir uso de referência relativa</li>
+      <li><strong>Ordem randomizada</strong> — nunca tocar duas vezes seguidas a mesma cor, pra impedir uso de referência relativa (com 2-3 cores o app permite repetir no máximo 2 vezes, senão alternar vira chute)</li>
     </ul>
 
     <h3>Quando introduzir a próxima cor</h3>
@@ -2883,7 +2884,14 @@ function pickNextChord() {
   const focusIdx = state.levelUnlocked - 1;
 
   const weights = available.map(idx => {
-    if (idx === lastChordIdx && available.length > 1) return 0;
+    if (idx === lastChordIdx && available.length > 1) {
+      // Com 2-3 cores, "nunca repetir" vira alternância previsível (dá para acertar
+      // sem ouvir). Aí a repetição é permitida às vezes, no máximo 2 seguidas.
+      if (available.length > 3) return 0;
+      let run = 0;
+      for (let i = state.history.length - 1; i >= 0 && state.history[i].chordIdx === idx; i--) run++;
+      return run >= 2 ? 0 : 0.6;
+    }
     // In train mode, bias toward the newest/focus color until it has enough trials to evaluate
     if (sessionMode === 'train' && idx === focusIdx) {
       const focusTrials = state.history.filter(h => h.mode === 'train' && h.chordIdx === idx).length;
@@ -5036,16 +5044,18 @@ if ('serviceWorker' in navigator) {
 // estatísticas, streak e "hoje N/5" continuam valendo para os pais.
 // ============================================
 const KID_ROUND_LENGTH = 10;
+// Fase 1 (só o Vermelho) é apresentação: 5 sons bastam.
+function kidRoundLength() { return state.levelUnlocked === 1 ? 5 : KID_ROUND_LENGTH; }
 const KID_INFO = {
   red:    { emoji: '🍎', desc: 'O som de casa: firme, com o pé bem no chão.' },
   yellow: { emoji: '🌻', desc: 'Lá no alto e brilhante, como o sol do meio-dia.' },
   blue:   { emoji: '🌊', desc: 'Alto e calmo como o céu, mas quer voltar pra casa.' },
   black:  { emoji: '🌙', desc: 'Mais grave e misterioso, como a noite.' },
   green:  { emoji: '🌳', desc: 'O mais agudo de todos: um broto novinho.' },
-  orange: { emoji: '🍊', desc: 'Parece o Vermelho, mas começa um degrau acima.' },
-  purple: { emoji: '🍇', desc: 'Firme como o Vermelho, mas é outra casa.' },
+  orange: { emoji: '🍊', desc: 'Parece o Vermelho, mas mais leve: não tem cara de fim.' },
+  purple: { emoji: '🍇', desc: 'Firme e quentinho: uma outra casa.' },
   pink:   { emoji: '🌸', desc: 'Anuncia que algo vai acontecer, como a primavera.' },
-  brown:  { emoji: '🍫', desc: 'Parece o Vermelho, mas fica flutuando, esperando.' },
+  brown:  { emoji: '🍫', desc: 'Fica flutuando no ar, esperando alguma coisa.' },
 };
 const KID_CONTRAST_TRIALS = 6;   // primeiras rodadas com a cor nova: só ela × a mais parecida
 const KID_CHEERS = ['Isso!', 'Mandou bem!', 'Uau!', 'Ouvido de ouro!', 'Arrasou!', 'Perfeito!', 'Show!'];
@@ -5105,7 +5115,10 @@ function kidGoHome() {
 // ---------- home ----------
 function renderKidDots(el) {
   const target = state.settings.dailySessionTarget || 5;
-  const done = Math.min(target, countSessionsToday());
+  const ks = kidState();
+  const today = new Date().toDateString();
+  const kidGames = ks.daily && ks.daily.date === today ? ks.daily.games : 0;
+  const done = Math.min(target, Math.max(kidGames, countSessionsToday()));
   let html = '';
   for (let i = 0; i < target; i++) html += `<span class="${i < done ? '' : 'off'}">${i < done ? '⭐' : '🎵'}</span>`;
   el.innerHTML = html;
@@ -5116,11 +5129,12 @@ function renderKidHome() {
   const ks = kidState();
   document.getElementById('kidStars').textContent = ks.stars;
   document.getElementById('kidSimonBestHome').textContent = ks.simonBest || 0;
+  document.getElementById('kidMedals').textContent = ks.medals || 0;
   document.getElementById('kidStreak').textContent = calculateStreak();
   const { done, target } = renderKidDots(document.getElementById('kidToday'));
   document.getElementById('kidTodayText').textContent = done >= target
     ? 'Missão cumprida hoje! Você é demais! 🏆'
-    : `Faltam ${target - done}. Cada jogo dura uns 2 minutinhos.`;
+    : `Faltam ${target - done}. Cada jogo leva menos de 1 minuto — o melhor é espalhar pelo dia!`;
 
   const level = state.levelUnlocked;
   const hour = new Date().getHours();
@@ -5156,8 +5170,11 @@ function renderKidHome() {
       b.addEventListener('click', () => { ensureAudioContext(); playChord(c.freqs, state.settings.instrument); });
     } else if (idx === level) {
       b.classList.add('next');
-      b.innerHTML = `<span class="e">❓</span>próxima`;
-      b.addEventListener('click', () => showModal('Cor surpresa!', 'Acerte <strong>5 sons seguidos</strong> e vença o desafio para ganhar esta cor.', [{ label: 'Bora!', primary: true, action: hideModal }]));
+      const waiting = !pacePass();
+      b.innerHTML = waiting ? `<span class="e">❓</span>⏳ ${daysUntilNextColor()}` : `<span class="e">❓</span>próxima`;
+      b.addEventListener('click', () => showModal('Cor surpresa!', waiting
+        ? `Ela chega em <strong>${daysUntilNextColor()}</strong>. Até lá, cada 5 seguidas vale uma medalha 🏅. Quando chegar, é só vencer o desafio!`
+        : 'Acerte <strong>5 sons seguidos</strong> e vença o desafio para ganhar esta cor.', [{ label: 'Bora!', primary: true, action: hideModal }]));
     } else {
       b.classList.add('locked');
       b.innerHTML = `<span class="e">🔒</span>`;
@@ -5356,7 +5373,7 @@ function startKidGame() {
   order.forEach((idx, k) => kidLater(() => {
     kidIntroPlay(idx, k === order.length - 1 && level > 1 ? 'De novo a mais nova:' : '');
     if (k === order.length - 1) kidLater(() => { kidIntroBusy = false; }, 1200);
-  }, 600 + k * 1500));
+  }, 500 + k * 1150));
 }
 
 function unlockIsFresh() { return daysAtCurrentLevel() < 3 || contrastLeft() > 0; }
@@ -5375,7 +5392,7 @@ function kidIntroCompare() {
   kidGen += 1;
   [a, b, a, b].forEach((idx, k) => kidLater(() => kidIntroPlay(idx, k === 0 ? 'Compare:' : ''), k * 1500));
   kidLater(() => {
-    document.getElementById('kidIntroSay').innerHTML = `${kidLabel(a)} × ${kidLabel(b)}<small>${CHORDS[a].hint}</small>`;
+    document.getElementById('kidIntroSay').innerHTML = `${kidLabel(a)} × ${kidLabel(b)}<small>${kidInfo(a).emoji} ${kidInfo(a).desc}<br>${kidInfo(b).emoji} ${kidInfo(b).desc}</small>`;
   }, 4 * 1500);
 }
 
@@ -5397,7 +5414,7 @@ function kidBeginGame() {
   kidStep = 0;
   kidAccepting = false;
   goTo('kidGame');
-  document.getElementById('kidTotal').textContent = KID_ROUND_LENGTH;
+  document.getElementById('kidTotal').textContent = kidRoundLength();
   kidSay('Escute e toque na cor certa!', '');
   renderKidChoices();
   renderKidMission();
@@ -5414,8 +5431,8 @@ function quitKidGame() {
 }
 
 function updateKidBar() {
-  document.getElementById('kidCount').textContent = Math.min(kidCount, KID_ROUND_LENGTH);
-  document.getElementById('kidBar').style.width = Math.min(100, kidCount / KID_ROUND_LENGTH * 100) + '%';
+  document.getElementById('kidCount').textContent = Math.min(kidCount, kidRoundLength());
+  document.getElementById('kidBar').style.width = Math.min(100, kidCount / kidRoundLength() * 100) + '%';
 }
 
 function kidSay(main, small, cls) {
@@ -5440,7 +5457,7 @@ function renderKidMission() {
   } else if (level < CHORDS.length && !pacePass()) {
     let marks = '';
     for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
-    el.innerHTML = `Missão: acerte ${STREAK_TO_CHALLENGE} seguidas. O ${kidLabel(level)} chega em ${daysUntilNextColor()}!<div class="k-stars">${marks}</div>`;
+    el.innerHTML = `Missão: ${STREAK_TO_CHALLENGE} seguidas = uma medalha 🏅 · o ${kidLabel(level)} chega em ${daysUntilNextColor()}<div class="k-stars">${marks}</div>`;
   } else if (level < CHORDS.length) {
     let marks = '';
     for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
@@ -5501,7 +5518,8 @@ function kidNewRound() {
   }
   currentVariation = { type: 'root', freqs: CHORDS[currentChordIdx].freqs };
   currentInstrument = state.settings.instrument;
-  kidSay('Qual é a cor deste som?', 'Toque no 🔊 para ouvir de novo');
+  if (state.levelUnlocked === 1) kidSay('Ouviu? Toca no Vermelho! 🍎', 'Esse é o som de casa.');
+  else kidSay('Qual é a cor deste som?', 'Toque no 🔊 para ouvir de novo');
   kidPlay();
 }
 
@@ -5587,17 +5605,24 @@ function kidAnswer(idx) {
   // Fase 1 (só o Vermelho) não tem desafio: termina a partida e o Amarelo chega.
   if (state.levelUnlocked === 1) { kidContinue(1100); return; }
 
+  // Ritmo fiel: enquanto a cor nova não pode chegar, 5 seguidas valem uma medalha.
   if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length && !pacePass()) {
     kidStreak = 0;
+    const ks = kidState();
+    ks.medals = (ks.medals || 0) + 1;
+    ks.stars += 3;
+    saveState();
     renderKidMission();
-    kidSay('Você está craque! 🌟', `O ${kidLabel(state.levelUnlocked)} chega em ${daysUntilNextColor()}. O método pede 2 semanas por cor.`, 'ok');
+    kidConfetti('#ffc233', 45);
+    kidLater(() => kidFloat('🏅 +3 ⭐'), 300);
+    kidSay('Medalha de craque! 🏅', `Você já tem ${ks.medals}. O ${kidLabel(state.levelUnlocked)} chega em ${daysUntilNextColor()}!`, 'ok');
   }
 
   if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
     kidLater(kidTriggerChallenge, 1200);
     return;
   }
-  if (correct) kidContinue(1100);
+  if (correct) kidContinue(750);
   else kidPendingNext = () => kidContinue(200);
 }
 
@@ -5611,9 +5636,12 @@ function kidShowCompare(chosen, right) {
     return `<button class="k-cmp" style="background:${c.hex};color:${c.text};" onclick="kidPlayCmp(${idx})">🔊 ${kidInfo(idx).emoji} ${c.name}<small>${label}</small></button>`;
   };
   box.innerHTML = `<p>Ouça a diferença:</p>${btn(chosen, 'você escolheu')}${btn(right, 'era este')}
-    <p>${CHORDS[right].hint}</p>
-    <button class="k-btn k-next" onclick="kidCompareNext()">Seguir ▶</button>`;
+    <p>${kidInfo(right).emoji} ${kidInfo(right).desc}</p>
+    <button class="k-btn k-btn-soft k-next" onclick="kidCompareNext()">Seguir ▶</button>`;
   box.style.display = '';
+  // Toca sozinho as duas, uma vez: você escolheu → era este.
+  kidLater(() => kidPlayCmp(chosen), 400);
+  kidLater(() => kidPlayCmp(right), 1900);
 }
 function kidPlayCmp(idx) {
   playChord(CHORDS[idx].freqs, state.settings.instrument);
@@ -5635,11 +5663,11 @@ function kidHint() {
   trialReplays += 1;
   playChord([Math.min(...currentVariation.freqs)], currentInstrument);
   kidLater(() => playChord(currentVariation.freqs, currentInstrument), 900);
-  kidSay('Escute o pé do acorde 👣', 'Primeiro a nota de baixo, depois o acorde inteiro.');
+  kidSay('Escute o pé do acorde 👣', 'Primeiro a nota mais grossa, depois o acorde inteiro.');
 }
 
 function kidContinue(delay) {
-  if (kidCount >= KID_ROUND_LENGTH) kidLater(kidEndGame, delay);
+  if (kidCount >= kidRoundLength()) kidLater(kidEndGame, delay);
   else kidLater(kidNewRound, delay);
 }
 
@@ -5743,6 +5771,10 @@ function kidCloseNewColor() {
 // ---------- fim da partida ----------
 function kidEndGame() {
   state.totalSessions += 1;
+  const ksd = kidState();
+  const today = new Date().toDateString();
+  if (!ksd.daily || ksd.daily.date !== today) ksd.daily = { date: today, games: 0 };
+  ksd.daily.games += 1;
   checkMilestones();
   saveState();
   const acc = kidCount > 0 ? kidCorrect / kidCount : 0;
