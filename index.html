@@ -1346,7 +1346,6 @@
   <div class="k-pad">
     <div class="k-top">
       <span class="k-chip">⭐ <span id="kidStars">0</span></span>
-      <span class="k-chip">🏅 <span id="kidMedals">0</span></span>
       <span class="k-chip">🔥 <span id="kidStreak">0</span> dia(s)</span>
     </div>
     <div class="k-mascot-row">
@@ -1618,6 +1617,8 @@
     <button class="home-btn home-btn-primary" onclick="startTrainSession()">
       <span class="home-btn-title">Treino Eguchi</span>
     </button>
+
+    <button class="home-btn home-btn-ghost" onclick="adultPlayAllOrder()">🎵 Ouvir as cores em ordem</button>
 
     <div class="home-row">
       <button class="home-btn home-btn-ghost" onclick="startFreeSession()">Livre</button>
@@ -1944,17 +1945,6 @@
   </div>
   <div class="screen-pad">
     <div class="setting-row">
-      <span class="label">Ritmo de novas cores</span>
-      <div class="seg" id="paceSeg">
-        <button class="seg-btn" data-pace="acelerado">3 seguidas</button>
-        <button class="seg-btn" data-pace="fiel">fiel · 3 seguidas + 14 dias</button>
-      </div>
-      <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
-        Padrão: 3 acertos seguidos liberam a próxima cor. Fiel = Sakakibara (2014): além disso, cada cor fica pelo menos 2 semanas.
-      </p>
-    </div>
-
-    <div class="setting-row">
       <span class="label">Instrumento (timbre do treino)</span>
       <div class="seg" id="instrumentSeg">
         <button class="seg-btn" data-instr="piano">piano</button>
@@ -1975,7 +1965,7 @@
         <button class="seg-btn" data-var="octave">só oitavas</button>
       </div>
       <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
-        No método Eguchi cada inversão é outra cor, então aqui só existe variação de oitava. Para o método fiel, deixe desligado.
+        No método Eguchi cada inversão é outra cor, então aqui só existe variação de oitava.
       </p>
     </div>
 
@@ -2077,7 +2067,7 @@
       <li>Marrom · Sol-Dó-Mi (Dó maior, Sol no baixo)</li>
     </ol>
     <p>Depois das 9, o método acrescenta 5 acordes de tecla preta (sem inversões) e, por fim, notas isoladas. A sequência exata desses 5 não está publicada em fonte aberta, então o app para nas 9 por enquanto.</p>
-    <p><strong>Regra deste app:</strong> 3 acertos seguidos liberam a próxima cor. Para seguir o ritmo de Sakakibara (≥14 dias por cor), use Ajustes → Ritmo de novas cores → fiel.</p>
+    <p><strong>Regra deste app:</strong> 3 acertos seguidos liberam a próxima cor. A criança avança no ritmo dela.</p>
 
     <h2 style="margin-top:24px;">Como este lab estende o método para uso adulto</h2>
 
@@ -2358,15 +2348,6 @@ function generateVariations(freqs) {
 function daysAtCurrentLevel() {
   return (Date.now() - new Date(state.lastUnlockDate).getTime()) / 86400000;
 }
-// Fase 1 (Vermelho sozinho) é só apresentação; a partir dela vale o ritmo escolhido.
-function pacePass() {
-  if (state.levelUnlocked <= 1 || state.settings.pace === 'acelerado') return true;
-  return daysAtCurrentLevel() >= EGUCHI_DAYS_PER_COLOR;
-}
-function daysUntilNextColor() {
-  const d = Math.max(1, Math.ceil(EGUCHI_DAYS_PER_COLOR - daysAtCurrentLevel()));
-  return d === 1 ? '1 dia' : `${d} dias`;
-}
 const PITCH_CLASS = { 'Dó': 0, 'Ré': 2, 'Mi': 4, 'Fá': 5, 'Sol': 7, 'Lá': 9, 'Si': 11 };
 // Quão fácil é confundir duas cores: notas em comum, mesmo "pé" e altura parecida,
 // mais as trocas que a pessoa já fez entre elas no histórico.
@@ -2438,11 +2419,8 @@ const DEFAULT_SETTINGS = {
   progressionLength: 3,       // 2 | 3 | 4
   dailySessionTarget: 5,      // Sakakibara: 5 sessions/day
   kidMode: 'off',             // 'on' abre o app no modo criança (6-12 anos)
-  pace: 'acelerado',          // 'acelerado' = 3 seguidas liberam | 'fiel' = além disso, ≥14 dias por cor (Sakakibara)
 };
 
-// Sakakibara (2014): cada cor nova fica ≥2 semanas E até 100% de acerto.
-const EGUCHI_DAYS_PER_COLOR = 14;
 const CHORD_SET = 'eguchi9';
 
 // ============================================
@@ -2530,7 +2508,7 @@ function loadState() {
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
       if (parsed.settings.variation === 'full') parsed.settings.variation = 'off';
       // v4: regra "3 acertos seguidos liberam a próxima cor" vira o padrão.
-      if (!parsed.ruleV || parsed.ruleV < 4) { parsed.settings.pace = 'acelerado'; parsed.ruleV = 4; }
+      delete parsed.settings.pace;   // não existe mais espera mínima entre cores
       return parsed;
     }
   } catch (e) { console.warn('localStorage read failed', e); }
@@ -3451,12 +3429,8 @@ function handleAnswer(idx) {
     }
     // Trigger challenge when streak reached and there's a color to unlock
     if (currentStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
-      if (pacePass()) {
-        setTimeout(passChallenge, 1100);   // 3 seguidas → próxima cor, sem desafio extra
-        return;
-      }
-      currentStreak = 0;
-      fb.innerHTML += `<small>Pronto para a próxima cor — o método pede ${EGUCHI_DAYS_PER_COLOR} dias por cor: faltam ${daysUntilNextColor()}.</small>`;
+      setTimeout(passChallenge, 1100);   // 3 seguidas → próxima cor
+      return;
     }
   }
 
@@ -4821,9 +4795,6 @@ function saveDailyLog() {
 // SETTINGS
 // ============================================
 function renderSettings() {
-  document.querySelectorAll('#paceSeg .seg-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.pace === state.settings.pace);
-  });
   document.querySelectorAll('#instrumentSeg .seg-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.instr === state.settings.instrument);
   });
@@ -4848,12 +4819,6 @@ function renderSettings() {
 }
 
 function bindSettings() {
-  document.querySelectorAll('#paceSeg .seg-btn').forEach(b => {
-    b.addEventListener('click', () => {
-      state.settings.pace = b.dataset.pace;
-      saveState(); renderSettings();
-    });
-  });
   document.querySelectorAll('#instrumentSeg .seg-btn').forEach(b => {
     b.addEventListener('click', () => {
       state.settings.instrument = b.dataset.instr;
@@ -5022,10 +4987,8 @@ bindSettings();
 renderMenu();
 updateAudioBadge();
 
-// Route first-time visitors: first ask who is playing (child or adult)
-if (!state.onboardingDone) {
-  goTo('whoPlays');
-}
+// O app sempre abre na tela de entrada das crianças (adulto entra pelo link do rodapé).
+goTo('whoPlays');
 
 // Pre-construct Tone.js instruments so Salamander samples start downloading
 // before the user clicks play. Audio context still needs a user gesture to start.
@@ -5105,7 +5068,7 @@ function chooseKidMode() {
 function chooseAdultMode() {
   state.settings.kidMode = 'off';
   saveState();
-  goTo('onbWelcome');
+  goTo(state.onboardingDone ? 'menu' : 'onbWelcome');
 }
 function enterKidMode() {
   state.settings.kidMode = 'on';
@@ -5140,8 +5103,6 @@ function renderKidHome() {
   const ks = kidState();
   document.getElementById('kidStars').textContent = ks.stars;
   document.getElementById('kidSimonBestHome').textContent = ks.simonBest || 0;
-  document.getElementById('kidMedals').textContent = ks.medals || 0;
-  document.getElementById('kidMedals').parentElement.style.display = ks.medals ? '' : 'none';
   document.getElementById('kidStreak').textContent = calculateStreak();
   const { done, target } = renderKidDots(document.getElementById('kidToday'));
   document.getElementById('kidTodayText').textContent = done >= target
@@ -5158,8 +5119,6 @@ function renderKidHome() {
     msg = `${hi} Vamos ouvir o ${kidLabel(0)} mais um pouco?`;
   } else if (contrastLeft() > 0) {
     msg = `${hi} Cor nova: ${kidLabel(kidNewest())}! Vamos aprender a diferença.`;
-  } else if (level < CHORDS.length && !pacePass()) {
-    msg = `${hi} O ${kidLabel(level)} chega em ${daysUntilNextColor()}. Até lá, treine suas ${level} cores!`;
   } else if (level < CHORDS.length) {
     msg = `${hi} Acerte ${STREAK_TO_CHALLENGE} seguidas e ganhe o ${kidLabel(level)}!`;
   } else {
@@ -5182,11 +5141,9 @@ function renderKidHome() {
       b.addEventListener('click', () => { ensureAudioContext(); playChord(c.freqs, state.settings.instrument); });
     } else if (idx === level) {
       b.classList.add('next');
-      const waiting = !pacePass();
-      b.innerHTML = waiting ? `<span class="e">❓</span>⏳ ${daysUntilNextColor()}` : `<span class="e">❓</span>próxima`;
-      b.addEventListener('click', () => showModal('Cor surpresa!', waiting
-        ? `Ela chega em <strong>${daysUntilNextColor()}</strong>. Até lá, cada ${STREAK_TO_CHALLENGE} seguidas vale uma medalha 🏅.`
-        : `Acerte <strong>${STREAK_TO_CHALLENGE} sons seguidos</strong> para ganhar esta cor.`, [{ label: 'Bora!', primary: true, action: hideModal }]));
+      b.innerHTML = `<span class="e">❓</span>próxima`;
+      b.addEventListener('click', () => showModal('Cor surpresa!',
+        `Acerte <strong>${STREAK_TO_CHALLENGE} sons seguidos</strong> para ganhar esta cor.`, [{ label: 'Bora!', primary: true, action: hideModal }]));
     } else {
       b.classList.add('locked');
       b.innerHTML = `<span class="e">🔒</span>`;
@@ -5502,10 +5459,6 @@ function renderKidMission() {
   } else if (contrastLeft() > 0) {
     const a = kidNewest(), b = contrastFor(a);
     el.innerHTML = `Treino de diferença: ${kidLabel(a)} ou ${kidLabel(b)}?<div class="k-stars">${'👂'.repeat(contrastLeft())}</div>`;
-  } else if (level < CHORDS.length && !pacePass()) {
-    let marks = '';
-    for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
-    el.innerHTML = `Missão: ${STREAK_TO_CHALLENGE} seguidas = uma medalha 🏅 · o ${kidLabel(level)} chega em ${daysUntilNextColor()}<div class="k-stars">${marks}</div>`;
   } else if (level < CHORDS.length) {
     let marks = '';
     for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
@@ -5652,19 +5605,6 @@ function kidAnswer(idx) {
 
   // Durante o treino de diferença a sequência não conta para liberar cor.
   if (contrastLeft() > 0) kidStreak = 0;
-
-  // Ritmo fiel: enquanto a cor nova não pode chegar, cada sequência vale uma medalha.
-  if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length && !pacePass()) {
-    kidStreak = 0;
-    const ks = kidState();
-    ks.medals = (ks.medals || 0) + 1;
-    ks.stars += 3;
-    saveState();
-    renderKidMission();
-    kidConfetti('#ffc233', 45);
-    kidLater(() => kidFloat('🏅 +3 ⭐'), 300);
-    kidSay('Medalha de craque! 🏅', `Você já tem ${ks.medals}. O ${kidLabel(state.levelUnlocked)} chega em ${daysUntilNextColor()}!`, 'ok');
-  }
 
   // Regra: 3 acertos seguidos liberam a próxima cor.
   if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
@@ -5834,9 +5774,7 @@ function kidEndGame() {
   document.getElementById('kidEndStars').innerHTML =
     [1, 2, 3].map(i => `<span class="${i <= stars ? '' : 'off'}">⭐</span>`).join('');
   let text = `Você acertou <strong>${kidCorrect} de ${kidCount}</strong> sons.`;
-  if (state.levelUnlocked < CHORDS.length && !pacePass()) {
-    text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)}, daqui a ${daysUntilNextColor()}. Até lá, treine as suas cores!`;
-  } else if (state.levelUnlocked < CHORDS.length) {
+  if (state.levelUnlocked < CHORDS.length) {
     text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)} — acerte ${STREAK_TO_CHALLENGE} seguidas!`;
   }
   document.getElementById('kidEndText').innerHTML = text;
@@ -5877,8 +5815,7 @@ function kidFloat(text) {
   setTimeout(() => el.remove(), 1000);
 }
 
-// Abre direto no modo criança quando ele está ligado
-if (state.onboardingDone && state.settings.kidMode === 'on') kidGoHome();
+// (o app abre sempre na tela de entrada — ver goTo('whoPlays') acima)
 
 // Aviso único depois da migração para as 9 cores originais de Eguchi
 if (state.migratedNotice) {

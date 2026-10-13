@@ -1,7 +1,7 @@
 // Eguchi Lab — Service Worker
-// Cache-first strategy for app shell; cache-on-fetch for fonts, Tone.js, and Salamander samples
+// Network-first for the app shell (cache = offline fallback); cache-on-fetch for fonts, Tone.js, and Salamander samples
 
-const CACHE_VERSION = 'eguchi-lab-v20';
+const CACHE_VERSION = 'eguchi-lab-v21';
 const APP_SHELL = [
   './',
   './index.html',
@@ -60,19 +60,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // App shell: cache-first
+  // App (mesma origem): rede primeiro, para cada deploy aparecer na hora;
+  // o cache só entra quando estiver offline.
   if (event.request.method === 'GET' && url.origin === location.origin) {
     event.respondWith(
-      caches.match(event.request).then((cached) => {
-        if (cached) return cached;
-        return fetch(event.request).then((response) => {
-          if (response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, responseClone));
-          }
-          return response;
-        });
-      })
+      fetch(event.request).then((response) => {
+        if (response && response.status === 200) {
+          const responseClone = response.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put(event.request, responseClone));
+        }
+        return response;
+      }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html')))
     );
   }
 });
