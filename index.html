@@ -1276,6 +1276,12 @@
   }
   .kid .k-center { text-align: center; }
 
+  /* --- tela de entrada --- */
+  .kid .k-welcome { justify-content: center; gap: 14px; }
+  .kid .k-welcome-sky { display: grid; grid-template-columns: repeat(9, 1fr); gap: 4px; }
+  .kid .k-welcome-sky span { aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2); transition: transform 0.2s; }
+  .kid .k-welcome-sky span.lit, .kid .k-sticker.lit { transform: scale(1.25); box-shadow: 0 0 0 4px var(--k-star); }
+
   /* --- who plays --- */
   .kid .k-who { display: flex; flex-direction: column; gap: 14px; }
   .kid .k-who-btn {
@@ -1319,19 +1325,19 @@
 
 <!-- ============ MODO CRIANÇA ============ -->
 <div class="screen kid" id="whoPlays">
-  <div class="k-pad" style="justify-content:center;">
-    <div class="k-center" style="font-size:72px;">🦉🎵</div>
-    <h1 class="k-title k-center">Quem vai jogar?</h1>
-    <p class="k-sub k-center">Escolha uma vez. Dá pra trocar depois.</p>
-    <div class="k-who">
-      <button class="k-who-btn pri" onclick="chooseKidMode()">
-        <span class="e">🧒</span>
-        <div><b>Criança</b><span>6 a 12 anos · jogo das cores e sons</span></div>
-      </button>
-      <button class="k-who-btn" onclick="chooseAdultMode()">
-        <span class="e">🧑</span>
-        <div><b>Adulto</b><span>treino completo com estatísticas</span></div>
-      </button>
+  <div class="k-pad k-welcome">
+    <div class="k-welcome-sky">
+      <span style="background:#c8332a">🍎</span><span style="background:#e8c83a">🌻</span><span style="background:#3a6a9a">🌊</span>
+      <span style="background:#1a1614">🌙</span><span style="background:#5a8a3a">🌳</span><span style="background:#e88a33">🍊</span>
+      <span style="background:#7a3d8a">🍇</span><span style="background:#e89aaa">🌸</span><span style="background:#7a4d2a">🍫</span>
+    </div>
+    <div class="k-mascot k-center bounce" style="font-size:96px;">🦉</div>
+    <h1 class="k-title k-center">Oi! Eu sou a Lumi.</h1>
+    <p class="k-sub k-center" style="font-size:19px;">Cada som tem uma cor. Vamos descobrir as 9 cores juntos?</p>
+    <button class="k-btn k-btn-big" onclick="chooseKidMode()">▶ VAMOS!</button>
+    <button class="k-btn k-btn-soft" onclick="welcomePreview()">🎵 Ouvir as cores</button>
+    <div class="k-footer">
+      <button class="k-link" onclick="chooseAdultMode()">Sou adulto · treino completo com estatísticas →</button>
     </div>
   </div>
 </div>
@@ -1348,6 +1354,7 @@
       <div class="k-bubble" id="kidHello">Oi! Eu sou a Lumi. Vamos descobrir as cores dos sons?</div>
     </div>
     <button class="k-btn k-btn-big" onclick="startKidGame()">▶ JOGAR</button>
+    <button class="k-btn k-btn-soft" onclick="kidPlayAllOrder()">🎵 Ouvir minhas cores em ordem</button>
     <button class="k-btn k-btn-soft" onclick="openKidSimon()">🔁 Siga a sequência <span style="font-weight:500;font-size:14px;">· recorde <span id="kidSimonBestHome">0</span></span></button>
     <div class="k-card">
       <div class="k-card-title">🎯 Missão de hoje: 5 jogos curtinhos</div>
@@ -1471,7 +1478,7 @@
       <div class="onb-steps">
         <div class="onb-step"><span class="onb-step-n">01</span><div><div class="onb-step-t">Comece direto</div><div class="onb-step-d">Sem teste cego antes. O app infere seu ponto de partida a partir das suas primeiras jogadas.</div></div></div>
         <div class="onb-step"><span class="onb-step-n">02</span><div><div class="onb-step-t">5 sessões por dia</div><div class="onb-step-d">2-3 minutos cada, ~20-25 trials. Distribuídas no dia (manhã, almoço, tarde, noite). Frequência &gt; duração — esse é o achado de Sakakibara 2014.</div></div></div>
-        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Próxima cor: 5 em sequência</div><div class="onb-step-d">Acerte 5 seguidas e enfrente um desafio de 3 acordes. Passou, a próxima cor destrava na hora.</div></div></div>
+        <div class="onb-step"><span class="onb-step-n">03</span><div><div class="onb-step-t">Próxima cor: 3 em sequência</div><div class="onb-step-d">Acerte 3 seguidas e a próxima cor destrava na hora.</div></div></div>
         <div class="onb-step"><span class="onb-step-n">04</span><div><div class="onb-step-t">Diário de covariáveis</div><div class="onb-step-d">Sono, café, álcool, mood. Variáveis confundidoras viram dados — fundamental pra um N=1 rigoroso.</div></div></div>
       </div>
     </div>
@@ -1541,7 +1548,7 @@
       <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;">É só <em style="color:var(--accent);font-style:italic;">começar.</em></h2>
       <div style="margin-top:22px;display:flex;flex-direction:column;gap:14px;">
         <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">◉</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Sem teste prévio.</strong> O app aprende seu ponto de partida sozinho, com suas primeiras jogadas.</div></div>
-        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">●</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Uma cor por vez.</strong> Acerte 5 em sequência, passe no desafio de 3 acordes e a próxima cor destrava.</div></div>
+        <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">●</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Uma cor por vez.</strong> Acerte 3 em sequência e a próxima cor destrava.</div></div>
         <div style="display:flex;gap:12px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);padding-top:2px;">↗</span><div style="font-family:'Fraunces',serif;font-size:14.5px;line-height:1.5;color:var(--text-dim);"><strong style="color:var(--text);font-weight:500;">Progresso visível.</strong> Em "partida" você compara suas primeiras jogadas com o agora.</div></div>
       </div>
     </div>
@@ -1651,7 +1658,7 @@
       <div class="drawer-label">Modos de treino</div>
       <button class="drawer-item drawer-item-primary" onclick="startTrainSession()">
         <span>Treino Eguchi <em class="drawer-tag">principal</em></span>
-        <small>desbloqueia cor a cor · 5 em sequência → desafio</small>
+        <small>desbloqueia cor a cor · 3 em sequência → próxima cor</small>
       </button>
       <button class="drawer-item" onclick="startFreeSession()"><span>Treino livre</span><small>todas as cores já liberadas</small></button>
       <button class="drawer-item" onclick="goTo('progressionsCurriculum')"><span>Currículo · 12 progressões</span><small>só com as 9 cores Eguchi</small></button>
@@ -1663,6 +1670,7 @@
       <div class="drawer-label">Explorar</div>
       <button class="drawer-item" onclick="goTo('curriculum')"><span>Currículo das cores</span><small>mapa das 9 cores</small></button>
       <button class="drawer-item" onclick="goTo('explore')"><span>Cada cor em detalhe</span><small>função, mnemônico, exemplo</small></button>
+      <button class="drawer-item" onclick="adultPlayAllOrder()"><span>Ouvir as cores em ordem</span><small>todas as liberadas, sempre na ordem do método</small></button>
     </div>
 
     <div class="drawer-section">
@@ -1938,11 +1946,11 @@
     <div class="setting-row">
       <span class="label">Ritmo de novas cores</span>
       <div class="seg" id="paceSeg">
-        <button class="seg-btn" data-pace="fiel">fiel · 14 dias por cor</button>
-        <button class="seg-btn" data-pace="acelerado">acelerado</button>
+        <button class="seg-btn" data-pace="acelerado">3 seguidas</button>
+        <button class="seg-btn" data-pace="fiel">fiel · 3 seguidas + 14 dias</button>
       </div>
       <p style="font-size:11px;color:var(--text-mute);margin-top:8px;font-family:'Fraunces',serif;font-style:italic;line-height:1.4;">
-        Fiel = Sakakibara (2014): cada cor fica pelo menos 2 semanas e só passa com acerto total no desafio. Acelerado = passa assim que dominar.
+        Padrão: 3 acertos seguidos liberam a próxima cor. Fiel = Sakakibara (2014): além disso, cada cor fica pelo menos 2 semanas.
       </p>
     </div>
 
@@ -2069,7 +2077,7 @@
       <li>Marrom · Sol-Dó-Mi (Dó maior, Sol no baixo)</li>
     </ol>
     <p>Depois das 9, o método acrescenta 5 acordes de tecla preta (sem inversões) e, por fim, notas isoladas. A sequência exata desses 5 não está publicada em fonte aberta, então o app para nas 9 por enquanto.</p>
-    <p><strong>Ritmo fiel:</strong> por padrão, cada cor nova só chega depois de 14 dias na cor anterior <em>e</em> de acertar o desafio sem erro (Ajustes → Ritmo de novas cores).</p>
+    <p><strong>Regra deste app:</strong> 3 acertos seguidos liberam a próxima cor. Para seguir o ritmo de Sakakibara (≥14 dias por cor), use Ajustes → Ritmo de novas cores → fiel.</p>
 
     <h2 style="margin-top:24px;">Como este lab estende o método para uso adulto</h2>
 
@@ -2417,7 +2425,7 @@ const PROBE_LENGTH = 10;
 const PROBE_INTERVAL_SESSIONS = 5;
 
 // Streak-based unlock (replaces Bayesian gating for new colors)
-const STREAK_TO_CHALLENGE = 5;   // N consecutive correct → 3-chord challenge
+const STREAK_TO_CHALLENGE = 3;   // 3 acertos seguidos liberam a próxima cor
 const CHALLENGE_LENGTH = 3;      // chords in unlock challenge
 
 const DEFAULT_SETTINGS = {
@@ -2430,7 +2438,7 @@ const DEFAULT_SETTINGS = {
   progressionLength: 3,       // 2 | 3 | 4
   dailySessionTarget: 5,      // Sakakibara: 5 sessions/day
   kidMode: 'off',             // 'on' abre o app no modo criança (6-12 anos)
-  pace: 'fiel',               // 'fiel' = ≥14 dias por cor (Sakakibara) | 'acelerado' = só desempenho
+  pace: 'acelerado',          // 'acelerado' = 3 seguidas liberam | 'fiel' = além disso, ≥14 dias por cor (Sakakibara)
 };
 
 // Sakakibara (2014): cada cor nova fica ≥2 semanas E até 100% de acerto.
@@ -2521,6 +2529,8 @@ function loadState() {
       if (!parsed.settings) parsed.settings = { ...DEFAULT_SETTINGS };
       else parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
       if (parsed.settings.variation === 'full') parsed.settings.variation = 'off';
+      // v4: regra "3 acertos seguidos liberam a próxima cor" vira o padrão.
+      if (!parsed.ruleV || parsed.ruleV < 4) { parsed.settings.pace = 'acelerado'; parsed.ruleV = 4; }
       return parsed;
     }
   } catch (e) { console.warn('localStorage read failed', e); }
@@ -2528,6 +2538,7 @@ function loadState() {
     version: 2,
     levelUnlocked: 1,
     chordSet: CHORD_SET,
+    ruleV: 4,
     history: [],
     baseline: null,
     probes: [],
@@ -3198,7 +3209,7 @@ function updateTrainHeader() {
   } else {
     hint.style.display = 'block';
     const pips = '●'.repeat(currentStreak) + '○'.repeat(Math.max(0, STREAK_TO_CHALLENGE - currentStreak));
-    hint.innerHTML = `streak <span class="streak-pips">${pips}</span> ${currentStreak}/${STREAK_TO_CHALLENGE} → desafio destrava <span style="color:${nextColor.hex};">${nextColor.name}</span>`;
+    hint.innerHTML = `seguidas <span class="streak-pips">${pips}</span> ${currentStreak}/${STREAK_TO_CHALLENGE} → destrava <span style="color:${nextColor.hex};">${nextColor.name}</span>`;
   }
 }
 
@@ -3441,7 +3452,7 @@ function handleAnswer(idx) {
     // Trigger challenge when streak reached and there's a color to unlock
     if (currentStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
       if (pacePass()) {
-        setTimeout(triggerChallenge, 1100);
+        setTimeout(passChallenge, 1100);   // 3 seguidas → próxima cor, sem desafio extra
         return;
       }
       currentStreak = 0;
@@ -4053,7 +4064,7 @@ function showSessionSummary(mode, count, newMilestones, extras) {
     }
     if (mode === 'train' && state.levelUnlocked < CHORDS.length) {
       const nextColor = CHORDS[state.levelUnlocked];
-      html += `<h3>Próxima cor</h3><p>Acerte <strong>${STREAK_TO_CHALLENGE} em sequência</strong> e passe no desafio de ${CHALLENGE_LENGTH} acordes pra destravar <strong style="color:${nextColor.hex};">${nextColor.name}</strong>.</p>`;
+      html += `<h3>Próxima cor</h3><p>Acerte <strong>${STREAK_TO_CHALLENGE} em sequência</strong> pra destravar <strong style="color:${nextColor.hex};">${nextColor.name}</strong>.</p>`;
     } else if (mode === 'train') {
       html += `<h3>Todas as cores destravadas</h3><p>Você cobriu as ${CHORDS.length} cores. Continue treinando pra firmar a discriminação.</p>`;
     }
@@ -5045,7 +5056,7 @@ if ('serviceWorker' in navigator) {
 // ============================================
 const KID_ROUND_LENGTH = 10;
 // Fase 1 (só o Vermelho) é apresentação: 5 sons bastam.
-function kidRoundLength() { return state.levelUnlocked === 1 ? 5 : KID_ROUND_LENGTH; }
+function kidRoundLength() { return KID_ROUND_LENGTH; }
 const KID_INFO = {
   red:    { emoji: '🍎', desc: 'O som de casa: firme, com o pé bem no chão.' },
   yellow: { emoji: '🌻', desc: 'Lá no alto e brilhante, como o sol do meio-dia.' },
@@ -5130,6 +5141,7 @@ function renderKidHome() {
   document.getElementById('kidStars').textContent = ks.stars;
   document.getElementById('kidSimonBestHome').textContent = ks.simonBest || 0;
   document.getElementById('kidMedals').textContent = ks.medals || 0;
+  document.getElementById('kidMedals').parentElement.style.display = ks.medals ? '' : 'none';
   document.getElementById('kidStreak').textContent = calculateStreak();
   const { done, target } = renderKidDots(document.getElementById('kidToday'));
   document.getElementById('kidTodayText').textContent = done >= target
@@ -5149,7 +5161,7 @@ function renderKidHome() {
   } else if (level < CHORDS.length && !pacePass()) {
     msg = `${hi} O ${kidLabel(level)} chega em ${daysUntilNextColor()}. Até lá, treine suas ${level} cores!`;
   } else if (level < CHORDS.length) {
-    msg = `${hi} Acerte 5 seguidas e ganhe o ${kidLabel(level)}!`;
+    msg = `${hi} Acerte ${STREAK_TO_CHALLENGE} seguidas e ganhe o ${kidLabel(level)}!`;
   } else {
     msg = `${hi} Você já tem todas as cores! Bora treinar o ouvido?`;
   }
@@ -5173,8 +5185,8 @@ function renderKidHome() {
       const waiting = !pacePass();
       b.innerHTML = waiting ? `<span class="e">❓</span>⏳ ${daysUntilNextColor()}` : `<span class="e">❓</span>próxima`;
       b.addEventListener('click', () => showModal('Cor surpresa!', waiting
-        ? `Ela chega em <strong>${daysUntilNextColor()}</strong>. Até lá, cada 5 seguidas vale uma medalha 🏅. Quando chegar, é só vencer o desafio!`
-        : 'Acerte <strong>5 sons seguidos</strong> e vença o desafio para ganhar esta cor.', [{ label: 'Bora!', primary: true, action: hideModal }]));
+        ? `Ela chega em <strong>${daysUntilNextColor()}</strong>. Até lá, cada ${STREAK_TO_CHALLENGE} seguidas vale uma medalha 🏅.`
+        : `Acerte <strong>${STREAK_TO_CHALLENGE} sons seguidos</strong> para ganhar esta cor.`, [{ label: 'Bora!', primary: true, action: hideModal }]));
     } else {
       b.classList.add('locked');
       b.innerHTML = `<span class="e">🔒</span>`;
@@ -5203,6 +5215,40 @@ function renderKidHome() {
   btn.addEventListener('pointercancel', cancel);
   btn.addEventListener('contextmenu', (e) => e.preventDefault());
 })();
+
+// ---------- Todas as cores, sempre na mesma ordem ----------
+// Ordem aditiva do método: Vermelho, Amarelo, Azul, … — cada cor nova entra no fim.
+// Tem seu próprio relógio (não usa kidGen) e para se for chamado de novo.
+let orderTimers = [];
+function playColorsInOrder(n, onStep) {
+  orderTimers.forEach(clearTimeout);
+  orderTimers = [];
+  ensureAudioContext();
+  for (let i = 0; i < n; i++) {
+    orderTimers.push(setTimeout(() => {
+      playChord(CHORDS[i].freqs, state.settings.instrument);
+      if (onStep) onStep(i);
+    }, 300 + i * 1200));
+  }
+  orderTimers.push(setTimeout(() => onStep && onStep(-1), 300 + n * 1200));
+}
+function kidPlayAllOrder() {
+  const stickers = [...document.querySelectorAll('#kidAlbum .k-sticker')];
+  playColorsInOrder(state.levelUnlocked, i => {
+    stickers.forEach((s, k) => s.classList.toggle('lit', k === i));
+    document.getElementById('kidHello').textContent = i >= 0
+      ? `${i + 1}. ${kidLabel(i)}`
+      : `Essas são as suas ${state.levelUnlocked} cores, sempre nessa ordem!`;
+  });
+}
+// Na entrada: toca as 9 cores do método, na ordem em que vão chegar.
+function welcomePreview() {
+  const dots = [...document.querySelectorAll('.k-welcome-sky span')];
+  playColorsInOrder(CHORDS.length, i => dots.forEach((d, k) => d.classList.toggle('lit', k === i)));
+}
+function adultPlayAllOrder() {
+  playColorsInOrder(state.levelUnlocked, i => { if (i >= 0) flashColor(CHORDS[i].hex); });
+}
 
 // ---------- Siga a sequência (estilo Genius / "Siga-me" do Pense Bem) ----------
 // As cores liberadas ficam num círculo. A cada rodada a sequência ganha um som;
@@ -5346,7 +5392,7 @@ function startKidGame() {
     : `Suas ${level} cores`;
   document.getElementById('kidIntroSub').textContent = level === 1
     ? 'Escute bem. Depois é só tocar nele toda vez que ouvir!'
-    : 'Escute cada cor. A nova toca por último. Toque numa cor para ouvir de novo.';
+    : 'Suas cores, sempre na mesma ordem. A nova é a última. Toque numa cor para ouvir de novo.';
   const grid = document.getElementById('kidIntroTiles');
   grid.innerHTML = '';
   grid.style.gridTemplateColumns = `repeat(${level <= 4 ? 2 : 3}, 1fr)`;
@@ -5365,13 +5411,13 @@ function startKidGame() {
   document.getElementById('kidIntroSay').innerHTML = '';
   goTo('kidIntro');
   // Sequência: cada cor uma vez; a mais nova de novo no fim.
+  // Sempre a mesma ordem aditiva: 1, 2, 3, … — a cor nova é a última.
   const order = [];
   for (let i = 0; i < level; i++) order.push(i);
-  if (level > 1) order.push(newest);
-  else order.push(0, 0);
+  if (level === 1) order.push(0, 0);
   kidIntroBusy = true;
   order.forEach((idx, k) => kidLater(() => {
-    kidIntroPlay(idx, k === order.length - 1 && level > 1 ? 'De novo a mais nova:' : '');
+    kidIntroPlay(idx, `${idx + 1}.`);
     if (k === order.length - 1) kidLater(() => { kidIntroBusy = false; }, 1200);
   }, 500 + k * 1150));
 }
@@ -5450,7 +5496,9 @@ function renderKidMission() {
     for (let i = 0; i < kidQueue.length; i++) marks += `<span class="${i < kidStep ? '' : 'off'}">🏆</span>`;
     el.innerHTML = `DESAFIO! Acerte os ${kidQueue.length} e ganhe o ${kidLabel(level)}<div class="k-stars">${marks}</div>`;
   } else if (level === 1) {
-    el.innerHTML = `Fase 1: toque no ${kidLabel(0)} sempre que ouvir. Na próxima fase chega o ${kidLabel(1)}!`;
+    let marks = '';
+    for (let i = 0; i < STREAK_TO_CHALLENGE; i++) marks += `<span class="${i < kidStreak ? '' : 'off'}">⭐</span>`;
+    el.innerHTML = `Fase 1: toque no ${kidLabel(0)} ${STREAK_TO_CHALLENGE} vezes e ganhe o ${kidLabel(1)}!<div class="k-stars">${marks}</div>`;
   } else if (contrastLeft() > 0) {
     const a = kidNewest(), b = contrastFor(a);
     el.innerHTML = `Treino de diferença: ${kidLabel(a)} ou ${kidLabel(b)}?<div class="k-stars">${'👂'.repeat(contrastLeft())}</div>`;
@@ -5602,10 +5650,10 @@ function kidAnswer(idx) {
   }
   renderKidMission();
 
-  // Fase 1 (só o Vermelho) não tem desafio: termina a partida e o Amarelo chega.
-  if (state.levelUnlocked === 1) { kidContinue(1100); return; }
+  // Durante o treino de diferença a sequência não conta para liberar cor.
+  if (contrastLeft() > 0) kidStreak = 0;
 
-  // Ritmo fiel: enquanto a cor nova não pode chegar, 5 seguidas valem uma medalha.
+  // Ritmo fiel: enquanto a cor nova não pode chegar, cada sequência vale uma medalha.
   if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length && !pacePass()) {
     kidStreak = 0;
     const ks = kidState();
@@ -5618,8 +5666,10 @@ function kidAnswer(idx) {
     kidSay('Medalha de craque! 🏅', `Você já tem ${ks.medals}. O ${kidLabel(state.levelUnlocked)} chega em ${daysUntilNextColor()}!`, 'ok');
   }
 
+  // Regra: 3 acertos seguidos liberam a próxima cor.
   if (kidStreak >= STREAK_TO_CHALLENGE && state.levelUnlocked < CHORDS.length) {
-    kidLater(kidTriggerChallenge, 1200);
+    kidSay(`${STREAK_TO_CHALLENGE} seguidas! 🔥`, `Cor nova: ${kidLabel(state.levelUnlocked)}!`, 'ok');
+    kidLater(kidPassChallenge, 1000);
     return;
   }
   if (correct) kidContinue(750);
@@ -5784,14 +5834,7 @@ function kidEndGame() {
   document.getElementById('kidEndStars').innerHTML =
     [1, 2, 3].map(i => `<span class="${i <= stars ? '' : 'off'}">⭐</span>`).join('');
   let text = `Você acertou <strong>${kidCorrect} de ${kidCount}</strong> sons.`;
-  if (state.levelUnlocked === 1 && acc >= 0.8) {
-    // Fase 1 (Vermelho sozinho) é só para conhecer: passou, chega o Amarelo.
-    state.levelUnlocked = 2;
-    state.lastUnlockDate = new Date().toISOString();
-    kidState().contrastLeft = KID_CONTRAST_TRIALS;
-    saveState();
-    text += `<br>Você já conhece o ${kidLabel(0)}! 🎉<br>Na próxima partida chega o ${kidLabel(1)}.`;
-  } else if (state.levelUnlocked < CHORDS.length && !pacePass()) {
+  if (state.levelUnlocked < CHORDS.length && !pacePass()) {
     text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)}, daqui a ${daysUntilNextColor()}. Até lá, treine as suas cores!`;
   } else if (state.levelUnlocked < CHORDS.length) {
     text += `<br>Próximo prêmio: ${kidLabel(state.levelUnlocked)} — acerte ${STREAK_TO_CHALLENGE} seguidas!`;
