@@ -37,7 +37,7 @@ O app, as cartinhas, as bandeiras e todos os pôsteres usam o conjunto original 
 | 8 | Rosa 桃 | Sol maior (G) | Sol4 Si4 Ré5 | Sol |
 | 9 | Marrom 茶 | Dó maior (C/G) | Sol4 Dó5 Mi5 | Sol |
 
-- **Regra de avanço:** 3 acertos seguidos liberam a próxima cor. Opção "fiel" nos Ajustes soma a espera de 14 dias por cor de Sakakibara.
+- **Regra de avanço:** 3 acertos seguidos liberam a próxima cor, sem espera mínima.
 - **Sem inversões aleatórias:** no método, inversão é outra cor; a opção de variação só muda a oitava.
 - **Depois das 9:** o método acrescenta 5 acordes de tecla preta e depois notas isoladas. A sequência exata não está em fonte aberta, então o app para nas 9.
 - **Coerência garantida:** `node cheatsheet/check-colors.js` falha se app, `cheatsheet/colors.js` e `cheatsheet/lib.js` divergirem.
@@ -144,13 +144,13 @@ Na primeira visita o app pergunta **"Quem vai jogar?"** — Criança ou Adulto. 
 - **Tema claro e colorido**, fonte arredondada, botões grandes e uma mascote (Lumi, a corujinha 🦉).
 - **Partidas curtas de 10 sons** (~2 min) — combina com as 5 sessões curtas por dia do protocolo Sakakibara. A "missão de hoje" mostra 5 notinhas que viram ⭐.
 - **Cada fase começa com a apresentação**: antes de cada partida, a Lumi toca todas as cores da fase, uma por vez, com a bandeira acendendo; a mais nova toca por último. Botão ⚖️ compara a cor nova com a já aprendida mais parecida (A-B-A-B).
-- **Tela de entrada para crianças**: a Lumi recebe, um botão grande "VAMOS!" e um "Ouvir as cores" que toca as 9 na ordem do método; o acesso de adulto é um link discreto.
+- **Tela de entrada para crianças** (abre sempre que o app é aberto): a Lumi recebe, um botão grande "VAMOS!" e um "Ouvir as cores" que toca as 9 na ordem do método; o acesso de adulto é um link discreto.
 - **🎵 Ouvir minhas cores em ordem** (home): toca as cores liberadas sempre na mesma ordem aditiva (1, 2, 3…; a nova entra no fim), acendendo a figurinha de cada uma. A apresentação antes de cada partida usa a mesma ordem.
 - **Fase 1 é só o Vermelho**: 3 toques certos e chega o Amarelo.
 - **Treino de diferença**: nas 6 primeiras rodadas depois de uma cor nova, só aparecem dois botões — a nova e a mais parecida.
 - **Pista do pé** 💡: toca só a nota mais grave e depois o acorde.
 - **Depois de errar**: botões para ouvir "o que você escolheu" × "o que era", com a dica de como distinguir; a criança segue quando quiser.
-- **Objetivo sempre visível**: "Acerte 3 seguidas para ganhar o 🌊 Azul" (no ritmo fiel, mostra quantos dias faltam e cada sequência vale uma medalha 🏅).
+- **Objetivo sempre visível**: "Acerte 3 seguidas para ganhar o 🌊 Azul".
 - **Cada cor tem um emoji** (🍎 Vermelho, 🌻 Amarelo, 🌊 Azul, 🌙 Preto, 🌳 Verde, 🍊 Laranja, 🍇 Roxo, 🌸 Rosa, 🍫 Marrom) e uma frase que ajuda a distinguir.
 - **Acertou**: confete, "+1 ⭐" e elogio. **Errou**: sem punição — mostra a cor certa e toca o som dela de novo.
 - **Cor nova**: 3 acertos seguidos → tela "COR NOVA!", figurinha na **coleção de cores** e treino de diferença com a cor mais parecida.
@@ -163,7 +163,7 @@ As jogadas entram no mesmo histórico do treino Eguchi (`mode: 'train'`, com `ki
 ## Modos de treino
 
 - **Treino livre** — todas as 9 cores desbloqueadas. Prática direta, sem gating Eguchi. Trials salvos com `mode: 'free'`.
-- **Treino Eguchi** — 3 acertos seguidos liberam a próxima cor. No ritmo "fiel" (opcional), só depois de 14 dias na cor atual. Cartão da cor nova traz "como distinguir" e ⚖️ comparar com a cor mais parecida.
+- **Treino Eguchi** — 3 acertos seguidos liberam a próxima cor. Cartão da cor nova traz "como distinguir" e ⚖️ comparar com a cor mais parecida.
 - **Modo progressão** — 2-4 acordes em sequência. Identifique cada um em ordem. Testa memória de curto prazo + reconhecimento.
 - **Baseline** — 50 trials cegos, sem feedback. Ponto de partida.
 - **Probe** — 10 trials com variações inéditas, sem feedback. Mede generalização.
